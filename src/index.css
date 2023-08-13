@@ -28,3 +28,6 @@ html {
   background-repeat: no-repeat;
   background-position: center center;
 }
+.accent-color {
+  background: linear-gradient(to left, #004badd0, #e4ebf5);
+}
