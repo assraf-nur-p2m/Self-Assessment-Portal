@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap");
+
+html {
+  font-family: "Fira Sans", sans-serif;
+}
+.banner-image {
+  animation: zoomAnimation 3s infinite alternate;
+}
+
+@keyframes zoomAnimation {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+.register-button:hover {
+  background-color: #5b2f86;
+}
+.login-page {
+  background-image: url("./assets/Images/loginBanner.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
