@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css");
 
 html {
   font-family: "Fira Sans", sans-serif;
@@ -30,4 +31,17 @@ html {
 }
 .accent-color {
   background: linear-gradient(to left, #004badd0, #e4ebf5);
+  animation: color-change 5s ease-in-out infinite;
+}
+
+@keyframes color-change {
+  0% {
+    background-color: #004badd0;
+  }
+  50% {
+    background-color: #e4ebf5;
+  }
+  100% {
+    background-color: #004badd0;
+  }
 }

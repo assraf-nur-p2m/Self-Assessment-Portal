@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import loginPic from "../../assets/Images/loginPic.png";
+import loginPic from "../../assets/Images/loginBanner.png";
 
 export default function Login() {
   return (
@@ -9,13 +9,13 @@ export default function Login() {
           <div className="grid lg:grid-cols-2 gap-4 w-full">
             <div className="md:flex md:justify-center md:items-center">
               <img
-                className="w-full md:w-10/12 max-w-lg mx-auto"
+                className="w-full max-w-lg mx-auto"
                 src={loginPic}
                 alt=""
               />
             </div>
             <div className="flex justify-center items-center">
-              <div className="bg-[#E5EBF5] shadow-lg p-12 rounded-lg w-9/12">
+              <div className="bg-[#E5EBF5] shadow-lg p-12 rounded-lg lg:w-9/12">
                 <h2 className="text-center font-bold text-4xl">Login</h2>
 
                 <form action="">

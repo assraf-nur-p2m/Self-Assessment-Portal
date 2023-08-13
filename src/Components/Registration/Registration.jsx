@@ -9,13 +9,13 @@ export default function Registration() {
           <div className="grid lg:grid-cols-2 gap-4 w-full">
             <div className="md:flex md:justify-center md:items-center">
               <img
-                className="w-full md:w-9/12 max-w-lg mx-auto"
+                className="w-full max-w-lg mx-auto"
                 src={signUp}
                 alt=""
               />
             </div>
             <div className="flex justify-center items-center">
-              <div className="bg-[#E5EBF5] shadow-lg px-12 py-9 rounded-lg w-9/12">
+              <div className="bg-[#E5EBF5] shadow-lg px-12 py-9 rounded-lg lg:w-9/12">
                 <h2 className="text-center font-bold text-4xl">Sign Up</h2>
                 <p className="text-center">It's free and easy</p>
 
