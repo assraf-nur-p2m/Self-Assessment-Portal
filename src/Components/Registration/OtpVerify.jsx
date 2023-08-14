@@ -2,6 +2,15 @@ import React from "react";
 import otpImage from "../../assets/Images/otpImage.png";
 
 export default function OtpVerify() {
+  const handleOtp = (e) => {
+    e.preventDefault();
+    const { otp } = e.target;
+    const otpValue = {
+      otp: otp.value,
+    };
+    console.log(otpValue);
+  };
+
   return (
     <div className="login-page min-h-screen p-4 md:p-16 flex justify-center items-center">
       <div className="p-4 rounded-xl bg-white bg-opacity-40 accent-color shadow-md">
@@ -11,12 +20,14 @@ export default function OtpVerify() {
               <img className="w-60" src={otpImage} alt="" />
             </div>
             <div className="text-center">
-              <form action="">
+              <form action="" onSubmit={handleOtp}>
                 <h2 className="text-center text-3xl font-semibold">
-                  Enter your <span className="font-bold text-[#004AAD]">OTP</span> code
+                  Enter your{" "}
+                  <span className="font-bold text-[#004AAD]">OTP</span> code
                 </h2>
                 <input
-                  type="number"
+                  name="otp"
+                  type="text"
                   className="mt-5 w-full p-4 shadow-xl border rounded-lg text-center text-xl"
                 />
 

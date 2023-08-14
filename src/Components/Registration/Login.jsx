@@ -2,6 +2,16 @@ import { Link } from "react-router-dom";
 import loginPic from "../../assets/Images/loginBanner.png";
 
 export default function Login() {
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const { mail, password } = e.target;
+    const loginData = {
+      mail: mail.value,
+      password: password.value,
+    };
+    console.log(loginData);
+  };
+
   return (
     <div className="login-page min-h-screen p-4 md:p-16 flex justify-center items-center">
       <div className="p-4 rounded-xl bg-white bg-opacity-40 accent-color shadow-md">
@@ -14,10 +24,11 @@ export default function Login() {
               <div className="bg-[#E5EBF5] shadow-lg p-12 rounded-lg lg:w-10/12">
                 <h2 className="text-center font-bold text-4xl">Login</h2>
 
-                <form action="">
+                <form action="" onSubmit={handleLogin}>
                   <div className="mt-8">
                     <p className="mb-0 ms-1 text-[#656566]">Enter Your Mail</p>
                     <input
+                      name="mail"
                       type="email"
                       placeholder="Email"
                       className="input input-bordered w-full max-w-lg border-none shadow-sm"
@@ -28,6 +39,7 @@ export default function Login() {
                       Enter Your Password
                     </p>
                     <input
+                      name="password"
                       type="password"
                       placeholder="Password"
                       className="input input-bordered w-full max-w-lg border-none shadow-sm"
