@@ -4,6 +4,7 @@ import Main from "../Layout/Main";
 import Login from "../Components/Registration/Login";
 import Registration from "../Components/Registration/Registration";
 import OtpVerify from "../Components/Registration/OtpVerify";
+import Test from "../Components/Test";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: "otp",
         element: <OtpVerify />,
+      },
+      {
+        path: "test",
+        element: <Test />,
       },
     ],
   },

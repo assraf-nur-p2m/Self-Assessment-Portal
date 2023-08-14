@@ -15,7 +15,7 @@ export default function Registration() {
       password: password.value,
     };
     console.log(userSignUp);
-    navigate("/otp");
+    navigate("/test");
   };
 
   return (
