@@ -20,14 +20,14 @@ export default function Registration() {
 
   return (
     <div className="login-page min-h-screen p-4 md:p-16 flex justify-center items-center">
-      <div className="p-4 rounded-xl bg-white bg-opacity-40 w-full accent-color shadow-md">
+      <div className="p-4 rounded-xl bg-white bg-opacity-40 accent-color shadow-md">
         <div className="login-box md:flex md:justify-center shadow-md md:items-center bg-white rounded-xl p-8 bg-opacity-90 w-full md:w-full">
           <div className="grid lg:grid-cols-2 gap-4 w-full">
             <div className="md:flex md:justify-center md:items-center">
-              <img className="w-full max-w-lg mx-auto" src={signUp} alt="" />
+              <img className="w-10/12 max-w-lg mx-auto" src={signUp} alt="" />
             </div>
             <div className="flex justify-center items-center">
-              <div className="bg-[#E5EBF5] shadow-lg px-12 py-9 rounded-lg lg:w-9/12">
+              <div className="bg-[#E5EBF5] shadow-lg px-12 py-9 rounded-lg lg:w-10/12">
                 <h2 className="text-center font-bold text-4xl">Sign Up</h2>
                 <p className="text-center">It's free and easy</p>
 
