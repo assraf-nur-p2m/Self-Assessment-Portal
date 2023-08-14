@@ -8,14 +8,10 @@ export default function Login() {
         <div className="login-box md:flex md:justify-center shadow-md md:items-center bg-white rounded-xl p-8 bg-opacity-90 w-full md:w-full">
           <div className="grid lg:grid-cols-2 gap-4 w-full">
             <div className="md:flex md:justify-center md:items-center">
-              <img
-                className="w-full max-w-lg mx-auto"
-                src={loginPic}
-                alt=""
-              />
+              <img className="w-full max-w-lg mx-auto" src={loginPic} alt="" />
             </div>
             <div className="flex justify-center items-center">
-              <div className="bg-[#E5EBF5] shadow-lg p-12 rounded-lg lg:w-9/12">
+              <div className="bg-[#E5EBF5] shadow-lg p-12 rounded-lg lg:w-10/12">
                 <h2 className="text-center font-bold text-4xl">Login</h2>
 
                 <form action="">
@@ -25,6 +21,7 @@ export default function Login() {
                       type="email"
                       placeholder="Email"
                       className="input input-bordered w-full max-w-lg border-none shadow-sm"
+                      required
                     />
 
                     <p className="mb-0 ms-1 mt-5 text-[#656566]">
@@ -34,6 +31,8 @@ export default function Login() {
                       type="password"
                       placeholder="Password"
                       className="input input-bordered w-full max-w-lg border-none shadow-sm"
+                      required
+                      minLength={8}
                     />
                     <small className="ms-1 text-[#7d7e80]">
                       Must be 8 character at least
