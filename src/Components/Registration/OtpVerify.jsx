@@ -11,18 +11,20 @@ export default function OtpVerify() {
               <img className="w-60" src={otpImage} alt="" />
             </div>
             <div className="text-center">
-              <h2 className="text-center text-3xl font-semibold">
-                Enter the OTP code
-              </h2>
-              <input
-                type="number"
-                className="mt-5 w-full p-4 shadow-xl border rounded-lg"
-              />
+              <form action="">
+                <h2 className="text-center text-3xl font-semibold">
+                  Enter your <span className="font-bold text-[#004AAD]">OTP</span> code
+                </h2>
+                <input
+                  type="number"
+                  className="mt-5 w-full p-4 shadow-xl border rounded-lg text-center text-xl"
+                />
 
-              <input
-                type="submit"
-                className="mt-8 bg-[#004AAD] text-white px-12 py-3 rounded-lg text-xl"
-              />
+                <input
+                  type="submit"
+                  className="mt-8 bg-[#004AAD] text-white px-12 py-3 rounded-lg text-xl cursor-pointer"
+                />
+              </form>
             </div>
           </div>
         </div>

@@ -1,12 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import signUp from "../../assets/Images/signUp.png";
 import { useState } from "react";
 
 export default function Registration() {
   const [termsChecked, setTermsChecked] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    const { name, mail, password } = e.target;
+    const userSignUp = {
+      name: name.value,
+      mail: mail.value,
+      password: password.value,
+    };
+    console.log(userSignUp);
+    navigate("/otp");
   };
 
   return (
@@ -22,10 +31,11 @@ export default function Registration() {
                 <h2 className="text-center font-bold text-4xl">Sign Up</h2>
                 <p className="text-center">It's free and easy</p>
 
-                <form action="">
+                <form action="" onSubmit={handleSignUp}>
                   <div className="mt-5">
                     <p className="mb-0 ms-1 text-[#656566]">Enter Your Name</p>
                     <input
+                      name="name"
                       type="text"
                       placeholder="Name"
                       className="input input-bordered w-full max-w-lg border-none shadow-sm"
@@ -36,6 +46,7 @@ export default function Registration() {
                       Enter Your Mail
                     </p>
                     <input
+                      name="mail"
                       type="email"
                       placeholder="Email"
                       className="input input-bordered w-full max-w-lg border-none shadow-sm"
@@ -46,6 +57,7 @@ export default function Registration() {
                       Enter Your Password
                     </p>
                     <input
+                      name="password"
                       type="password"
                       placeholder="Password"
                       className="input input-bordered w-full max-w-lg border-none shadow-sm"
