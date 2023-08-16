@@ -5,7 +5,7 @@ export default function Quiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(600); 
+  const [timeLeft, setTimeLeft] = useState(600);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const submitButtonRef = useRef(null);
 
@@ -37,7 +37,7 @@ export default function Quiz() {
 
   useEffect(() => {
     if (!quizSubmitted && timeLeft === 0) {
-      submitButtonRef.current.click(); 
+      submitButtonRef.current.click();
     }
   }, [timeLeft, quizSubmitted]);
 
@@ -77,7 +77,9 @@ export default function Quiz() {
     <div>
       {quizData.length > 0 && (
         <div>
-          <h2>Question {currentQuestionIndex + 1}</h2>
+          <h2>
+            Question {currentQuestionIndex + 1}/{quizData.length}
+          </h2>
           <p>{quizData[currentQuestionIndex].context}</p>
           <p>
             Time Left: {Math.floor(timeLeft / 60)}:
