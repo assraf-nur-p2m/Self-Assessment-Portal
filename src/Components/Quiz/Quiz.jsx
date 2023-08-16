@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
+import { ImArrowRight, ImArrowLeft } from "react-icons/im";
+import { CiSaveUp2 } from "react-icons/ci";
 
 export default function Quiz() {
   const [quizData, setQuizData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(600);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const submitButtonRef = useRef(null);
 
@@ -92,7 +94,7 @@ export default function Quiz() {
                 </div>
 
                 <div>
-                  <h1 className="text-5xl font-semibold">
+                  <h1 className="text-4xl font-semibold">
                     {quizData[currentQuestionIndex].context}
                   </h1>
                 </div>
@@ -104,7 +106,7 @@ export default function Quiz() {
                         return (
                           <label
                             key={key}
-                            className={`flex rounded-md items-center py-3 ps-1 text-xl font-semibold space-x-2 cursor-pointer ${
+                            className={`flex rounded-md py-3 ps-1 text-xl font-semibold space-x-2 cursor-pointer ${
                               selectedOptions[currentQuestionIndex] === key
                                 ? "bg-[#004AAD] text-white"
                                 : "bg-gray-200 text-gray-700"
@@ -136,10 +138,11 @@ export default function Quiz() {
                 <div className="flex justify-between items-center mt-4 absolute bottom-0 w-full">
                   <button
                     onClick={handlePreviousQuestion}
-                    className="bg-[#004AAD] hover:bg-blue-600 text-xl text-white py-2 px-4 rounded"
+                    className="bg-[#004AAD] flex hover:bg-blue-600 text-xl text-white py-2 px-4 rounded"
                   >
-                    Previous
+                    <ImArrowLeft className="mt-[3.5px] me-3" /> Previous
                   </button>
+
                   <p className="countdown">
                     Time Left: {Math.floor(timeLeft / 60)}:
                     {(timeLeft % 60).toString().padStart(2, "0")}
@@ -150,16 +153,17 @@ export default function Quiz() {
                       ref={submitButtonRef}
                       onClick={handleSubmit}
                       disabled={quizSubmitted}
-                      className="bg-[#004AAD] hover:bg-blue-600 text-white text-xl py-2 px-4 rounded"
+                      className="bg-[#004AAD] flex hover:bg-blue-600 text-white text-xl py-2 px-4 rounded"
                     >
-                      Submit
+                      Submit{" "}
+                      <CiSaveUp2 className="mt-[3.5px] ms-3 text-xl font-bold" />
                     </button>
                   ) : (
                     <button
                       onClick={handleNextQuestion}
-                      className="bg-[#004AAD] hover:bg-blue-600 text-white text-xl py-2 px-4 rounded"
+                      className="bg-[#004AAD] flex hover:bg-blue-600 text-white text-xl py-2 px-4 rounded"
                     >
-                      Next
+                      Next <ImArrowRight className="mt-[5px] ms-3" />
                     </button>
                   )}
                 </div>

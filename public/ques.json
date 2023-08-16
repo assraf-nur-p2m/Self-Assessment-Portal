@@ -1,42 +1,82 @@
 [
   {
-    "id": 166,
-    "context": "Who is dilu?",
-    "a": "Dilu is very Bad Boy",
-    "c": "Dilu, who have multiple gf!",
-    "b": "Dilu is known as Play Boy",
-    "d": "dilu is good boy"
+    "id": 1,
+    "context": "What is climate change?",
+    "a": "Climate change refers to long-term alterations in Earth's temperature and weather patterns due to human activities.",
+    "b": "Climate change is the result of natural weather fluctuations over time.",
+    "c": "Climate change is a political hoax with no scientific basis.",
+    "d": "Climate change is only about seasonal variations in temperature."
   },
   {
-    "id": 3332,
-    "context": "Who is Nur?",
-    "a": "Nur is tesla fan",
-    "c": "Nur is a single boy",
-    "b": "Nur have have 4 wife",
-    "d": "Nur could not be a name of any person"
+    "id": 2,
+    "context": "Who was Albert Einstein?",
+    "a": "Albert Einstein was a famous painter and sculptor.",
+    "b": "Albert Einstein was a renowned physicist who developed the theory of relativity.",
+    "c": "Albert Einstein was a professional athlete known for his achievements in track and field.",
+    "d": "Albert Einstein was a philosopher who wrote extensively on ethics and morality."
   },
   {
-    "id": 23,
-    "context": "Who is Pappuraj?",
-    "a": "pappu is king",
-    "c": "no one like pappu",
-    "b": "pappu mean raja",
-    "d": "pappu is used to kissing everyone"
+    "id": 3,
+    "context": "What is the purpose of DNA?",
+    "a": "DNA is responsible for producing energy in cells.",
+    "b": "DNA is a storage molecule for genetic information that codes for traits and functions.",
+    "c": "DNA regulates the body's sleep-wake cycle.",
+    "d": "DNA is essential for digestion and nutrient absorption."
   },
   {
-    "id": 443,
-    "context": "Where P2M is loceted?",
-    "a": "not in bd",
-    "c": "belongs dilu's heart",
-    "b": "besides dilu's hous",
-    "d": "in uganda"
+    "id": 4,
+    "context": "What is the significance of the Mona Lisa painting?",
+    "a": "The Mona Lisa is a representation of a fictional character.",
+    "b": "The Mona Lisa is an artwork created by Vincent van Gogh.",
+    "c": "The Mona Lisa is an iconic painting by Leonardo da Vinci, known for its enigmatic smile.",
+    "d": "The Mona Lisa is a depiction of a historical event."
   },
   {
     "id": 5,
-    "context": "Where P2M is loceted?",
-    "a": "not in bd",
-    "c": "belongs dilu's heart",
-    "b": "besides dilu's hous",
-    "d": "in uganda"
+    "context": "What is renewable energy?",
+    "a": "Renewable energy refers to energy obtained from burning fossil fuels.",
+    "b": "Renewable energy comes from sources that are naturally replenished, like sunlight and wind.",
+    "c": "Renewable energy is a type of energy used exclusively in space exploration.",
+    "d": "Renewable energy is a concept related to ancient civilizations' power sources."
+  },
+  {
+    "id": 6,
+    "context": "Who wrote the play \"Romeo and Juliet\"?",
+    "a": "\"Romeo and Juliet\" was written by William Shakespeare.",
+    "b": "\"Romeo and Juliet\" was written by Jane Austen.",
+    "c": "\"Romeo and Juliet\" was written by Charles Dickens.",
+    "d": "\"Romeo and Juliet\" was written by Mark Twain."
+  },
+  {
+    "id": 7,
+    "context": "What is the capital of Japan?",
+    "a": "The capital of Japan is Tokyo.",
+    "b": "The capital of Japan is Kyoto.",
+    "c": "The capital of Japan is Osaka.",
+    "d": "The capital of Japan is Seoul."
+  },
+  {
+    "id": 8,
+    "context": "What is the purpose of the United Nations (UN)?",
+    "a": "The UN is an international sports organization.",
+    "b": "The UN aims to promote global cooperation, peace, and security among nations.",
+    "c": "The UN primarily focuses on entertainment and cultural events.",
+    "d": "The UN's primary goal is to advance economic growth in developed countries."
+  },
+  {
+    "id": 9,
+    "context": "What is the water cycle?",
+    "a": "The water cycle is the process of purifying water for human consumption.",
+    "b": "The water cycle is the movement of water between Earth's surface and the atmosphere through evaporation, condensation, and precipitation.",
+    "c": "The water cycle is a process used to generate electricity from water.",
+    "d": "The water cycle refers to the controlled distribution of water resources in arid regions."
+  },
+  {
+    "id": 10,
+    "context": "Who painted the famous artwork \"Starry Night\"?",
+    "a": "\"Starry Night\" was painted by Pablo Picasso.",
+    "b": "\"Starry Night\" was painted by Salvador Dalí.",
+    "c": "\"Starry Night\" was painted by Vincent van Gogh.",
+    "d": "\"Starry Night\" was painted by Leonardo da Vinci."
   }
 ]
