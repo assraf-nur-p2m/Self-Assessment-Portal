@@ -83,9 +83,9 @@ export default function Quiz() {
             {quizData.length > 0 && (
               <div className="">
                 <div className="">
-                  <div className="mb-8 h-4 bg-gray-300 rounded-full">
+                  <div className="mb-8 h-4 bg-gray-300 rounded-sm">
                     <div
-                      className="h-full rounded-full bg-[#004AAD]"
+                      className="h-full rounded-sm bg-[#004AAD]"
                       style={{ width: `${progressPercentage}%` }}
                     ></div>
                   </div>
@@ -96,13 +96,20 @@ export default function Quiz() {
                     {quizData[currentQuestionIndex].context}
                   </h1>
                 </div>
-                
-                <div>
-                  <form>
+
+                <div className="mt-12">
+                  <form className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     {Object.keys(quizData[currentQuestionIndex]).map((key) => {
                       if (key.match(/^[a-d]$/)) {
                         return (
-                          <div key={key}>
+                          <label
+                            key={key}
+                            className={`flex rounded-md items-center py-3 ps-1 text-xl font-semibold space-x-2 cursor-pointer ${
+                              selectedOptions[currentQuestionIndex] === key
+                                ? "bg-[#004AAD] text-white"
+                                : "bg-gray-200 text-gray-700"
+                            }`}
+                          >
                             <input
                               type="radio"
                               name={`question_${currentQuestionIndex}`}
@@ -112,9 +119,13 @@ export default function Quiz() {
                               }
                               onChange={() => handleOptionSelect(key)}
                               disabled={quizSubmitted}
+                              className="hidden"
                             />
-                            <label>{quizData[currentQuestionIndex][key]}</label>
-                          </div>
+                            <span className="w-7 h-7 border border-gray-400 rounded-sm flex items-center justify-center">
+                              {key.toUpperCase()}
+                            </span>
+                            <span>{quizData[currentQuestionIndex][key]}</span>
+                          </label>
                         );
                       }
                       return null;
@@ -122,30 +133,31 @@ export default function Quiz() {
                   </form>
                 </div>
 
-                <div className="flex justify-between items-center mt-4">
+                <div className="flex justify-between items-center mt-4 absolute bottom-0 w-full">
                   <button
                     onClick={handlePreviousQuestion}
-                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+                    className="bg-[#004AAD] hover:bg-blue-600 text-xl text-white py-2 px-4 rounded"
                   >
                     Previous
                   </button>
-                  <p>
+                  <p className="countdown">
                     Time Left: {Math.floor(timeLeft / 60)}:
                     {(timeLeft % 60).toString().padStart(2, "0")}
                   </p>
+
                   {isLastQuestion ? (
                     <button
                       ref={submitButtonRef}
                       onClick={handleSubmit}
                       disabled={quizSubmitted}
-                      className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+                      className="bg-[#004AAD] hover:bg-blue-600 text-white text-xl py-2 px-4 rounded"
                     >
                       Submit
                     </button>
                   ) : (
                     <button
                       onClick={handleNextQuestion}
-                      className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+                      className="bg-[#004AAD] hover:bg-blue-600 text-white text-xl py-2 px-4 rounded"
                     >
                       Next
                     </button>
