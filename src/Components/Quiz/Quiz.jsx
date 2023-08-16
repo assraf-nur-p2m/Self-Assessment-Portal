@@ -79,56 +79,78 @@ export default function Quiz() {
     <div className="login-page min-h-screen p-4 md:p-16 flex justify-center items-center">
       <div className="p-4 rounded-xl bg-white bg-opacity-40 accent-color shadow-md">
         <div className="login-box md:flex md:justify-center shadow-md md:items-center bg-white rounded-xl p-8 bg-opacity-90 w-full md:w-full">
-          <div>
+          <div className="w-full md:w-[650px] lg:w-[850px] xl:w-[1100px] h-[60vh] relative">
             {quizData.length > 0 && (
-              <div>
-                <div className="mb-8 h-4 bg-gray-300 rounded-full">
-                  <div
-                    className="h-full rounded-full bg-[#004AAD]"
-                    style={{ width: `${progressPercentage}%` }}
-                  ></div>
+              <div className="">
+                <div className="">
+                  <div className="mb-8 h-4 bg-gray-300 rounded-full">
+                    <div
+                      className="h-full rounded-full bg-[#004AAD]"
+                      style={{ width: `${progressPercentage}%` }}
+                    ></div>
+                  </div>
                 </div>
 
-                <p>{quizData[currentQuestionIndex].context}</p>
-                <p>
-                  Time Left: {Math.floor(timeLeft / 60)}:
-                  {(timeLeft % 60).toString().padStart(2, "0")}
-                </p>
-                <form>
-                  {Object.keys(quizData[currentQuestionIndex]).map((key) => {
-                    if (key.match(/^[a-d]$/)) {
-                      return (
-                        <div key={key}>
-                          <input
-                            type="radio"
-                            name={`question_${currentQuestionIndex}`}
-                            value={key}
-                            checked={
-                              selectedOptions[currentQuestionIndex] === key
-                            }
-                            onChange={() => handleOptionSelect(key)}
-                            disabled={quizSubmitted}
-                          />
-                          <label>{quizData[currentQuestionIndex][key]}</label>
-                        </div>
-                      );
-                    }
-                    return null;
-                  })}
-                </form>
-                <button onClick={handlePreviousQuestion}>Previous</button>
-                {isLastQuestion ? (
+                <div>
+                  <h1 className="text-5xl font-semibold">
+                    {quizData[currentQuestionIndex].context}
+                  </h1>
+                </div>
+                
+                <div>
+                  <form>
+                    {Object.keys(quizData[currentQuestionIndex]).map((key) => {
+                      if (key.match(/^[a-d]$/)) {
+                        return (
+                          <div key={key}>
+                            <input
+                              type="radio"
+                              name={`question_${currentQuestionIndex}`}
+                              value={key}
+                              checked={
+                                selectedOptions[currentQuestionIndex] === key
+                              }
+                              onChange={() => handleOptionSelect(key)}
+                              disabled={quizSubmitted}
+                            />
+                            <label>{quizData[currentQuestionIndex][key]}</label>
+                          </div>
+                        );
+                      }
+                      return null;
+                    })}
+                  </form>
+                </div>
+
+                <div className="flex justify-between items-center mt-4">
                   <button
-                    ref={submitButtonRef}
-                    onClick={handleSubmit}
-                    disabled={quizSubmitted}
+                    onClick={handlePreviousQuestion}
+                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
                   >
-                    Submit
+                    Previous
                   </button>
-                ) : (
-                  <button onClick={handleNextQuestion}>Next</button>
-                )}
-                {submitSuccess && <p>Options submitted successfully!</p>}
+                  <p>
+                    Time Left: {Math.floor(timeLeft / 60)}:
+                    {(timeLeft % 60).toString().padStart(2, "0")}
+                  </p>
+                  {isLastQuestion ? (
+                    <button
+                      ref={submitButtonRef}
+                      onClick={handleSubmit}
+                      disabled={quizSubmitted}
+                      className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+                    >
+                      Submit
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleNextQuestion}
+                      className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+                    >
+                      Next
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
