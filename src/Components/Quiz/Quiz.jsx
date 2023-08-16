@@ -72,6 +72,8 @@ export default function Quiz() {
   };
 
   const isLastQuestion = currentQuestionIndex === quizData.length - 1;
+  const progressPercentage =
+    (currentQuestionIndex / (quizData.length - 1)) * 100;
 
   return (
     <div className="login-page min-h-screen p-4 md:p-16 flex justify-center items-center">
@@ -80,9 +82,13 @@ export default function Quiz() {
           <div>
             {quizData.length > 0 && (
               <div>
-                <h2>
-                  Question {currentQuestionIndex + 1}/{quizData.length}
-                </h2>
+                <div className="mb-8 h-4 bg-gray-300 rounded-full">
+                  <div
+                    className="h-full rounded-full bg-[#004AAD]"
+                    style={{ width: `${progressPercentage}%` }}
+                  ></div>
+                </div>
+
                 <p>{quizData[currentQuestionIndex].context}</p>
                 <p>
                   Time Left: {Math.floor(timeLeft / 60)}:
