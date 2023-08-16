@@ -5,7 +5,7 @@ export default function Quiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(600);
+  const [timeLeft, setTimeLeft] = useState(30);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const submitButtonRef = useRef(null);
 
@@ -36,7 +36,7 @@ export default function Quiz() {
   }, [timeLeft, quizSubmitted]);
 
   useEffect(() => {
-    if (!quizSubmitted && timeLeft === 0) {
+    if (!quizSubmitted && timeLeft === 0 && submitButtonRef.current) {
       submitButtonRef.current.click();
     }
   }, [timeLeft, quizSubmitted]);
@@ -65,7 +65,7 @@ export default function Quiz() {
 
     const optionsToSend = quizData.map((question, index) => ({
       questionId: question.id,
-      selectedOption: selectedOptions[index],
+      selectedOption: selectedOptions[index] || null,
     }));
 
     console.log(optionsToSend);
@@ -74,52 +74,60 @@ export default function Quiz() {
   const isLastQuestion = currentQuestionIndex === quizData.length - 1;
 
   return (
-    <div>
-      {quizData.length > 0 && (
-        <div>
-          <h2>
-            Question {currentQuestionIndex + 1}/{quizData.length}
-          </h2>
-          <p>{quizData[currentQuestionIndex].context}</p>
-          <p>
-            Time Left: {Math.floor(timeLeft / 60)}:
-            {(timeLeft % 60).toString().padStart(2, "0")}
-          </p>
-          <form>
-            {Object.keys(quizData[currentQuestionIndex]).map((key) => {
-              if (key.match(/^[a-d]$/)) {
-                return (
-                  <div key={key}>
-                    <input
-                      type="radio"
-                      name={`question_${currentQuestionIndex}`}
-                      value={key}
-                      checked={selectedOptions[currentQuestionIndex] === key}
-                      onChange={() => handleOptionSelect(key)}
-                      disabled={quizSubmitted} // Disable options after submitting
-                    />
-                    <label>{quizData[currentQuestionIndex][key]}</label>
-                  </div>
-                );
-              }
-              return null;
-            })}
-          </form>
-          <button onClick={handlePreviousQuestion}>Previous</button>
-          {isLastQuestion ? (
-            <button
-              ref={submitButtonRef}
-              onClick={handleSubmit}
-              disabled={quizSubmitted}
-            >
-              Submit
-            </button>
-          ) : (
-            <button onClick={handleNextQuestion}>Next</button>
-          )}
-          {submitSuccess && <p>Options submitted successfully!</p>}
+    <div className="login-page min-h-screen p-4 md:p-16 flex justify-center items-center">
+      <div className="p-4 rounded-xl bg-white bg-opacity-40 accent-color shadow-md">
+        <div className="login-box md:flex md:justify-center shadow-md md:items-center bg-white rounded-xl p-8 bg-opacity-90 w-full md:w-full">
+          <div>
+            {quizData.length > 0 && (
+              <div>
+                <h2>
+                  Question {currentQuestionIndex + 1}/{quizData.length}
+                </h2>
+                <p>{quizData[currentQuestionIndex].context}</p>
+                <p>
+                  Time Left: {Math.floor(timeLeft / 60)}:
+                  {(timeLeft % 60).toString().padStart(2, "0")}
+                </p>
+                <form>
+                  {Object.keys(quizData[currentQuestionIndex]).map((key) => {
+                    if (key.match(/^[a-d]$/)) {
+                      return (
+                        <div key={key}>
+                          <input
+                            type="radio"
+                            name={`question_${currentQuestionIndex}`}
+                            value={key}
+                            checked={
+                              selectedOptions[currentQuestionIndex] === key
+                            }
+                            onChange={() => handleOptionSelect(key)}
+                            disabled={quizSubmitted}
+                          />
+                          <label>{quizData[currentQuestionIndex][key]}</label>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                </form>
+                <button onClick={handlePreviousQuestion}>Previous</button>
+                {isLastQuestion ? (
+                  <button
+                    ref={submitButtonRef}
+                    onClick={handleSubmit}
+                    disabled={quizSubmitted}
+                  >
+                    Submit
+                  </button>
+                ) : (
+                  <button onClick={handleNextQuestion}>Next</button>
+                )}
+                {submitSuccess && <p>Options submitted successfully!</p>}
+              </div>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
