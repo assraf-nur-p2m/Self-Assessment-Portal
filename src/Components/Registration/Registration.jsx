@@ -15,7 +15,7 @@ export default function Registration() {
       password: password.value,
     };
     console.log(userSignUp);
-    navigate("/test");
+    navigate("/quiz");
   };
 
   return (

@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loginPic from "../../assets/Images/loginBanner.png";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const handleLogin = (e) => {
     e.preventDefault();
     const { mail, password } = e.target;
@@ -10,6 +12,7 @@ export default function Login() {
       password: password.value,
     };
     console.log(loginData);
+    navigate("/quiz");
   };
 
   return (
