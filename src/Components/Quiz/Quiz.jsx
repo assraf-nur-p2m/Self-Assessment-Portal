@@ -14,6 +14,7 @@ const Quiz = () => {
   const submitButtonRef = useRef(null);
   const navigate = useNavigate();
 
+  // fetching data from api
   useEffect(() => {
     fetch(
       "https://self-assesment-portal-production.up.railway.app/api/questions"
@@ -40,6 +41,7 @@ const Quiz = () => {
     }
   }, [timeLeft, quizSubmitted]);
 
+  // auto submit function after timer stops
   useEffect(() => {
     if (!quizSubmitted && timeLeft === 0) {
       Swal.fire({
@@ -74,14 +76,41 @@ const Quiz = () => {
             })
             .then((data) => {
               console.log("Response data:", data);
+              let timerInterval;
+              Swal.fire({
+                title: "Auto close alert!",
+                html: "I will close in <b></b> milliseconds.",
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () => {
+                  Swal.showLoading();
+                  const b = Swal.getHtmlContainer().querySelector("b");
+                  const timerInterval = setInterval(() => {
+                    b.textContent = Swal.getTimerLeft();
+                  }, 100);
+                  // Navigate to "/result" after the alert closes
+                  timerInterval &&
+                    setTimeout(() => {
+                      navigate("/result");
+                    }, 2000);
+                },
+                willClose: () => {
+                  clearInterval(timerInterval);
+                },
+              });
             })
             .catch((error) => {
               console.error("Error submitting data:", error);
             });
 
           console.log(optionsToSend);
-          Swal.fire("Submitted!", "Your answer has been submitted.", "success");
-          navigate("/result");
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Your answer has been Submitted",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       });
     }
@@ -106,6 +135,7 @@ const Quiz = () => {
     }));
   };
 
+  // submit answers function
   const handleSubmit = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -140,18 +170,46 @@ const Quiz = () => {
           })
           .then((data) => {
             console.log("Response data:", data);
+            let timerInterval;
+            Swal.fire({
+              title: "Calculating Result",
+              html: "It will close in <b></b> milliseconds.",
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+                const b = Swal.getHtmlContainer().querySelector("b");
+                const timerInterval = setInterval(() => {
+                  b.textContent = Swal.getTimerLeft();
+                }, 100);
+                // Navigate to "/result" after the alert closes
+                timerInterval &&
+                  setTimeout(() => {
+                    navigate("/result");
+                  }, 2000);
+              },
+              willClose: () => {
+                clearInterval(timerInterval);
+              },
+            });
           })
           .catch((error) => {
             console.error("Error submitting data:", error);
           });
 
         console.log(optionsToSend);
-        Swal.fire("Submitted!", "Your answer has been submitted.", "success");
-        navigate("/result");
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Your work has been saved",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     });
   };
 
+  // progress bar
   const isLastQuestion = currentQuestionIndex === quizData.length - 1;
   const progressPercentage =
     (currentQuestionIndex / (quizData.length - 1)) * 100;
