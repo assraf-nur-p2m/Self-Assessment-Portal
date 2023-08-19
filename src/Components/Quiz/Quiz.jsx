@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ImArrowRight, ImArrowLeft } from "react-icons/im";
 import { CiSaveUp2 } from "react-icons/ci";
+import { motion } from "framer-motion";
 
 export default function Quiz() {
   const [quizData, setQuizData] = useState([]);
@@ -93,19 +94,33 @@ export default function Quiz() {
                   </div>
                 </div>
 
-                <div>
-                  <h1 className="text-4xl font-semibold">
+                <div key={currentQuestionIndex}>
+                  <motion.h1
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-4xl font-semibold"
+                  >
                     {quizData[currentQuestionIndex].context}
-                  </h1>
+                  </motion.h1>
                 </div>
 
-                <div className="mt-12">
+                <motion.div
+                  className="mt-12"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
                   <form className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     {Object.keys(quizData[currentQuestionIndex]).map((key) => {
                       if (key.match(/^[a-d]$/)) {
                         return (
-                          <label
-                            key={key}
+                          <motion.label
+                            key={`${key}-${currentQuestionIndex}`}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.1 * key }}
                             className={`flex rounded-md py-3 ps-1 text-xl font-semibold space-x-2 cursor-pointer ${
                               selectedOptions[currentQuestionIndex] === key
                                 ? "bg-[#004AAD] text-white"
@@ -127,45 +142,47 @@ export default function Quiz() {
                               {key.toUpperCase()}
                             </span>
                             <span>{quizData[currentQuestionIndex][key]}</span>
-                          </label>
+                          </motion.label>
                         );
                       }
                       return null;
                     })}
                   </form>
-                </div>
+                </motion.div>
 
                 <div className="flex justify-between items-center mt-4 absolute bottom-0 w-full">
-                  <button
+                  <motion.button
                     onClick={handlePreviousQuestion}
                     className="bg-[#004AAD] flex hover:bg-blue-600 text-xl text-white py-2 px-4 rounded"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     <ImArrowLeft className="mt-[3.5px] me-3" /> Previous
-                  </button>
+                  </motion.button>
 
                   <p className="countdown">
                     Time Left: {Math.floor(timeLeft / 60)}:
                     {(timeLeft % 60).toString().padStart(2, "0")}
                   </p>
 
-                  {isLastQuestion ? (
-                    <button
-                      ref={submitButtonRef}
-                      onClick={handleSubmit}
-                      disabled={quizSubmitted}
-                      className="bg-[#004AAD] flex hover:bg-blue-600 text-white text-xl py-2 px-4 rounded"
-                    >
-                      Submit{" "}
-                      <CiSaveUp2 className="mt-[3.5px] ms-3 text-xl font-bold" />
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handleNextQuestion}
-                      className="bg-[#004AAD] flex hover:bg-blue-600 text-white text-xl py-2 px-4 rounded"
-                    >
-                      Next <ImArrowRight className="mt-[5px] ms-3" />
-                    </button>
-                  )}
+                  <motion.button
+                    onClick={isLastQuestion ? handleSubmit : handleNextQuestion}
+                    disabled={quizSubmitted}
+                    className="bg-[#004AAD] flex hover:bg-blue-600 text-white text-xl py-2 px-4 rounded"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {isLastQuestion ? (
+                      <>
+                        Submit{" "}
+                        <CiSaveUp2 className="mt-[3.5px] ms-3 text-xl font-bold" />
+                      </>
+                    ) : (
+                      <>
+                        Next <ImArrowRight className="mt-[5px] ms-3" />
+                      </>
+                    )}
+                  </motion.button>
                 </div>
               </div>
             )}
