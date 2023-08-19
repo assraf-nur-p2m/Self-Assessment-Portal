@@ -6,6 +6,7 @@ import Registration from "../Components/Registration/Registration";
 import OtpVerify from "../Components/Registration/OtpVerify";
 import Test from "../Components/Test";
 import Quiz from "../Components/Quiz/Quiz";
+import Result from "../Components/Quiz/Result";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: "quiz",
         element: <Quiz />,
+      },
+      {
+        path: "result",
+        element: <Result />,
       },
     ],
   },
