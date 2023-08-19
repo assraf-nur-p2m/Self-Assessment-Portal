@@ -9,7 +9,7 @@ const Quiz = () => {
   const [quizData, setQuizData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [timeLeft, setTimeLeft] = useState(600);
+  const [timeLeft, setTimeLeft] = useState(10);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const submitButtonRef = useRef(null);
   const navigate = useNavigate();
@@ -41,8 +41,49 @@ const Quiz = () => {
   }, [timeLeft, quizSubmitted]);
 
   useEffect(() => {
-    if (!quizSubmitted && timeLeft === 0 && submitButtonRef.current) {
-      submitButtonRef.current.click();
+    if (!quizSubmitted && timeLeft === 0) {
+      Swal.fire({
+        title: "Time's up!",
+        text: "Your time for the quiz has expired.",
+        icon: "warning",
+        confirmButtonColor: "#004AAD",
+        confirmButtonText: "Submit Answers",
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setQuizSubmitted(true);
+
+          const optionsToSend = quizData.map((question, index) => ({
+            questionId: question.id,
+            selectedOption: selectedOptions[index] || null,
+          }));
+
+          fetch(
+            "https://self-assesment-portal-production.up.railway.app/api/answers",
+            {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify(optionsToSend),
+            }
+          )
+            .then((res) => {
+              console.log("Response status:", res.status);
+              return res.json();
+            })
+            .then((data) => {
+              console.log("Response data:", data);
+            })
+            .catch((error) => {
+              console.error("Error submitting data:", error);
+            });
+
+          console.log(optionsToSend);
+          Swal.fire("Submitted!", "Your answer has been submitted.", "success");
+          navigate("/result");
+        }
+      });
     }
   }, [timeLeft, quizSubmitted]);
 
