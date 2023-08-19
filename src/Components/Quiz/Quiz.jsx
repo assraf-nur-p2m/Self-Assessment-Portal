@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { ImArrowRight, ImArrowLeft } from "react-icons/im";
 import { CiSaveUp2 } from "react-icons/ci";
 import { motion } from "framer-motion";
+import Swal from "sweetalert2";
 
 export default function Quiz() {
   const [quizData, setQuizData] = useState([]);
@@ -64,14 +65,27 @@ export default function Quiz() {
   };
 
   const handleSubmit = () => {
-    setQuizSubmitted(true);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to submit your answer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#004AAD",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, submit it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setQuizSubmitted(true);
 
-    const optionsToSend = quizData.map((question, index) => ({
-      questionId: question.id,
-      selectedOption: selectedOptions[index] || null,
-    }));
+        const optionsToSend = quizData.map((question, index) => ({
+          questionId: question.id,
+          selectedOption: selectedOptions[index] || null,
+        }));
 
-    console.log(optionsToSend);
+        console.log(optionsToSend);
+        Swal.fire("Submitted!", "Your answer has been submitted.", "success");
+      }
+    });
   };
 
   const isLastQuestion = currentQuestionIndex === quizData.length - 1;
