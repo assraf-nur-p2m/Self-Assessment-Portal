@@ -14,7 +14,9 @@ export default function Quiz() {
   const submitButtonRef = useRef(null);
 
   useEffect(() => {
-    fetch("ques.json")
+    fetch(
+      "https://self-assesment-portal-production.up.railway.app/api/questions"
+    )
       .then((res) => res.json())
       .then((data) => {
         setQuizData(data);
@@ -78,9 +80,30 @@ export default function Quiz() {
         setQuizSubmitted(true);
 
         const optionsToSend = quizData.map((question, index) => ({
-          questionId: question.id,
+          questionsId: question.id,
           selectedOption: selectedOptions[index] || null,
         }));
+
+        fetch(
+          "https://self-assesment-portal-production.up.railway.app/api/answers",
+          {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(optionsToSend),
+          }
+        )
+          .then((res) => {
+            console.log("Response status:", res.status);
+            return res.json();
+          })
+          .then((data) => {
+            console.log("Response data:", data);
+          })
+          .catch((error) => {
+            console.error("Error submitting data:", error);
+          });
 
         console.log(optionsToSend);
         Swal.fire("Submitted!", "Your answer has been submitted.", "success");
