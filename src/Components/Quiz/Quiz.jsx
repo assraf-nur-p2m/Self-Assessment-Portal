@@ -160,14 +160,14 @@ export default function Quiz() {
                     <ImArrowLeft className="mt-[3.5px] me-3" /> Previous
                   </motion.button>
 
-                  <p className="countdown">
-                    Time Left: {Math.floor(timeLeft / 60)}:
+                  <p className="text-2xl font-bold">
+                    {Math.floor(timeLeft / 60)}:
                     {(timeLeft % 60).toString().padStart(2, "0")}
                   </p>
 
                   <motion.button
                     onClick={isLastQuestion ? handleSubmit : handleNextQuestion}
-                    disabled={quizSubmitted}
+                    disabled={quizSubmitted && isLastQuestion}
                     className="bg-[#004AAD] flex hover:bg-blue-600 text-white text-xl py-2 px-4 rounded"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
