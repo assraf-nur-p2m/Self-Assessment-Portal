@@ -9,7 +9,7 @@ const Quiz = () => {
   const [quizData, setQuizData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(600);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const submitButtonRef = useRef(null);
   const navigate = useNavigate();
@@ -78,7 +78,7 @@ const Quiz = () => {
               console.log("Response data:", data);
               let timerInterval;
               Swal.fire({
-                title: "Auto close alert!",
+                title: "Calculating Result",
                 html: "I will close in <b></b> milliseconds.",
                 timer: 2000,
                 timerProgressBar: true,
