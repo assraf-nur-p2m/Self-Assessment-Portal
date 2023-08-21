@@ -64,41 +64,42 @@ export default function SetQuestion() {
   };
 
   return (
-    <div className="p-2 shadow-lg rounded-xl">
+    <div className="p-2 shadow-lg rounded-xl h-[96vh]">
       <form action="" onSubmit={handleSubmit}>
         <div className="p-2">
+          <h2 className="ps-4 text-xl mb-[-10px]">Select Question Level</h2>
           <div className="flex items-center p-4">
-            <div className="mr-12 flex">
+            <div className="mr-12 flex bg-green-300 px-2 py-2 rounded-lg font-semibold shadow-lg">
               <input
                 type="radio"
                 id="level1"
                 name="questionLevel"
                 value="1"
-                className="mr-2 radio"
+                className="mr-2 radio shadow-md"
               />
               <label htmlFor="level1" className="label-text text-lg">
                 Level 1
               </label>
             </div>
-            <div className="mr-12 flex">
+            <div className="mr-12 flex bg-yellow-300 px-2 py-2 rounded-lg font-semibold shadow-lg">
               <input
                 type="radio"
                 id="level2"
                 name="questionLevel"
                 value="2"
-                className="mr-2 radio"
+                className="mr-2 radio  shadow-md"
               />
               <label htmlFor="level2" className="label-text text-lg">
                 Level 2
               </label>
             </div>
-            <div className="flex">
+            <div className="flex bg-red-400 px-2 py-2 rounded-lg font-semibold shadow-lg">
               <input
                 type="radio"
                 id="level3"
                 name="questionLevel"
                 value="3"
-                className="mr-2 radio"
+                className="mr-2 radio  shadow-md"
               />
               <label htmlFor="level3" className="label-text text-lg">
                 Level 3
@@ -133,7 +134,7 @@ export default function SetQuestion() {
                       id="optionARadio"
                       name="correctAnswer"
                       value="A"
-                      className="mr-2 radio"
+                      className="mr-2 radio shadow-md"
                     />
                     <input
                       name="optionA"
@@ -148,7 +149,7 @@ export default function SetQuestion() {
                       id="optionARadio"
                       name="correctAnswer"
                       value="B"
-                      className="mr-2 radio"
+                      className="mr-2 radio shadow-md"
                     />
                     <input
                       name="optionB"
@@ -163,7 +164,7 @@ export default function SetQuestion() {
                       id="optionARadio"
                       name="correctAnswer"
                       value="C"
-                      className="mr-2 radio"
+                      className="mr-2 radio shadow-md"
                     />
                     <input
                       name="optionC"
@@ -178,7 +179,7 @@ export default function SetQuestion() {
                       id="optionARadio"
                       name="correctAnswer"
                       value="D"
-                      className="mr-2 radio"
+                      className="mr-2 radio shadow-md"
                     />
                     <input
                       name="optionD"

@@ -1,8 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import QuestionList from "./QuestionList";
 
 export default function Dashboard() {
   const location = useLocation();
+  const [isQuestionListOpen, setIsQuestionListOpen] = useState(false);
+
+  const handleQuestionListToggle = () => {
+    setIsQuestionListOpen(!isQuestionListOpen);
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (isQuestionListOpen && e.target.closest(".menu-dropdown") === null) {
+        setIsQuestionListOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [isQuestionListOpen]);
 
   return (
     <div>
@@ -29,6 +49,73 @@ export default function Dashboard() {
               >
                 Set Question
               </Link>
+            </li>
+            <hr />
+            <li className="relative menu-dropdown">
+              <button
+                onClick={handleQuestionListToggle}
+                className={`text-xl font-semibold py-3 ${
+                  location.pathname.startsWith("/dashboard/question-list") ||
+                  isQuestionListOpen
+                    ? "bg-[#004bad2d]"
+                    : ""
+                }`}
+              >
+                Question List
+                <span
+                  className={`ml-2 ${
+                    isQuestionListOpen ? "transform rotate-180" : ""
+                  } transition`}
+                >
+                  ▼
+                </span>
+              </button>
+              {isQuestionListOpen && (
+                <ul className="menu-sub p-2 shadow z-[1] bg-base-100 rounded-box w-52 absolute left-0 top-full">
+                  <li>
+                    <Link
+                      className={`text-xl font-semibold py-2 bg-green-300 ${
+                        location.pathname.startsWith(
+                          "/dashboard/question-list/level/1"
+                        )
+                          ? "bg-[#004bad2d]"
+                          : ""
+                      }`}
+                      to="/dashboard/question-list/level/1"
+                    >
+                      Level 1
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className={`text-xl font-semibold py-2 bg-yellow-300 mt-2 ${
+                        location.pathname.startsWith(
+                          "/dashboard/question-list/level/2"
+                        )
+                          ? "bg-[#004bad2d]"
+                          : ""
+                      }`}
+                      to="/dashboard/question-list/level/2"
+                    >
+                      Level 2
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className={`text-xl font-semibold py-2 bg-red-400 mt-2 ${
+                        location.pathname.startsWith(
+                          "/dashboard/question-list/level/3"
+                        )
+                          ? "bg-[#004bad2d]"
+                          : ""
+                      }`}
+                      to="/dashboard/question-list/level/3"
+                    >
+                      Level 3
+                    </Link>
+                  </li>
+                </ul>
+              )}
             </li>
             <hr />
             <li>
