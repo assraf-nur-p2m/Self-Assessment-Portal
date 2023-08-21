@@ -1,9 +1,38 @@
 import React from "react";
 
 export default function SetQuestion() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const {
+      questionLevel,
+      question,
+      optionA,
+      optionB,
+      optionC,
+      optionD,
+      description,
+      correctAnswer,
+    } = e.target;
+
+    const setQuestion = {
+      level: questionLevel.value,
+      ques: question.value,
+      correctAnswer: correctAnswer.value,
+      options: {
+        optionA: optionA.value,
+        optionB: optionB.value,
+        optionC: optionC.value,
+        optionD: optionD.value,
+      },
+      description: description.value,
+    };
+
+    console.log(setQuestion);
+  };
+
   return (
     <div className="p-2 shadow-lg rounded-xl">
-      <form action="">
+      <form action="" onSubmit={handleSubmit}>
         <div className="p-2">
           <div className="flex items-center p-4">
             <div className="mr-12 flex">
@@ -68,9 +97,9 @@ export default function SetQuestion() {
                   <div className="flex items-center">
                     <input
                       type="radio"
-                      id="optionA"
-                      name="option"
-                      value="Option A"
+                      id="optionARadio"
+                      name="correctAnswer"
+                      value="A"
                       className="mr-2 radio"
                     />
                     <input
@@ -83,9 +112,9 @@ export default function SetQuestion() {
                   <div className="flex items-center">
                     <input
                       type="radio"
-                      id="optionB"
-                      name="option"
-                      value="Option B"
+                      id="optionARadio"
+                      name="correctAnswer"
+                      value="B"
                       className="mr-2 radio"
                     />
                     <input
@@ -98,9 +127,9 @@ export default function SetQuestion() {
                   <div className="flex items-center">
                     <input
                       type="radio"
-                      id="optionC"
-                      name="option"
-                      value="Option C"
+                      id="optionARadio"
+                      name="correctAnswer"
+                      value="C"
                       className="mr-2 radio"
                     />
                     <input
@@ -113,9 +142,9 @@ export default function SetQuestion() {
                   <div className="flex items-center">
                     <input
                       type="radio"
-                      id="optionD"
-                      name="option"
-                      value="Option D"
+                      id="optionARadio"
+                      name="correctAnswer"
+                      value="D"
                       className="mr-2 radio"
                     />
                     <input
