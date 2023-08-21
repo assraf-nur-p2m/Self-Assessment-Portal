@@ -1,4 +1,5 @@
 import React from "react";
+import Swal from "sweetalert2";
 
 export default function SetQuestion() {
   const handleSubmit = (e) => {
@@ -14,18 +15,50 @@ export default function SetQuestion() {
       correctAnswer,
     } = e.target;
 
+    if (
+      !questionLevel.value ||
+      !question.value ||
+      !correctAnswer.value ||
+      (!optionA.value && !optionB.value && !optionC.value && !optionD.value)
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Please fill out all required fields",
+      });
+      return;
+    }
+
     const setQuestion = {
       level: questionLevel.value,
-      ques: question.value,
-      correctAnswer: correctAnswer.value,
-      options: {
-        optionA: optionA.value,
-        optionB: optionB.value,
-        optionC: optionC.value,
-        optionD: optionD.value,
+      context: question.value,
+      answer: {
+        description: description.value,
+        correctAnswer: correctAnswer.value,
+        a: optionA.value || null,
+        b: optionB.value || null,
+        c: optionC.value || null,
+        d: optionD.value || null,
       },
-      description: description.value,
     };
+
+    fetch("http://192.168.1.29:8081/admin/question", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(setQuestion),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Question Submitted",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        e.target.reset();
+      });
 
     console.log(setQuestion);
   };
@@ -40,7 +73,7 @@ export default function SetQuestion() {
                 type="radio"
                 id="level1"
                 name="questionLevel"
-                value="Level 1"
+                value="1"
                 className="mr-2 radio"
               />
               <label htmlFor="level1" className="label-text text-lg">
@@ -52,7 +85,7 @@ export default function SetQuestion() {
                 type="radio"
                 id="level2"
                 name="questionLevel"
-                value="Level 2"
+                value="2"
                 className="mr-2 radio"
               />
               <label htmlFor="level2" className="label-text text-lg">
@@ -64,7 +97,7 @@ export default function SetQuestion() {
                 type="radio"
                 id="level3"
                 name="questionLevel"
-                value="Level 3"
+                value="3"
                 className="mr-2 radio"
               />
               <label htmlFor="level3" className="label-text text-lg">
