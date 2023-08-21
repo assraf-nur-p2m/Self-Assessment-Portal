@@ -7,6 +7,9 @@ import OtpVerify from "../Components/Registration/OtpVerify";
 import Test from "../Components/Test";
 import Quiz from "../Components/Quiz/Quiz";
 import Result from "../Components/Quiz/Result";
+import Dashboard from "../Components/Admin/Dashboard";
+import SetQuestion from "../Components/Admin/SetQuestion";
+import UserList from "../Components/Admin/UserList";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +44,20 @@ export const router = createBrowserRouter([
         path: "result",
         element: <Result />,
       },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+    children: [
+      {
+        path: "/dashboard",
+        element: <SetQuestion />,
+      },
+      {
+        path: "/dashboard/user-list",
+        element: <UserList/>,
+      }
     ],
   },
 ]);
