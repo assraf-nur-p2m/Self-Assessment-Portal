@@ -9,7 +9,7 @@ const Quiz = () => {
   const [quizData, setQuizData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [timeLeft, setTimeLeft] = useState(600);
+  const [timeLeft, setTimeLeft] = useState(10);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const submitButtonRef = useRef(null);
   const navigate = useNavigate();
