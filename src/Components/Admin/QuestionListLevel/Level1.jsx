@@ -1,7 +1,9 @@
-import React from 'react'
+import React from "react";
 
 export default function Level1() {
   return (
-    <div>Level1</div>
-  )
+    <div className="p-2 shadow-lg rounded-xl">
+      <div></div>
+    </div>
+  );
 }

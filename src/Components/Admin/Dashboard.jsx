@@ -76,12 +76,12 @@ export default function Dashboard() {
                     <Link
                       className={`text-xl font-semibold py-2 bg-green-300 ${
                         location.pathname.startsWith(
-                          "/dashboard/question-list/level/1"
+                          "/dashboard/question-list/level-1"
                         )
                           ? "bg-[#004bad2d]"
                           : ""
                       }`}
-                      to="/dashboard/question-list/level/1"
+                      to="/dashboard/question-list/level-1"
                     >
                       Level 1
                     </Link>
@@ -90,12 +90,12 @@ export default function Dashboard() {
                     <Link
                       className={`text-xl font-semibold py-2 bg-yellow-300 mt-2 ${
                         location.pathname.startsWith(
-                          "/dashboard/question-list/level/2"
+                          "/dashboard/question-list/level-2"
                         )
                           ? "bg-[#004bad2d]"
                           : ""
                       }`}
-                      to="/dashboard/question-list/level/2"
+                      to="/dashboard/question-list/level-2"
                     >
                       Level 2
                     </Link>
@@ -104,12 +104,12 @@ export default function Dashboard() {
                     <Link
                       className={`text-xl font-semibold py-2 bg-red-400 mt-2 ${
                         location.pathname.startsWith(
-                          "/dashboard/question-list/level/3"
+                          "/dashboard/question-list/level-3"
                         )
                           ? "bg-[#004bad2d]"
                           : ""
                       }`}
-                      to="/dashboard/question-list/level/3"
+                      to="/dashboard/question-list/level-3"
                     >
                       Level 3
                     </Link>

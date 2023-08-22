@@ -77,7 +77,10 @@ export default function SetQuestion() {
                 value="1"
                 className="mr-2 radio shadow-md"
               />
-              <label htmlFor="level1" className="label-text text-lg">
+              <label
+                htmlFor="level1"
+                className="label-text text-lg cursor-pointer"
+              >
                 Level 1
               </label>
             </div>
@@ -89,7 +92,10 @@ export default function SetQuestion() {
                 value="2"
                 className="mr-2 radio  shadow-md"
               />
-              <label htmlFor="level2" className="label-text text-lg">
+              <label
+                htmlFor="level2"
+                className="label-text text-lg cursor-pointer"
+              >
                 Level 2
               </label>
             </div>
@@ -101,7 +107,10 @@ export default function SetQuestion() {
                 value="3"
                 className="mr-2 radio  shadow-md"
               />
-              <label htmlFor="level3" className="label-text text-lg">
+              <label
+                htmlFor="level3"
+                className="label-text text-lg cursor-pointer"
+              >
                 Level 3
               </label>
             </div>

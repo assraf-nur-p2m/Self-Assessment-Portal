@@ -67,15 +67,15 @@ export const router = createBrowserRouter([
         element: <QuestionList />,
       },
       {
-        path: "/dashboard/question-list/level/1",
+        path: "/dashboard/question-list/level-1",
         element: <Level1 />,
       },
       {
-        path: "/dashboard/question-list/level/2",
+        path: "/dashboard/question-list/level-2",
         element: <Level2 />,
       },
       {
-        path: "/dashboard/question-list/level/3",
+        path: "/dashboard/question-list/level-3",
         element: <Level3 />,
       },
     ],
