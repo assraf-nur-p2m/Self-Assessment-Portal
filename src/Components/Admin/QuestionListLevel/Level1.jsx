@@ -62,8 +62,8 @@ export default function Level1() {
             <tr className="text-lg bg-[#004bad2d] rounded-lg">
               <th className="font-bold">ID</th>
               <th className="font-bold">Questions</th>
-              <th className="font-bold">Options</th>
-              <th className="font-bold">Action</th>
+              <th className="font-bold text-center">Options</th>
+              <th className="font-bold text-center">Action</th>
             </tr>
           </thead>
           <tbody>
