@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 export default function Level1() {
   const [question1, setQuestion1] = useState([]);
@@ -48,6 +49,34 @@ export default function Level1() {
       );
     }
     return pageNumbers;
+  };
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const url = `http://192.168.1.29:8081/admin/question/${id}`;
+
+        fetch(url, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.deletedCount > 0) {
+              const remaining = question1.filter((item) => item.id !== id);
+              setQuestion1(remaining);
+            }
+          });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
   };
 
   return (
@@ -117,7 +146,12 @@ export default function Level1() {
                 <td width="30">
                   <div className="flex gap-5">
                     <button className="btn btn-sm bg-blue-200">Edit</button>
-                    <button className="btn btn-sm bg-red-200">Delete</button>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="btn btn-sm bg-red-200"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </td>
               </tr>
