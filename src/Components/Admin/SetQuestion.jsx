@@ -213,11 +213,11 @@ export default function SetQuestion() {
             </div>
             <div className="w-full text-center mt-12">
               <input
-                className="btn text-white bg-[#004aad] px-24 shadow-xl"
+                className="btn text-white bg-[#004aad] px-24 shadow-xl hover:bg-green-500"
                 value="Add Question"
                 type="submit"
               />
-            </div>
+            </div>  
           </div>
         </div>
       </form>

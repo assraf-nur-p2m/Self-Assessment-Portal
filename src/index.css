@@ -51,3 +51,9 @@ html {
   border-radius: 10px;
   margin-bottom: -10px;
 }
+.correct-answer {
+  background-color: rgba(0, 128, 0, 0.336);
+  color: black;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
