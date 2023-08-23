@@ -11,7 +11,6 @@ export default function Level1() {
       .then((res) => res.json())
       .then((data) => {
         setQuestion1(data);
-        console.log(data);
       });
   }, []);
 
@@ -35,7 +34,18 @@ export default function Level1() {
 
   const renderPageNumbers = () => {
     const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
+
+    // Calculate the range of page numbers to show
+    const maxButtons = 4;
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    // Adjust the range if it goes beyond the totalPages limit
+    if (endPage - startPage + 1 < maxButtons) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
         <button
           key={i}
@@ -68,12 +78,7 @@ export default function Level1() {
           method: "DELETE",
         })
           .then((res) => res.json())
-          .then((data) => {
-            if (data.deletedCount > 0) {
-              const remaining = question1.filter((item) => item.id !== id);
-              setQuestion1(remaining);
-            }
-          });
+          .then((data) => {});
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
     });
