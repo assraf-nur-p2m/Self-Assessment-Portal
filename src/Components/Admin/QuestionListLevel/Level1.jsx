@@ -12,7 +12,7 @@ export default function Level1() {
       .then((data) => {
         setQuestion1(data);
       });
-  }, []);
+  }, [question1]);
 
   const totalPages = Math.ceil(question1.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -78,7 +78,12 @@ export default function Level1() {
           method: "DELETE",
         })
           .then((res) => res.json())
-          .then((data) => {});
+          .then((data) => {
+            // Remove the deleted question from the question1 array
+            setQuestion1((prevQuestions) =>
+              prevQuestions.filter((question) => question.id !== id)
+            );
+          });
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
     });
