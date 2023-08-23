@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 export default function Level3() {
   const [question1, setQuestion1] = useState([]);
@@ -10,9 +11,8 @@ export default function Level3() {
       .then((res) => res.json())
       .then((data) => {
         setQuestion1(data);
-        console.log(data);
       });
-  }, []);
+  }, [question1]);
 
   const totalPages = Math.ceil(question1.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -50,6 +50,34 @@ export default function Level3() {
     return pageNumbers;
   };
 
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const url = `http://192.168.1.29:8081/admin/question/${id}`;
+
+        fetch(url, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            // Remove the deleted question from the question1 array
+            setQuestion1((prevQuestions) =>
+              prevQuestions.filter((question) => question.id !== id)
+            );
+          });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  };
+
   return (
     <div className="p-2 shadow-lg rounded-xl border">
       <h1 className="text-center text-4xl font-semibold mb-0">
@@ -78,46 +106,51 @@ export default function Level3() {
                   <div>
                     <p
                       className={
-                        item.answer.correctAnswer === "A"
+                        item.answer && item.answer.correctAnswer === "A"
                           ? "correct-answer ps-2 rounded-lg"
                           : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
                       }
                     >
-                      A. {item.answer.a}
+                      A. {item.answer ? item.answer.a : ""}
                     </p>
                     <p
                       className={
-                        item.answer.correctAnswer === "B"
+                        item.answer && item.answer.correctAnswer === "B"
                           ? "correct-answer ps-2 rounded-lg"
                           : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
                       }
                     >
-                      B. {item.answer.b}
+                      B. {item.answer ? item.answer.b : ""}
                     </p>
                     <p
                       className={
-                        item.answer.correctAnswer === "C"
+                        item.answer && item.answer.correctAnswer === "C"
                           ? "correct-answer ps-2 rounded-lg"
                           : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
                       }
                     >
-                      C. {item.answer.c}
+                      C. {item.answer ? item.answer.c : ""}
                     </p>
                     <p
                       className={
-                        item.answer.correctAnswer === "D"
+                        item.answer && item.answer.correctAnswer === "D"
                           ? "correct-answer ps-2 rounded-lg"
                           : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
                       }
                     >
-                      D. {item.answer.d}
+                      D. {item.answer ? item.answer.d : ""}
                     </p>
                   </div>
                 </td>
                 <td width="30">
                   <div className="flex gap-5">
                     <button className="btn btn-sm bg-blue-200">Edit</button>
-                    <button className="btn btn-sm bg-red-200">Delete</button>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="btn btn-sm bg-red-200"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </td>
               </tr>

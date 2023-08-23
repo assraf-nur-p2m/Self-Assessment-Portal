@@ -117,39 +117,39 @@ export default function Level1() {
                   <div>
                     <p
                       className={
-                        item.answer.correctAnswer === "A"
+                        item.answer && item.answer.correctAnswer === "A"
                           ? "correct-answer ps-2 rounded-lg"
                           : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
                       }
                     >
-                      A. {item.answer.a}
+                      A. {item.answer ? item.answer.a : ""}
                     </p>
                     <p
                       className={
-                        item.answer.correctAnswer === "B"
+                        item.answer && item.answer.correctAnswer === "B"
                           ? "correct-answer ps-2 rounded-lg"
                           : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
                       }
                     >
-                      B. {item.answer.b}
+                      B. {item.answer ? item.answer.b : ""}
                     </p>
                     <p
                       className={
-                        item.answer.correctAnswer === "C"
+                        item.answer && item.answer.correctAnswer === "C"
                           ? "correct-answer ps-2 rounded-lg"
                           : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
                       }
                     >
-                      C. {item.answer.c}
+                      C. {item.answer ? item.answer.c : ""}
                     </p>
                     <p
                       className={
-                        item.answer.correctAnswer === "D"
+                        item.answer && item.answer.correctAnswer === "D"
                           ? "correct-answer ps-2 rounded-lg"
                           : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
                       }
                     >
-                      D. {item.answer.d}
+                      D. {item.answer ? item.answer.d : ""}
                     </p>
                   </div>
                 </td>
