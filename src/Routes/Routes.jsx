@@ -14,6 +14,7 @@ import QuestionList from "../Components/Admin/QuestionList";
 import Level1 from "../Components/Admin/QuestionListLevel/Level1";
 import Level2 from "../Components/Admin/QuestionListLevel/Level2";
 import Level3 from "../Components/Admin/QuestionListLevel/Level3";
+import QuestionView from "../Components/Admin/QuestionView";
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/question-list/level-3",
         element: <Level3 />,
+      },
+      {
+        path: "/dashboard/question-view",
+        element: <QuestionView />,
       },
     ],
   },

@@ -132,6 +132,19 @@ export default function Dashboard() {
                 User List
               </Link>
             </li>
+            <hr />
+            <li>
+              <Link
+                className={`text-xl font-semibold py-3 ${
+                  location.pathname === "/dashboard/question-view"
+                    ? "bg-[#004bad2d]"
+                    : ""
+                }`}
+                to="/dashboard/question-view"
+              >
+                Question View
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
