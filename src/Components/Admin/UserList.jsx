@@ -70,7 +70,7 @@ export default function UserList() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `http://192.168.1.29:8081/admin/users/${id}`;
+        const url = `http://192.168.1.29:8081/admin/user/${id}`;
 
         fetch(url, {
           method: "DELETE",
