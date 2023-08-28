@@ -145,6 +145,19 @@ export default function Dashboard() {
                 Question View
               </Link>
             </li>
+            <hr />
+            <li>
+              <Link
+                className={`text-xl font-semibold py-3 ${
+                  location.pathname === "/dashboard/create-module"
+                    ? "bg-[#004bad2d]"
+                    : ""
+                }`}
+                to="/dashboard/create-module"
+              >
+                Create Module
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
