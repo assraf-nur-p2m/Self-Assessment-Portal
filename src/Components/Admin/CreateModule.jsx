@@ -4,12 +4,22 @@ import Swal from "sweetalert2";
 
 export default function CreateModule() {
   const [category, setCategory] = useState([]);
+  const currentDate = new Date().toISOString().slice(0, 16);
+  const [levelWiseQuestion, setLevelWiseQuestion] = useState([]);
 
   useEffect(() => {
     fetch("http://192.168.1.29:8081/admin/category")
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("http://192.168.1.29:8081/admin/dashboard/question/CP")
+      .then((res) => res.json())
+      .then((data) => {
+        setLevelWiseQuestion(data);
       });
   }, []);
 
@@ -30,6 +40,61 @@ export default function CreateModule() {
       showNotice,
       visibility,
     } = e.target;
+
+    const startNoticeDateTime = new Date(noticeStartTime.value);
+    const endNoticeDateTime = new Date(noticeEndTime.value);
+    const startExamDateTime = new Date(examStartTime.value);
+    const endExamDateTime = new Date(examEndTime.value);
+    const passPercentage = parseInt(percentOfPass.value, 10);
+
+    if (endNoticeDateTime <= startNoticeDateTime) {
+      Swal.fire({
+        icon: "error",
+        title: "Notice End time must be after Notice Start time",
+      });
+      return;
+    }
+
+    if (endExamDateTime <= startExamDateTime) {
+      Swal.fire({
+        icon: "error",
+        title: "Quiz End time must be after Quiz Start time",
+      });
+      return;
+    }
+
+    if (passPercentage > 100) {
+      Swal.fire({
+        icon: "error",
+        title: "Percentage of Pass in Quiz cannot exceed 100%",
+      });
+      return;
+    }
+    if (
+      level1Questions.value > levelWiseQuestion.level1Question ||
+      level2Questions.value > levelWiseQuestion.level2Question ||
+      level3Questions.value > levelWiseQuestion.level3Question
+    ) {
+      Swal.fire({
+        icon: "error",
+        title:
+          "Number of quiz questions per level cannot exceed available questions",
+      });
+      return;
+    }
+
+    if (
+      passPercentage < 0 ||
+      level1Questions.value < 0 ||
+      level2Questions.value < 0 ||
+      level3Questions.value < 0
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Input values cannot be negative",
+      });
+      return;
+    }
 
     if (
       !moduleName.value ||
@@ -146,6 +211,7 @@ export default function CreateModule() {
                   Notice Start time
                 </p>
                 <input
+                  min={currentDate}
                   name="noticeStartTime"
                   type="datetime-local"
                   className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
@@ -156,6 +222,7 @@ export default function CreateModule() {
                   Notice End time
                 </p>
                 <input
+                  min={currentDate}
                   name="noticeEndTime"
                   type="datetime-local"
                   className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
@@ -199,6 +266,7 @@ export default function CreateModule() {
                         Quiz Start time
                       </p>
                       <input
+                        min={currentDate}
                         name="examStartTime"
                         type="datetime-local"
                         className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
@@ -209,6 +277,7 @@ export default function CreateModule() {
                         Quiz End time
                       </p>
                       <input
+                        min={currentDate}
                         name="examEndTime"
                         type="datetime-local"
                         className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
@@ -222,26 +291,29 @@ export default function CreateModule() {
 
                     <div className="mt-4">
                       <div className="flex gap-5 justify-between">
-                        <div>
+                        <div className="text-center">
+                          <p>{levelWiseQuestion.level1Question} available</p>
                           <input
                             name="level1Questions"
-                            type="text"
+                            type="number"
                             placeholder="From level 1"
                             className="input input-bordered w-full max-w-xs text-center"
                           />
                         </div>
-                        <div>
+                        <div className="text-center">
+                          <p>{levelWiseQuestion.level2Question} available</p>
                           <input
                             name="level2Questions"
-                            type="text"
+                            type="number"
                             placeholder="From level 2"
                             className="input input-bordered w-full max-w-xs text-center"
                           />
                         </div>
-                        <div>
+                        <div className="text-center">
+                          <p>{levelWiseQuestion.level3Question} available</p>
                           <input
                             name="level3Questions"
-                            type="text"
+                            type="number"
                             placeholder="From level 3"
                             className="input input-bordered w-full max-w-xs text-center"
                           />
@@ -255,7 +327,7 @@ export default function CreateModule() {
                         <span>
                           <input
                             name="percentOfPass"
-                            type="text"
+                            type="number"
                             placeholder="%"
                             className="input input-bordered w-full max-w-xs text-center ms-4 me-4"
                           />
@@ -275,7 +347,6 @@ export default function CreateModule() {
                             className="radio text-indigo-500"
                             name="visibility"
                             value="true"
-                            z
                           />
                           <span className="ml-2 flex items-center">
                             Public <FiEye className="ms-4" />{" "}
