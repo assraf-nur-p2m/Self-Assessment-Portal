@@ -13,7 +13,7 @@ export default function CreateModule() {
 
   return (
     <div>
-      <div className="p-2 shadow-lg rounded-xl h-[96vh]">
+      <div className="p-2 shadow-lg rounded-xl h-auto">
         <div>
           <div className="form-control p-4">
             <label className="label mb-0">
@@ -67,23 +67,15 @@ export default function CreateModule() {
                 Notice Start time
               </p>
               <input
-                type="date"
-                className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300"
-              />
-              <input
-                type="time"
-                className="border mb-2 border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300"
+                type="datetime-local"
+                className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
               />
             </div>
             <div className="p-4 flex items-center gap-4">
               <p className="mb-1 font-medium text-gray-700">Notice End time</p>
               <input
-                type="date"
-                className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300"
-              />
-              <input
-                type="time"
-                className="border mb-2 border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300"
+                type="datetime-local"
+                className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
               />
             </div>
           </div>
@@ -99,7 +91,8 @@ export default function CreateModule() {
                     type="radio"
                     className="radio text-indigo-500"
                     name="visibility"
-                    value="on"z
+                    value="on"
+                    z
                   />
                   <span className="ml-2">On</span>
                 </label>
@@ -112,6 +105,77 @@ export default function CreateModule() {
                   />
                   <span className="ml-2">Off</span>
                 </label>
+              </div>
+
+              <div className="mt-10">
+                <h2 className="text-3xl mb-0">Quiz Setting</h2>
+                <div className="divider mt-0"></div>
+
+                <div className="flex justify-between text-lg">
+                  <div className="flex items-center gap-4">
+                    <p className="mb-1 font-medium text-gray-700">
+                      Quiz Start time
+                    </p>
+                    <input
+                      type="datetime-local"
+                      className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
+                    />
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <p className="mb-1 font-medium text-gray-700">
+                      Quiz End time
+                    </p>
+                    <input
+                      type="datetime-local"
+                      className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <h2 className="text-xl">Question Level from</h2>
+                  <hr />
+
+                  <div className="mt-4">
+                    <div className="flex gap-5 justify-between">
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="From level 1"
+                          className="input input-bordered w-full max-w-xs text-center"
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="From level 2"
+                          className="input input-bordered w-full max-w-xs text-center"
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="From level 3"
+                          className="input input-bordered w-full max-w-xs text-center"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-12">
+                    <h2>
+                      Percentage of Pass in Quiz{" "}
+                      <span>
+                        <input
+                          type="text"
+                          placeholder="%"
+                          className="input input-bordered w-full max-w-xs text-center ms-4 me-4"
+                        />
+                      </span>
+                      (not more than 100%)
+                    </h2>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
