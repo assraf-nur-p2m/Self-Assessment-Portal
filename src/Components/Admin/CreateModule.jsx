@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import Swal from "sweetalert2";
 
 export default function CreateModule() {
   const [category, setCategory] = useState([]);
@@ -14,6 +15,78 @@ export default function CreateModule() {
 
   const handleCreateModule = (e) => {
     e.preventDefault();
+    const {
+      moduleName,
+      percentOfPass,
+      level1Questions,
+      level2Questions,
+      level3Questions,
+      quizCategory,
+      notice,
+      noticeStartTime,
+      noticeEndTime,
+      examStartTime,
+      examEndTime,
+      showNotice,
+      visibility,
+    } = e.target;
+
+    if (
+      !moduleName.value ||
+      !percentOfPass.value ||
+      !level1Questions.value ||
+      !level2Questions.value ||
+      !level3Questions.value ||
+      !quizCategory.value ||
+      !notice.value ||
+      !noticeStartTime.value ||
+      !noticeEndTime.value ||
+      !examStartTime.value ||
+      !examEndTime.value ||
+      !showNotice.value ||
+      !visibility.value
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Please fill out all required fields",
+      });
+      return;
+    }
+
+    const addModule = {
+      moduleName: moduleName.value,
+      percentOfPass: percentOfPass.value,
+      level1Questions: level1Questions.value,
+      level2Questions: level2Questions.value,
+      level3Questions: level3Questions.value,
+      quizCategory: quizCategory.value,
+      notice: notice.value,
+      noticeStartTime: noticeStartTime.value,
+      noticeEndTime: noticeEndTime.value,
+      examStartTime: examStartTime.value,
+      examEndTime: examEndTime.value,
+      showNotice: showNotice.value,
+      visibility: visibility.value,
+    };
+
+    fetch("http://192.168.1.29:8081/admin/module", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(addModule),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "New Module Added",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        e.target.reset();
+      });
   };
 
   return (
@@ -28,7 +101,7 @@ export default function CreateModule() {
                 </span>
               </label>
               <input
-                name="question"
+                name="moduleName"
                 type="text"
                 placeholder="Module Name.."
                 className="input input-bordered w-12/12 mt-0 shadow-md text-lg"
@@ -40,7 +113,7 @@ export default function CreateModule() {
                 <p className="text-xl">Select Category</p>
                 <select
                   className="form-select border px-12 py-2 text-xl rounded-lg shadow-md"
-                  name="category"
+                  name="quizCategory"
                   id=""
                 >
                   <option value="">Select a category</option>
@@ -62,7 +135,7 @@ export default function CreateModule() {
                 <textarea
                   className="textarea textarea-bordered w-full h-[10.7rem] shadow-md text-lg"
                   placeholder="Notice"
-                  name="description"
+                  name="notice"
                 ></textarea>
               </div>
             </div>
@@ -73,6 +146,7 @@ export default function CreateModule() {
                   Notice Start time
                 </p>
                 <input
+                  name="noticeStartTime"
                   type="datetime-local"
                   className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
                 />
@@ -82,6 +156,7 @@ export default function CreateModule() {
                   Notice End time
                 </p>
                 <input
+                  name="noticeEndTime"
                   type="datetime-local"
                   className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
                 />
@@ -98,9 +173,8 @@ export default function CreateModule() {
                     <input
                       type="radio"
                       className="radio text-indigo-500"
-                      name="visibility"
-                      value="on"
-                      z
+                      name="showNotice"
+                      value="true"
                     />
                     <span className="ml-2">On</span>
                   </label>
@@ -108,8 +182,8 @@ export default function CreateModule() {
                     <input
                       type="radio"
                       className="radio text-indigo-500"
-                      name="visibility"
-                      value="off"
+                      name="showNotice"
+                      value="false"
                     />
                     <span className="ml-2">Off</span>
                   </label>
@@ -125,6 +199,7 @@ export default function CreateModule() {
                         Quiz Start time
                       </p>
                       <input
+                        name="examStartTime"
                         type="datetime-local"
                         className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
                       />
@@ -134,6 +209,7 @@ export default function CreateModule() {
                         Quiz End time
                       </p>
                       <input
+                        name="examEndTime"
                         type="datetime-local"
                         className="mb-2 border border-gray-300 p-2 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-300 cursor-pointer"
                       />
@@ -148,6 +224,7 @@ export default function CreateModule() {
                       <div className="flex gap-5 justify-between">
                         <div>
                           <input
+                            name="level1Questions"
                             type="text"
                             placeholder="From level 1"
                             className="input input-bordered w-full max-w-xs text-center"
@@ -155,6 +232,7 @@ export default function CreateModule() {
                         </div>
                         <div>
                           <input
+                            name="level2Questions"
                             type="text"
                             placeholder="From level 2"
                             className="input input-bordered w-full max-w-xs text-center"
@@ -162,6 +240,7 @@ export default function CreateModule() {
                         </div>
                         <div>
                           <input
+                            name="level3Questions"
                             type="text"
                             placeholder="From level 3"
                             className="input input-bordered w-full max-w-xs text-center"
@@ -175,6 +254,7 @@ export default function CreateModule() {
                         Percentage of Pass in Quiz{" "}
                         <span>
                           <input
+                            name="percentOfPass"
                             type="text"
                             placeholder="%"
                             className="input input-bordered w-full max-w-xs text-center ms-4 me-4"
@@ -194,7 +274,7 @@ export default function CreateModule() {
                             type="radio"
                             className="radio text-indigo-500"
                             name="visibility"
-                            value="on"
+                            value="true"
                             z
                           />
                           <span className="ml-2 flex items-center">
@@ -206,7 +286,7 @@ export default function CreateModule() {
                             type="radio"
                             className="radio text-indigo-500"
                             name="visibility"
-                            value="off"
+                            value="false"
                           />
                           <span className="ml-2 flex items-center">
                             Private <FiEyeOff className="ms-4" />{" "}

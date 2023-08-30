@@ -72,8 +72,6 @@ export default function SetQuestion() {
         });
         e.target.reset();
       });
-
-    console.log(setQuestion);
   };
 
   return (
