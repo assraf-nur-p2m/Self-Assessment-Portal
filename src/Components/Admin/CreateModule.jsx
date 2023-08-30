@@ -292,7 +292,9 @@ export default function CreateModule() {
                     <div className="mt-4">
                       <div className="flex gap-5 justify-between">
                         <div className="text-center">
-                          <p>{levelWiseQuestion.level1Question} available</p>
+                          <p className="badge badge-primary mb-2 text-white p-3">
+                            {levelWiseQuestion.level1Question} available
+                          </p>
                           <input
                             name="level1Questions"
                             type="number"
@@ -301,7 +303,9 @@ export default function CreateModule() {
                           />
                         </div>
                         <div className="text-center">
-                          <p>{levelWiseQuestion.level2Question} available</p>
+                          <p className="badge badge-primary mb-2 text-white p-3">
+                            {levelWiseQuestion.level2Question} available
+                          </p>
                           <input
                             name="level2Questions"
                             type="number"
@@ -310,7 +314,9 @@ export default function CreateModule() {
                           />
                         </div>
                         <div className="text-center">
-                          <p>{levelWiseQuestion.level3Question} available</p>
+                          <p className="badge badge-primary mb-2 text-white p-3">
+                            {levelWiseQuestion.level3Question} available
+                          </p>
                           <input
                             name="level3Questions"
                             type="number"
