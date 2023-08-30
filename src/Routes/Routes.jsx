@@ -16,6 +16,7 @@ import Level2 from "../Components/Admin/QuestionListLevel/Level2";
 import Level3 from "../Components/Admin/QuestionListLevel/Level3";
 import QuestionView from "../Components/Admin/QuestionView";
 import CreateModule from "../Components/Admin/CreateModule";
+import DashPanel from "../Components/Admin/DashPanel";
 
 export const router = createBrowserRouter([
   {
@@ -57,7 +58,7 @@ export const router = createBrowserRouter([
     element: <Dashboard />,
     children: [
       {
-        path: "/dashboard",
+        path: "/dashboard/set-question",
         element: <SetQuestion />,
       },
       {
@@ -87,6 +88,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/create-module",
         element: <CreateModule />,
+      },
+      {
+        path: "/dashboard",
+        element: <DashPanel />,
       },
     ],
   },

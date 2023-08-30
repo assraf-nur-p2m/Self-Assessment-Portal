@@ -49,6 +49,19 @@ export default function Dashboard() {
                 }`}
                 to="/dashboard"
               >
+                Dashboard
+              </Link>
+            </li>
+            <hr />
+            <li>
+              <Link
+                className={`text-xl font-semibold py-3 ${
+                  location.pathname === "/dashboard/set-question"
+                    ? "bg-[#004bad2d]"
+                    : ""
+                }`}
+                to="/dashboard/set-question"
+              >
                 Set Question
               </Link>
             </li>
