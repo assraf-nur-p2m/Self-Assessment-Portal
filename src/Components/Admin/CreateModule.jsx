@@ -6,6 +6,7 @@ export default function CreateModule() {
   const [category, setCategory] = useState([]);
   const currentDate = new Date().toISOString().slice(0, 16);
   const [levelWiseQuestion, setLevelWiseQuestion] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     fetch("http://192.168.1.29:8081/admin/category")
@@ -15,13 +16,21 @@ export default function CreateModule() {
       });
   }, []);
 
-  useEffect(() => {
-    fetch("http://192.168.1.29:8081/admin/dashboard/question/CP")
-      .then((res) => res.json())
-      .then((data) => {
-        setLevelWiseQuestion(data);
-      });
-  }, []);
+  const handleCategoryChange = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedCategory(selectedValue);
+    if (selectedValue) {
+      fetch(
+        `http://192.168.1.29:8081/admin/dashboard/question/${selectedValue}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setLevelWiseQuestion(data);
+        });
+    } else {
+      setLevelWiseQuestion([]);
+    }
+  };
 
   const handleCreateModule = (e) => {
     e.preventDefault();
@@ -173,22 +182,21 @@ export default function CreateModule() {
               />
             </div>
 
-            <div>
-              <div className="p-3 flex items-center gap-4">
-                <p className="text-xl">Select Category</p>
-                <select
-                  className="form-select border px-12 py-2 text-xl rounded-lg shadow-md"
-                  name="quizCategory"
-                  id=""
-                >
-                  <option value="">Select a category</option>
-                  {category?.map((cat, index) => (
-                    <option key={cat.id} value={cat.category}>
-                      {cat.category}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="p-3 flex items-center gap-4">
+              <p className="text-xl">Select Category</p>
+              <select
+                className="form-select border px-12 py-2 text-xl rounded-lg shadow-md"
+                name="quizCategory"
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+              >
+                <option value="">Select a category</option>
+                {category.map((cat) => (
+                  <option key={cat.id} value={cat.category}>
+                    {cat.category}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
