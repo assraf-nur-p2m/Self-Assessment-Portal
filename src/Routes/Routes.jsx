@@ -17,6 +17,7 @@ import Level3 from "../Components/Admin/QuestionListLevel/Level3";
 import QuestionView from "../Components/Admin/QuestionView";
 import CreateModule from "../Components/Admin/CreateModule";
 import DashPanel from "../Components/Admin/DashPanel";
+import SetModuleMaterials from "../Components/Admin/SetModuleMaterials";
 
 export const router = createBrowserRouter([
   {
@@ -92,6 +93,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <DashPanel />,
+      },
+      {
+        path: "/dashboard/set-module-materials",
+        element: <SetModuleMaterials />,
       },
     ],
   },
