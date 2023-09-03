@@ -12,6 +12,7 @@ export default function SetModuleMaterials() {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // Adjust the number of items per page as needed
+  const [uploadInProgress, setUploadInProgress] = useState(false);
 
   useEffect(() => {
     fetch("http://192.168.1.29:8081/admin/category")
@@ -56,10 +57,13 @@ export default function SetModuleMaterials() {
     const name = event.target.name;
     const value = event.target.value;
     if (name === "file") {
-      setUploadData({
-        ...uploadData,
-        [name]: event.target.files[0],
-      });
+      const selectedFile = event.target.files[0];
+      if (selectedFile) {
+        setUploadData({
+          ...uploadData,
+          file: selectedFile,
+        });
+      }
     } else {
       setUploadData({
         ...uploadData,
@@ -69,8 +73,50 @@ export default function SetModuleMaterials() {
   };
 
   const handleUpload = () => {
-    // Implement the upload logic here and update the state/apiData
-    // You can use the FormData API to send the file and other data to your server.
+    if (selectedButton === "documents" || selectedButton === "video") {
+      const apiUrl =
+        selectedButton === "documents"
+          ? "http://192.168.1.29:8081/documents"
+          : "http://192.168.1.29:8081/video";
+
+      const json = {
+        fileName: uploadData.fileName,
+        sequence: uploadData.fileSequence,
+        category: selectedCategory,
+      };
+
+      if (selectedButton === "video") {
+        setUploadInProgress(true);
+      }
+
+      const formData = new FormData();
+      formData.append("file", uploadData.file);
+      formData.append("json", JSON.stringify(json));
+
+      console.log(formData);
+
+      fetch(apiUrl, {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Upload response:", data);
+
+          document.getElementById("fileInput").value = "";
+
+          if (selectedButton === "video") {
+            setUploadInProgress(false);
+          }
+        })
+        .catch((error) => {
+          console.error("Upload error:", error);
+
+          if (selectedButton === "video") {
+            setUploadInProgress(false);
+          }
+        });
+    }
   };
 
   // Calculate the current items to display
@@ -192,11 +238,17 @@ export default function SetModuleMaterials() {
                   </label>
                   <input
                     type="file"
+                    id="fileInput"
                     name="file"
                     className="file-input file-input-bordered w-full max-w-xs h-32"
                     onChange={handleFileInputChange}
                   />
                 </div>
+                {selectedButton === "video" && uploadInProgress && (
+                  <div className="text-green-500 font-semibold">
+                    Uploading... Please wait.
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -242,7 +294,7 @@ export default function SetModuleMaterials() {
         </div>
 
         {/* Pagination Controls */}
-        <div className="pagination flex gap-5 mt-5 justify-end">
+        <div className="pagination flex gap-4 mt-5">
           <button
             className="btn btn-sm btn-info"
             onClick={prevPage}
