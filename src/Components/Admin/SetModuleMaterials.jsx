@@ -158,6 +158,45 @@ export default function SetModuleMaterials() {
     }
   };
 
+  const handleDelete = (itemId) => {
+    const apiUrl =
+      selectedButton === "documents"
+        ? `http://192.168.1.29:8081/documents/${itemId}`
+        : `http://192.168.1.29:8081/videos/${itemId}`;
+
+    fetch(apiUrl, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.ok) {
+          // Delete was successful
+          const updatedItems = apiData.filter((item) => item.id !== itemId);
+          setApiData(updatedItems); // Update apiData state
+
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Item has been deleted",
+            showConfirmButton: false,
+            timer: 1500,
+            
+          });
+        } else {
+          // Handle error here
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Failed to delete item",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Delete error:", error);
+      });
+  };
+
   return (
     <div>
       <div className="p-2 shadow-lg rounded-xl h-auto">
@@ -301,7 +340,7 @@ export default function SetModuleMaterials() {
                     </button>
                     <button
                       className="btn btn-error"
-                      // onClick={() => handleDelete(item.id)}
+                      onClick={() => handleDelete(item.id)}
                     >
                       Delete
                     </button>
