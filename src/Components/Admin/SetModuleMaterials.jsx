@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 export default function SetModuleMaterials() {
   const [category, setCategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedButton, setSelectedButton] = useState(""); // Track the selected button
+  const [selectedButton, setSelectedButton] = useState("");
   const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
@@ -14,19 +14,29 @@ export default function SetModuleMaterials() {
       });
   }, []);
 
+  useEffect(() => {
+    if (selectedCategory !== "") {
+      fetchData(selectedButton);
+    }
+  }, [selectedCategory]);
+
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
   };
 
   const fetchData = (buttonType) => {
-    // Make an API request based on the selected category and button type
     const apiUrl = `http://192.168.1.29:8081/${buttonType}/${selectedCategory}`;
     fetch(apiUrl)
       .then((res) => res.json())
       .then((data) => {
         setApiData(data);
-        setSelectedButton(buttonType); // Update the selected button
+        setSelectedButton(buttonType);
       });
+  };
+
+  const handleDownload = (downloadURL) => {
+    // You can trigger a download for the given URL here
+    window.open(downloadURL);
   };
 
   return (
@@ -52,7 +62,7 @@ export default function SetModuleMaterials() {
           <div className="flex gap-5 text-lg px-2">
             <button
               className={`btn btn-info ${
-                selectedButton === "documents" ? "active" : ""
+                selectedButton === "documents" ? "bg-blue-500 text-white" : ""
               }`}
               onClick={() => fetchData("documents")}
             >
@@ -60,7 +70,7 @@ export default function SetModuleMaterials() {
             </button>
             <button
               className={`btn btn-info ${
-                selectedButton === "videos" ? "active" : ""
+                selectedButton === "video" ? "bg-blue-500 text-white" : ""
               }`}
               onClick={() => fetchData("video")}
             >
@@ -68,7 +78,7 @@ export default function SetModuleMaterials() {
             </button>
             <button
               className={`btn btn-info ${
-                selectedButton === "questions" ? "active" : ""
+                selectedButton === "questions" ? "bg-blue-500 text-white" : ""
               }`}
               onClick={() => fetchData("questions")}
             >
@@ -77,11 +87,34 @@ export default function SetModuleMaterials() {
           </div>
         </div>
         <hr className="mt-2" />
-
-        {/* Display the fetched data */}
         <div>
-          <h2>Fetched Data:</h2>
-          <pre>{JSON.stringify(apiData, null, 2)}</pre>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>File Name</th>
+                <th>Category</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {apiData.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.id}</td>
+                  <td>{item.fileName}</td>
+                  <td>{item.category}</td>
+                  <td>
+                    <button
+                      className="btn btn-success"
+                      onClick={() => handleDownload(item.downloadURL)}
+                    >
+                      Download
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
