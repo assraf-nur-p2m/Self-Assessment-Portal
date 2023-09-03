@@ -10,6 +10,8 @@ export default function SetModuleMaterials() {
     fileSequence: "",
     file: null,
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // Adjust the number of items per page as needed
 
   useEffect(() => {
     fetch("http://192.168.1.29:8081/admin/category")
@@ -23,7 +25,7 @@ export default function SetModuleMaterials() {
     if (selectedCategory !== "") {
       fetchData(selectedButton);
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, selectedButton]);
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
@@ -69,6 +71,28 @@ export default function SetModuleMaterials() {
   const handleUpload = () => {
     // Implement the upload logic here and update the state/apiData
     // You can use the FormData API to send the file and other data to your server.
+  };
+
+  // Calculate the current items to display
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = apiData.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Create functions to handle page navigation
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const nextPage = () => {
+    if (currentPage < Math.ceil(apiData.length / itemsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   return (
@@ -192,7 +216,7 @@ export default function SetModuleMaterials() {
               </tr>
             </thead>
             <tbody>
-              {apiData.map((item) => (
+              {currentItems.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-200">
                   <td>{item.id}</td>
                   <td>{item.fileName}</td>
@@ -215,6 +239,37 @@ export default function SetModuleMaterials() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="pagination flex gap-5 mt-5 justify-end">
+          <button
+            className="btn btn-sm btn-info"
+            onClick={prevPage}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          {Array.from({ length: Math.ceil(apiData.length / itemsPerPage) }).map(
+            (page, index) => (
+              <button
+                key={index}
+                className={`btn btn-sm btn-info ${
+                  currentPage === index + 1 ? "bg-blue-500 text-white" : ""
+                }`}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </button>
+            )
+          )}
+          <button
+            className="btn btn-sm btn-info"
+            onClick={nextPage}
+            disabled={currentPage === Math.ceil(apiData.length / itemsPerPage)}
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>
