@@ -73,14 +73,14 @@ export default function SetModuleMaterials() {
   };
 
   const handleUpload = () => {
-    if (selectedButton === "documents" || selectedButton === "video") {
+    if (selectedButton === "documents" || selectedButton === "videos") {
       const apiUrl =
         selectedButton === "documents"
           ? "http://192.168.1.29:8081/documents"
-          : "http://192.168.1.29:8081/video";
+          : "http://192.168.1.29:8081/videos";
 
       const json = {
-        fileName: uploadData.fileName,
+        name: uploadData.fileName,
         sequence: uploadData.fileSequence,
         category: selectedCategory,
       };
@@ -105,14 +105,14 @@ export default function SetModuleMaterials() {
 
           document.getElementById("fileInput").value = "";
 
-          if (selectedButton === "video") {
+          if (selectedButton === "videos") {
             setUploadInProgress(false);
           }
         })
         .catch((error) => {
           console.error("Upload error:", error);
 
-          if (selectedButton === "video") {
+          if (selectedButton === "videos") {
             setUploadInProgress(false);
           }
         });
@@ -172,11 +172,11 @@ export default function SetModuleMaterials() {
             </button>
             <button
               className={`btn btn-info ${
-                selectedButton === "video" ? "bg-blue-500 text-white" : ""
+                selectedButton === "videos" ? "bg-blue-500 text-white" : ""
               }`}
-              onClick={() => setSelectedButton("video")}
+              onClick={() => setSelectedButton("videos")}
             >
-              Video
+              Videos
             </button>
             <button
               className={`btn btn-info ${
@@ -244,7 +244,7 @@ export default function SetModuleMaterials() {
                     onChange={handleFileInputChange}
                   />
                 </div>
-                {selectedButton === "video" && uploadInProgress && (
+                {selectedButton === "videos" && uploadInProgress && (
                   <div className="text-green-500 font-semibold">
                     Uploading... Please wait.
                   </div>
@@ -261,7 +261,7 @@ export default function SetModuleMaterials() {
           <table className="table w-full">
             <thead>
               <tr>
-                <th className="w-[10%]">ID</th>
+                <th className="w-[10%]">Sequence</th>
                 <th className="w-[25%]">File Name</th>
                 <th className="w-[25%]">Category</th>
                 <th className="w-[25%] text-center">Actions</th>
@@ -270,8 +270,8 @@ export default function SetModuleMaterials() {
             <tbody>
               {currentItems.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-200">
-                  <td>{item.id}</td>
-                  <td>{item.fileName}</td>
+                  <td>{item.sequence}</td>
+                  <td>{item.name}</td>
                   <td>{item.category}</td>
                   <td className="flex justify-between">
                     <button

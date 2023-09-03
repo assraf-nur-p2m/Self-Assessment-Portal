@@ -61,7 +61,7 @@ export default function Navbar() {
           </ul>
         </div>
         <Link to="/" className="btn btn-ghost normal-case text-xl">
-          SAPP
+          LAPP
         </Link>
       </div>
       <div className="navbar-end hidden lg:flex">
