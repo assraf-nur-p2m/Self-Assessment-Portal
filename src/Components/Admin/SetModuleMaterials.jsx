@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 export default function SetModuleMaterials() {
   const [category, setCategory] = useState([]);
@@ -48,6 +49,16 @@ export default function SetModuleMaterials() {
       });
   };
 
+  const handleButtonChange = (buttonType) => {
+    setSelectedButton(buttonType);
+    // Reset the upload form when the button changes
+    setUploadData({
+      fileName: "",
+      fileSequence: "",
+      file: null,
+    });
+  };
+
   const handleDownload = (downloadURL) => {
     // You can trigger a download for the given URL here
     window.open(downloadURL);
@@ -93,21 +104,27 @@ export default function SetModuleMaterials() {
       formData.append("file", uploadData.file);
       formData.append("json", JSON.stringify(json));
 
-      console.log(formData);
-
       fetch(apiUrl, {
         method: "POST",
         body: formData,
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Upload response:", data);
-
           document.getElementById("fileInput").value = "";
+          document.getElementById("nameInput").value = "";
+          document.getElementById("sequenceInput").value = "";
 
           if (selectedButton === "videos") {
             setUploadInProgress(false);
           }
+
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         })
         .catch((error) => {
           console.error("Upload error:", error);
@@ -166,7 +183,7 @@ export default function SetModuleMaterials() {
               className={`btn btn-info ${
                 selectedButton === "documents" ? "bg-blue-500 text-white" : ""
               }`}
-              onClick={() => setSelectedButton("documents")}
+              onClick={() => handleButtonChange("documents")}
             >
               Document
             </button>
@@ -174,7 +191,7 @@ export default function SetModuleMaterials() {
               className={`btn btn-info ${
                 selectedButton === "videos" ? "bg-blue-500 text-white" : ""
               }`}
-              onClick={() => setSelectedButton("videos")}
+              onClick={() => handleButtonChange("videos")}
             >
               Videos
             </button>
@@ -182,7 +199,7 @@ export default function SetModuleMaterials() {
               className={`btn btn-info ${
                 selectedButton === "questions" ? "bg-blue-500 text-white" : ""
               }`}
-              onClick={() => setSelectedButton("questions")}
+              onClick={() => handleButtonChange("questions")}
             >
               Question
             </button>
@@ -201,6 +218,7 @@ export default function SetModuleMaterials() {
                 <div className="mb-3">
                   <label className="block text-lg">File Name</label>
                   <input
+                    id="nameInput"
                     type="text"
                     name="fileName"
                     className="input input-bordered w-full max-w-xs"
@@ -211,6 +229,7 @@ export default function SetModuleMaterials() {
                 <div className="mb-3">
                   <label className="block text-lg">File Sequence</label>
                   <input
+                    id="sequenceInput"
                     type="text"
                     name="fileSequence"
                     className="input input-bordered w-full max-w-xs"
