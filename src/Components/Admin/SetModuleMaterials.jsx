@@ -159,42 +159,53 @@ export default function SetModuleMaterials() {
   };
 
   const handleDelete = (itemId) => {
-    const apiUrl =
-      selectedButton === "documents"
-        ? `http://192.168.1.29:8081/documents/${itemId}`
-        : `http://192.168.1.29:8081/videos/${itemId}`;
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const apiUrl =
+          selectedButton === "documents"
+            ? `http://192.168.1.29:8081/documents/${itemId}`
+            : `http://192.168.1.29:8081/videos/${itemId}`;
 
-    fetch(apiUrl, {
-      method: "DELETE",
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Delete was successful
-          const updatedItems = apiData.filter((item) => item.id !== itemId);
-          setApiData(updatedItems); // Update apiData state
+        fetch(apiUrl, {
+          method: "DELETE",
+        })
+          .then((response) => {
+            if (response.ok) {
+              // Delete was successful
+              const updatedItems = apiData.filter((item) => item.id !== itemId);
+              setApiData(updatedItems); // Update apiData state
 
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Item has been deleted",
-            showConfirmButton: false,
-            timer: 1500,
-            
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Item has been deleted",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            } else {
+              // Handle error here
+              Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Failed to delete item",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error("Delete error:", error);
           });
-        } else {
-          // Handle error here
-          Swal.fire({
-            position: "center",
-            icon: "error",
-            title: "Failed to delete item",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Delete error:", error);
-      });
+      }
+    });
   };
 
   return (
@@ -269,7 +280,7 @@ export default function SetModuleMaterials() {
                   <label className="block text-lg">File Sequence</label>
                   <input
                     id="sequenceInput"
-                    type="text"
+                    type="number"
                     name="fileSequence"
                     className="input input-bordered w-full max-w-xs"
                     value={uploadData.fileSequence}
