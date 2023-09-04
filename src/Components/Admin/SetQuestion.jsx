@@ -45,17 +45,15 @@ export default function SetQuestion() {
       level: questionLevel.value,
       context: question.value,
       category: category.value,
-      answer: {
-        description: description.value,
-        correctAnswer: correctAnswer.value,
-        a: optionA.value || null,
-        b: optionB.value || null,
-        c: optionC.value || null,
-        d: optionD.value || null,
-      },
+      a: optionA.value || null,
+      b: optionB.value || null,
+      c: optionC.value || null,
+      d: optionD.value || null,
+      description: description.value,
+      correctAnswer: correctAnswer.value,
     };
 
-    fetch("http://192.168.1.29:8081/admin/question", {
+    fetch("http://192.168.1.29:8081/question", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -186,7 +184,7 @@ export default function SetQuestion() {
                       type="radio"
                       id="optionARadio"
                       name="correctAnswer"
-                      value="A"
+                      value="a"
                       className="mr-2 radio shadow-md"
                     />
                     <input
@@ -201,7 +199,7 @@ export default function SetQuestion() {
                       type="radio"
                       id="optionARadio"
                       name="correctAnswer"
-                      value="B"
+                      value="b"
                       className="mr-2 radio shadow-md"
                     />
                     <input
@@ -216,7 +214,7 @@ export default function SetQuestion() {
                       type="radio"
                       id="optionARadio"
                       name="correctAnswer"
-                      value="C"
+                      value="c"
                       className="mr-2 radio shadow-md"
                     />
                     <input
@@ -231,7 +229,7 @@ export default function SetQuestion() {
                       type="radio"
                       id="optionARadio"
                       name="correctAnswer"
-                      value="D"
+                      value="d"
                       className="mr-2 radio shadow-md"
                     />
                     <input

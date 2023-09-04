@@ -2,14 +2,40 @@ import React, { useEffect, useState } from "react";
 
 export default function QuestionView() {
   const [category, setCategory] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState("");
+  const [questionData, setQuestionData] = useState([]);
 
   useEffect(() => {
+    // Fetch the list of categories
     fetch("http://192.168.1.29:8081/admin/category")
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
       });
   }, []);
+
+  useEffect(() => {
+    // Make an API request to fetch data based on selectedCategory and selectedLevel
+    if (selectedCategory && selectedLevel) {
+      fetch(
+        `http://192.168.1.29:8081/question/${selectedCategory}/${selectedLevel}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setQuestionData(data);
+        });
+    }
+  }, [selectedCategory, selectedLevel]);
+
+  const handleLevelChange = (e) => {
+    setSelectedLevel(e.target.value);
+  };
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
   return (
     <div>
       <div className="p-2 shadow-lg rounded-xl h-[96vh]">
@@ -23,6 +49,7 @@ export default function QuestionView() {
                 name="questionLevel"
                 value="1"
                 className="mr-2 radio shadow-md"
+                onChange={handleLevelChange}
               />
               <label
                 htmlFor="level1"
@@ -38,6 +65,7 @@ export default function QuestionView() {
                 name="questionLevel"
                 value="2"
                 className="mr-2 radio  shadow-md"
+                onChange={handleLevelChange}
               />
               <label
                 htmlFor="level2"
@@ -53,6 +81,7 @@ export default function QuestionView() {
                 name="questionLevel"
                 value="3"
                 className="mr-2 radio  shadow-md"
+                onChange={handleLevelChange}
               />
               <label
                 htmlFor="level3"
@@ -68,6 +97,7 @@ export default function QuestionView() {
               className="form-select border px-12 py-2 text-xl rounded-lg shadow-md"
               name="category"
               id=""
+              onChange={handleCategoryChange}
             >
               <option value="">Select a category</option>
               {category?.map((cat, index) => (
@@ -78,6 +108,83 @@ export default function QuestionView() {
             </select>
           </div>
         </div>
+        {questionData.length > 0 && (
+          <div className="px-4">
+            <h2>Question Table</h2>
+            <table className="table">
+              <thead>
+                <tr className="text-lg bg-[#004bad2d] rounded-lg">
+                  <th className="font-bold">ID</th>
+                  <th className="font-bold">Questions</th>
+                  <th className="font-bold text-center">Options</th>
+                  <th className="font-bold text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {questionData.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="hover bg-slate-100 border-b border-gray-300 text-lg"
+                  >
+                    <th>{item.id}</th>
+                    <td>{item.context}</td>
+                    <td>
+                      <div>
+                        <p
+                          className={
+                            item.correctAnswer === "a"
+                              ? "correct-answer ps-2 rounded-lg"
+                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
+                          }
+                        >
+                          A. {item.a}
+                        </p>
+                        <p
+                          className={
+                            item.correctAnswer === "b"
+                              ? "correct-answer ps-2 rounded-lg"
+                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
+                          }
+                        >
+                          B. {item.b}
+                        </p>
+                        <p
+                          className={
+                            item.correctAnswer === "c"
+                              ? "correct-answer ps-2 rounded-lg"
+                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
+                          }
+                        >
+                          C. {item.c}
+                        </p>
+                        <p
+                          className={
+                            item.correctAnswer === "d"
+                              ? "correct-answer ps-2 rounded-lg"
+                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
+                          }
+                        >
+                          D. {item.d}
+                        </p>
+                      </div>
+                    </td>
+                    <td width="30">
+                      <div className="flex gap-5">
+                        <button className="btn btn-sm bg-blue-200">Edit</button>
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="btn btn-sm bg-red-200"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
