@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function SetModuleMaterials() {
@@ -230,7 +231,7 @@ export default function SetModuleMaterials() {
           </div>
           <div className="flex gap-5 text-lg px-2">
             <button
-              className={`btn btn-info ${
+              className={`btn btn-sm btn-info ${
                 selectedButton === "documents" ? "bg-blue-500 text-white" : ""
               }`}
               onClick={() => handleButtonChange("documents")}
@@ -238,21 +239,30 @@ export default function SetModuleMaterials() {
               Document
             </button>
             <button
-              className={`btn btn-info ${
+              className={`btn btn-sm btn-info ${
                 selectedButton === "videos" ? "bg-blue-500 text-white" : ""
               }`}
               onClick={() => handleButtonChange("videos")}
             >
               Videos
             </button>
-            <button
+            {/* <button
               className={`btn btn-info ${
                 selectedButton === "questions" ? "bg-blue-500 text-white" : ""
               }`}
               onClick={() => handleButtonChange("questions")}
+              to="/dashboard/set-question"
             >
               Question
-            </button>
+            </button> */}
+            <Link
+              className={`btn btn-sm btn-info ${
+                selectedButton === "questions" ? "bg-blue-500 text-white" : ""
+              }`}
+              to="/dashboard/set-question"
+            >
+              Question
+            </Link>
           </div>
         </div>
         <hr className="mt-2" />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function SetQuestion() {
@@ -75,9 +76,24 @@ export default function SetQuestion() {
   };
 
   return (
-    <div className="p-2 shadow-lg rounded-xl h-[96vh]">
+    <div className="p-2 shadow-lg rounded-xl h-auto">
       <form action="" onSubmit={handleSubmit}>
         <div className="p-2">
+          <div className="ps-4 mb-4 flex gap-4 justify-start">
+            <Link
+              className="btn btn-sm btn-info text-dark"
+              to="/dashboard/set-module-materials"
+            >
+              Document
+            </Link>
+            <Link
+              className="btn btn-sm btn-info text-dark"
+              to="/dashboard/set-module-materials"
+            >
+              Videos
+            </Link>
+          </div>
+          <hr />
           <h2 className="ps-4 text-xl mb-[-10px]">Select Question Level</h2>
           <div className="flex justify-between">
             <div className="flex items-center p-4">
