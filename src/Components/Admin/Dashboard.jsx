@@ -171,6 +171,19 @@ export default function Dashboard() {
                 Set Module Materials
               </Link>
             </li>
+            <hr />
+            <li>
+              <Link
+                className={`text-xl font-semibold py-3 ${
+                  location.pathname === "/dashboard/control-category"
+                    ? "bg-[#004bad2d]"
+                    : ""
+                }`}
+                to="/dashboard/control-category"
+              >
+                Control Category
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

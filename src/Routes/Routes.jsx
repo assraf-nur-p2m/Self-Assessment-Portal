@@ -18,6 +18,7 @@ import QuestionView from "../Components/Admin/QuestionView";
 import CreateModule from "../Components/Admin/CreateModule";
 import DashPanel from "../Components/Admin/DashPanel";
 import SetModuleMaterials from "../Components/Admin/SetModuleMaterials";
+import ControlCategory from "../Components/Admin/ControlCategory";
 
 export const router = createBrowserRouter([
   {
@@ -97,6 +98,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/set-module-materials",
         element: <SetModuleMaterials />,
+      },
+      {
+        path: "/dashboard/control-category",
+        element: <ControlCategory />,
       },
     ],
   },
