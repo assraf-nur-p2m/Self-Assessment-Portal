@@ -5,6 +5,8 @@ export default function QuestionView() {
   const [selectedCategory, setSelectedCategory] = useState(""); // Initialize with an empty string
   const [selectedLevel, setSelectedLevel] = useState("1"); // Initialize with "1" for Level 1
   const [questionData, setQuestionData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Number of items to display per page
 
   useEffect(() => {
     // Fetch the list of categories
@@ -37,6 +39,21 @@ export default function QuestionView() {
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
+  };
+
+  // Calculate the range of items to display on the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = questionData.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(questionData.length / itemsPerPage);
+
+  // Function to handle page changes
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
   };
 
   return (
@@ -99,6 +116,7 @@ export default function QuestionView() {
           </div>
           <div className="p-3 flex items-center gap-4">
             <p className="text-xl">Select Category</p>
+            {/* Dropdown for selecting category */}
             <select
               className="form-select border px-12 py-2 text-xl rounded-lg shadow-md"
               name="category"
@@ -115,7 +133,7 @@ export default function QuestionView() {
             </select>
           </div>
         </div>
-        {questionData.length > 0 ? (
+        {currentItems.length > 0 ? (
           <div className="px-4">
             <h2 className="mb-2 text-xl">Question Table</h2>
             <table className="table">
@@ -128,7 +146,7 @@ export default function QuestionView() {
                 </tr>
               </thead>
               <tbody>
-                {questionData.map((item) => (
+                {currentItems.map((item) => (
                   <tr
                     key={item.id}
                     className="hover bg-slate-100 border-b border-gray-300 text-lg"
@@ -194,6 +212,35 @@ export default function QuestionView() {
         ) : (
           <p className="text-4xl text-center mt-12">No data available</p>
         )}
+
+        {/* Pagination buttons */}
+        <div className="flex justify-center mt-4">
+          <button
+            className="btn btn-sm bg-blue-200"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              className={`btn btn-sm ${
+                i + 1 === currentPage ? "bg-blue-500" : "bg-blue-200"
+              } mx-2`}
+              onClick={() => handlePageChange(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button
+            className="btn btn-sm bg-blue-200"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
