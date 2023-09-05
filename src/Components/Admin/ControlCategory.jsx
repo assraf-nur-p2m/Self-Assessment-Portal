@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaPlus } from 'react-icons/fa';
+import Swal from "sweetalert2";
 
 export default function ControlCategory() {
   const [cat, setCat] = useState([]);
@@ -11,6 +11,34 @@ export default function ControlCategory() {
         setCat(data);
       });
   }, []);
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    const category = e.target.category.value;
+
+    const newCategoryData = {
+      category,
+    };
+
+    fetch("http://192.168.1.29:8081/admin/category", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newCategoryData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Your work has been saved",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        e.target.reset();
+      });
+  };
 
   const handleDelete = (id) => {
     // Implement your delete logic here using the category ID
@@ -26,8 +54,10 @@ export default function ControlCategory() {
     <div>
       <div className="p-2 shadow-lg rounded-xl h-auto">
         <div>
-          <form action="">
+          <form action="" onSubmit={handleAdd}>
             <input
+              required
+              name="category"
               type="text"
               placeholder="Add new Category"
               className="input input-bordered w-full max-w-xs"
