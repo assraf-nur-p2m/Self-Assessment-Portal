@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 
 export default function QuestionView() {
   const [category, setCategory] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedLevel, setSelectedLevel] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(""); // Initialize with an empty string
+  const [selectedLevel, setSelectedLevel] = useState("1"); // Initialize with "1" for Level 1
   const [questionData, setQuestionData] = useState([]);
 
   useEffect(() => {
@@ -12,6 +12,9 @@ export default function QuestionView() {
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
+        if (data.length > 0) {
+          setSelectedCategory(data[0].category);
+        }
       });
   }, []);
 
@@ -50,6 +53,7 @@ export default function QuestionView() {
                 value="1"
                 className="mr-2 radio shadow-md"
                 onChange={handleLevelChange}
+                checked={selectedLevel === "1"} // Check if selectedLevel is "1"
               />
               <label
                 htmlFor="level1"
@@ -66,6 +70,7 @@ export default function QuestionView() {
                 value="2"
                 className="mr-2 radio  shadow-md"
                 onChange={handleLevelChange}
+                checked={selectedLevel === "2"} // Check if selectedLevel is "2"
               />
               <label
                 htmlFor="level2"
@@ -82,6 +87,7 @@ export default function QuestionView() {
                 value="3"
                 className="mr-2 radio  shadow-md"
                 onChange={handleLevelChange}
+                checked={selectedLevel === "3"} // Check if selectedLevel is "3"
               />
               <label
                 htmlFor="level3"
@@ -98,6 +104,7 @@ export default function QuestionView() {
               name="category"
               id=""
               onChange={handleCategoryChange}
+              value={selectedCategory} // Set the value to selectedCategory
             >
               <option value="">Select a category</option>
               {category?.map((cat, index) => (
@@ -108,9 +115,9 @@ export default function QuestionView() {
             </select>
           </div>
         </div>
-        {questionData.length > 0 && (
+        {questionData.length > 0 ? (
           <div className="px-4">
-            <h2>Question Table</h2>
+            <h2 className="mb-2 text-xl">Question Table</h2>
             <table className="table">
               <thead>
                 <tr className="text-lg bg-[#004bad2d] rounded-lg">
@@ -184,6 +191,8 @@ export default function QuestionView() {
               </tbody>
             </table>
           </div>
+        ) : (
+          <p className="text-4xl text-center mt-12">No data available</p>
         )}
       </div>
     </div>

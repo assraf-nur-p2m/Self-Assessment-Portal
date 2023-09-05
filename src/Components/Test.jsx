@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-export default function SetModuleMaterials() {
+export default function QuestionView() {
   const [category, setCategory] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedButton, setSelectedButton] = useState("");
-  const [apiData, setApiData] = useState([]);
-  const [uploadData, setUploadData] = useState({
-    fileName: "",
-    fileSequence: "",
-    file: null,
-  });
+  const [selectedCategory, setSelectedCategory] = useState(""); // Initialize with an empty string
+  const [selectedLevel, setSelectedLevel] = useState("1"); // Initialize with "1" for Level 1
+  const [questionData, setQuestionData] = useState([]);
 
   useEffect(() => {
+    // Fetch the list of categories
     fetch("http://192.168.1.29:8081/admin/category")
       .then((res) => res.json())
       .then((data) => {
@@ -20,202 +16,179 @@ export default function SetModuleMaterials() {
   }, []);
 
   useEffect(() => {
-    if (selectedCategory !== "") {
-      fetchData(selectedButton);
+    // Make an API request to fetch data based on selectedCategory and selectedLevel
+    if (selectedCategory && selectedLevel) {
+      fetch(
+        `http://192.168.1.29:8081/question/${selectedCategory}/${selectedLevel}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setQuestionData(data);
+        });
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, selectedLevel]);
 
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
-    // Reset the upload form when the category changes
-    setUploadData({
-      fileName: "",
-      fileSequence: "",
-      file: null,
-    });
+  const handleLevelChange = (e) => {
+    setSelectedLevel(e.target.value);
   };
 
-  const fetchData = (buttonType) => {
-    const apiUrl = `http://192.168.1.29:8081/${buttonType}/${selectedCategory}`;
-    fetch(apiUrl)
-      .then((res) => res.json())
-      .then((data) => {
-        setApiData(data);
-        setSelectedButton(buttonType);
-      });
-  };
-
-  const handleDownload = (downloadURL) => {
-    // You can trigger a download for the given URL here
-    window.open(downloadURL);
-  };
-
-  const handleFileInputChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    if (name === "file") {
-      setUploadData({
-        ...uploadData,
-        [name]: event.target.files[0],
-      });
-    } else {
-      setUploadData({
-        ...uploadData,
-        [name]: value,
-      });
-    }
-  };
-
-  const handleUpload = () => {
-    // Implement the upload logic here and update the state/apiData
-    // You can use the FormData API to send the file and other data to your server.
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
   };
 
   return (
     <div>
-      <div className="p-2 shadow-lg rounded-xl h-auto">
-        <div className="flex justify-between content-center items-center">
+      <div className="p-2 shadow-lg rounded-xl h-[96vh]">
+        <h2 className="ps-4 text-xl mb-[-10px]">Select Question Level</h2>
+        <div className="flex justify-between">
+          <div className="flex items-center p-4">
+            <div className="mr-12 flex bg-green-300 px-2 py-2 rounded-lg font-semibold shadow-lg">
+              <input
+                type="radio"
+                id="level1"
+                name="questionLevel"
+                value="1"
+                className="mr-2 radio shadow-md"
+                onChange={handleLevelChange}
+                checked={selectedLevel === "1"} // Check if selectedLevel is "1"
+              />
+              <label
+                htmlFor="level1"
+                className="label-text text-lg cursor-pointer"
+              >
+                Level 1
+              </label>
+            </div>
+            <div className="mr-12 flex bg-yellow-300 px-2 py-2 rounded-lg font-semibold shadow-lg">
+              <input
+                type="radio"
+                id="level2"
+                name="questionLevel"
+                value="2"
+                className="mr-2 radio  shadow-md"
+                onChange={handleLevelChange}
+                checked={selectedLevel === "2"} // Check if selectedLevel is "2"
+              />
+              <label
+                htmlFor="level2"
+                className="label-text text-lg cursor-pointer"
+              >
+                Level 2
+              </label>
+            </div>
+            <div className="flex bg-red-400 px-2 py-2 rounded-lg font-semibold shadow-lg">
+              <input
+                type="radio"
+                id="level3"
+                name="questionLevel"
+                value="3"
+                className="mr-2 radio  shadow-md"
+                onChange={handleLevelChange}
+                checked={selectedLevel === "3"} // Check if selectedLevel is "3"
+              />
+              <label
+                htmlFor="level3"
+                className="label-text text-lg cursor-pointer"
+              >
+                Level 3
+              </label>
+            </div>
+          </div>
           <div className="p-3 flex items-center gap-4">
             <p className="text-xl">Select Category</p>
             <select
               className="form-select border px-12 py-2 text-xl rounded-lg shadow-md"
-              name="quizCategory"
+              name="category"
+              id=""
               onChange={handleCategoryChange}
-              value={selectedCategory}
+              value={selectedCategory} // Set the value to selectedCategory
             >
               <option value="">Select a category</option>
-              {category.map((cat) => (
+              {category?.map((cat, index) => (
                 <option key={cat.id} value={cat.category}>
                   {cat.category}
                 </option>
               ))}
             </select>
           </div>
-          <div className="flex gap-5 text-lg px-2">
-            <button
-              className={`btn btn-info ${
-                selectedButton === "documents" ? "bg-blue-500 text-white" : ""
-              }`}
-              onClick={() => setSelectedButton("documents")}
-            >
-              Document
-            </button>
-            <button
-              className={`btn btn-info ${
-                selectedButton === "video" ? "bg-blue-500 text-white" : ""
-              }`}
-              onClick={() => setSelectedButton("video")}
-            >
-              Video
-            </button>
-            <button
-              className={`btn btn-info ${
-                selectedButton === "questions" ? "bg-blue-500 text-white" : ""
-              }`}
-              onClick={() => setSelectedButton("questions")}
-            >
-              Question
-            </button>
-          </div>
         </div>
-        <hr className="mt-2" />
-
-        {/* Upload Section */}
-        {selectedButton && (
-          <div className="p-2">
-            <h2 className="text-lg font-semibold">
-              Upload New {selectedButton}
-            </h2>
-            <div className="flex justify-between">
-              <div className="w-full">
-                <div className="mb-3">
-                  <label className="block text-lg">File Name</label>
-                  <input
-                    type="text"
-                    name="fileName"
-                    className="input input-bordered w-full max-w-xs"
-                    value={uploadData.fileName}
-                    onChange={handleFileInputChange}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="block text-lg">File Sequence</label>
-                  <input
-                    type="text"
-                    name="fileSequence"
-                    className="input input-bordered w-full max-w-xs"
-                    value={uploadData.fileSequence}
-                    onChange={handleFileInputChange}
-                  />
-                </div>
-
-                <button
-                  className="btn btn-success"
-                  onClick={handleUpload}
-                  disabled={
-                    !uploadData.fileName ||
-                    !uploadData.fileSequence ||
-                    !uploadData.file
-                  }
-                >
-                  Upload
-                </button>
-              </div>
-              <div className="w-full">
-                <div className="mb-3">
-                  <label className="block text-lg">
-                    Upload {selectedButton}
-                  </label>
-                  <input
-                    type="file"
-                    name="file"
-                    className="file-input file-input-bordered w-full max-w-xs h-32"
-                    onChange={handleFileInputChange}
-                  />
-                </div>
-              </div>
-            </div>
+        {questionData.length > 0 && (
+          <div className="px-4">
+            <h2 className="mb-2 text-xl">Question Table</h2>
+            <table className="table">
+              <thead>
+                <tr className="text-lg bg-[#004bad2d] rounded-lg">
+                  <th className="font-bold">ID</th>
+                  <th className="font-bold">Questions</th>
+                  <th className="font-bold text-center">Options</th>
+                  <th className="font-bold text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {questionData.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="hover bg-slate-100 border-b border-gray-300 text-lg"
+                  >
+                    <th>{item.id}</th>
+                    <td>{item.context}</td>
+                    <td>
+                      <div>
+                        <p
+                          className={
+                            item.correctAnswer === "a"
+                              ? "correct-answer ps-2 rounded-lg"
+                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
+                          }
+                        >
+                          A. {item.a}
+                        </p>
+                        <p
+                          className={
+                            item.correctAnswer === "b"
+                              ? "correct-answer ps-2 rounded-lg"
+                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
+                          }
+                        >
+                          B. {item.b}
+                        </p>
+                        <p
+                          className={
+                            item.correctAnswer === "c"
+                              ? "correct-answer ps-2 rounded-lg"
+                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
+                          }
+                        >
+                          C. {item.c}
+                        </p>
+                        <p
+                          className={
+                            item.correctAnswer === "d"
+                              ? "correct-answer ps-2 rounded-lg"
+                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
+                          }
+                        >
+                          D. {item.d}
+                        </p>
+                      </div>
+                    </td>
+                    <td width="30">
+                      <div className="flex gap-5">
+                        <button className="btn btn-sm bg-blue-200">Edit</button>
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="btn btn-sm bg-red-200"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
-
-        <div className="divider"></div>
-
-        {/* Display the fetched data */}
-        <div className="overflow-x-auto">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                <th className="w-[10%]">ID</th>
-                <th className="w-[25%]">File Name</th>
-                <th className="w-[25%]">Category</th>
-                <th className="w-[25%] text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {apiData.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-200">
-                  <td>{item.id}</td>
-                  <td>{item.fileName}</td>
-                  <td>{item.category}</td>
-                  <td className="flex justify-between">
-                    <button
-                      className="btn btn-success mr-2"
-                      onClick={() => handleDownload(item.downloadURL)}
-                    >
-                      Download
-                    </button>
-                    <button
-                      className="btn btn-error"
-                      // onClick={() => handleDelete(item.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   );
