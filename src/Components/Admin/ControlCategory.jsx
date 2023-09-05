@@ -27,16 +27,38 @@ export default function ControlCategory() {
       },
       body: JSON.stringify(newCategoryData),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 409) {
+          Swal.fire({
+            icon: "error",
+            title: "Duplicate Category",
+            text: "Category already exists.",
+          });
+        } else if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Failed to add category");
+        }
+      })
       .then((data) => {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Your work has been saved",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        e.target.reset();
+        if (data && data.id) {
+          setCat([...cat, data]);
+          const sortedCategories = [...cat, data].sort((a, b) => a.id - b.id);
+          setCat(sortedCategories);
+
+          Swal.fire({
+            position: "top-center",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+
+          e.target.reset();
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
       });
   };
 
