@@ -2,14 +2,27 @@ import React, { useEffect, useState } from "react";
 
 export default function QuestionView() {
   const [category, setCategory] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(""); // Initialize with an empty string
-  const [selectedLevel, setSelectedLevel] = useState("1"); // Initialize with "1" for Level 1
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState("1");
   const [questionData, setQuestionData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Number of items to display per page
+  const itemsPerPage = 5;
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    context: "",
+    level: "",
+    answer: {
+      a: "",
+      b: "",
+      c: "",
+      d: "",
+      correctAnswer: "",
+      description: "",
+    },
+    id: null,
+  });
 
   useEffect(() => {
-    // Fetch the list of categories
     fetch("http://192.168.1.29:8081/admin/category")
       .then((res) => res.json())
       .then((data) => {
@@ -21,7 +34,6 @@ export default function QuestionView() {
   }, []);
 
   useEffect(() => {
-    // Make an API request to fetch data based on selectedCategory and selectedLevel
     if (selectedCategory && selectedLevel) {
       fetch(
         `http://192.168.1.29:8081/question/${selectedCategory}/${selectedLevel}`
@@ -41,19 +53,59 @@ export default function QuestionView() {
     setSelectedCategory(e.target.value);
   };
 
-  // Calculate the range of items to display on the current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = questionData.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Calculate the total number of pages
   const totalPages = Math.ceil(questionData.length / itemsPerPage);
 
-  // Function to handle page changes
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
     }
+  };
+
+  const openEditModal = (question) => {
+    setIsEditModalOpen(true);
+    setEditFormData({
+      context: question.context,
+      level: question.level,
+      answer: {
+        a: question.a,
+        b: question.b,
+        c: question.c,
+        d: question.d,
+        correctAnswer: question.correctAnswer,
+        description: question.description,
+      },
+      id: question.id,
+    });
+  };
+
+  const handleEditFormChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleEditFormSubmit = () => {
+    fetch(`http://192.168.1.29:8081/question/${editFormData.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editFormData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsEditModalOpen(false);
+        // Handle success or display an error message
+      })
+      .catch((error) => {
+        console.error("Error editing question:", error);
+        // Handle error and display an error message
+      });
   };
 
   return (
@@ -195,7 +247,12 @@ export default function QuestionView() {
                     </td>
                     <td width="30">
                       <div className="flex gap-5">
-                        <button className="btn btn-sm bg-blue-200">Edit</button>
+                        <button
+                          className="btn btn-sm bg-blue-200"
+                          onClick={() => openEditModal(item)}
+                        >
+                          Edit
+                        </button>
                         <button
                           onClick={() => handleDelete(item.id)}
                           className="btn btn-sm bg-red-200"
@@ -242,6 +299,35 @@ export default function QuestionView() {
           </button>
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {isEditModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Edit Question</h2>
+            <form onSubmit={handleEditFormSubmit}>
+              <div className="form-group">
+                <label htmlFor="context">Question:</label>
+                <textarea
+                  name="context"
+                  id="context"
+                  value={editFormData.context}
+                  onChange={handleEditFormChange}
+                  rows="4"
+                  required
+                />
+              </div>
+              {/* Add input fields for editing other question properties */}
+              <div className="form-group">
+                <button type="submit">Save Changes</button>
+                <button onClick={() => setIsEditModalOpen(false)}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
