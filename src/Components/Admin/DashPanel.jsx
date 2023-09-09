@@ -45,6 +45,25 @@ export default function DashPanel() {
           </div>
         </div>
       </div>
+
+      {/* categories */}
+      <div className="mt-5">
+        <p className="ms-1 mb-1 text-xl font-bold">Category:</p>
+        <div className="p-5 rounded-xl shadow-xl bg-gradient-to-r from-[#b4ade7] via-[#585e92] to-[#505285]">
+          <div>
+            <ul className="flex justify-between items-center">
+              {dashData.categories?.map((category) => (
+                <li
+                  className="text-2xl text-white hover:scale-110 transform transition-transform duration-300 px-8 py-1"
+                  key={category.id}
+                >
+                  {category.category}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
