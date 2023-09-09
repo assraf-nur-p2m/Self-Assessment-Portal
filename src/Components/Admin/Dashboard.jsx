@@ -42,7 +42,7 @@ export default function Dashboard() {
         <div className="drawer-side">
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
           <ul className="menu p-4 w-80 h-full bg-[#5A727C] bg-accent-color text-white">
-            <li>
+            <li className="py-2">
               <Link
                 className={`text-xl font-semibold py-3 ${
                   location.pathname === "/dashboard" ? "bg-[#b4b8bd4b]" : ""
@@ -53,7 +53,7 @@ export default function Dashboard() {
               </Link>
             </li>
             <hr />
-            <li>
+            <li className="py-2">
               <Link
                 className={`text-xl font-semibold py-3 ${
                   location.pathname === "/dashboard/user-list"
@@ -66,7 +66,7 @@ export default function Dashboard() {
               </Link>
             </li>
             <hr />
-            <li>
+            <li className="py-2">
               <Link
                 className={`text-xl font-semibold py-3 ${
                   location.pathname === "/dashboard/question-view"
@@ -79,7 +79,7 @@ export default function Dashboard() {
               </Link>
             </li>
             <hr />
-            <li>
+            <li className="py-2">
               <Link
                 className={`text-xl font-semibold py-3 ${
                   location.pathname === "/dashboard/create-module"
@@ -92,7 +92,7 @@ export default function Dashboard() {
               </Link>
             </li>
             <hr />
-            <li>
+            <li className="py-2">
               <Link
                 className={`text-xl font-semibold py-3 ${
                   location.pathname === "/dashboard/set-module-materials"
@@ -105,7 +105,7 @@ export default function Dashboard() {
               </Link>
             </li>
             <hr />
-            <li>
+            <li className="py-2">
               <Link
                 className={`text-xl font-semibold py-3 ${
                   location.pathname === "/dashboard/control-category"
