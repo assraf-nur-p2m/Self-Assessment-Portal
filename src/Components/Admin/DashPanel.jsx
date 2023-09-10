@@ -13,6 +13,45 @@ export default function DashPanel() {
       });
   }, []);
 
+  const handleVisibility = (modId) => {
+    const updatedModules = dashData.modules.map((mod) => {
+      if (mod.id === modId) {
+        return {
+          ...mod,
+          visibility: !mod.visibility,
+        };
+      }
+      return mod;
+    });
+
+    const updatedDashData = { ...dashData, modules: updatedModules };
+
+    setDashData(updatedDashData);
+    const requestBody = {
+      isActive: !dashData.modules.find((mod) => mod.id === modId).visibility,
+    };
+
+    fetch(`http://192.168.1.29:8081/admin/module/visibility/${modId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    })
+      .then((res) => {
+        if (res.ok) {
+          console.log(`Module visibility updated for module with ID ${modId}`);
+        } else {
+          console.error(
+            `Failed to update module visibility for module with ID ${modId}`
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <div className="p-5">
       <div className="flex justify-between gap-6">
@@ -141,7 +180,10 @@ export default function DashPanel() {
                         </p>
                       </div>
                       <div>
-                        <button className="btn btn-xs btn-outline btn-primary">
+                        <button
+                          className="btn btn-xs btn-outline btn-primary"
+                          onClick={() => handleVisibility(mod.id)}
+                        >
                           {mod.visibility ? "Make Private" : "Make Public"}
                         </button>
                       </div>
