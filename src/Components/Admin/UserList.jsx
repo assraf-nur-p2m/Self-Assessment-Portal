@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-export default function UserList() {
+export default function ManageUser() {
   const [userList, setUserList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/admin/users")
+    fetch("http://192.168.1.29:8081/admin/admin")
       .then((res) => res.json())
       .then((data) => {
         setUserList(data);
       });
-  }, [userList]);
+  }, []);
 
   const totalPages = Math.ceil(userList.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -70,25 +70,28 @@ export default function UserList() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `http://192.168.1.29:8081/admin/user/${id}`;
+        const url = `http://192.168.1.29:8081/admin/admin/${id}`;
 
         fetch(url, {
           method: "DELETE",
         })
-          .then((res) => res.json())
-          .then((data) => {
-            setUserList((prevUsers) =>
-              prevUsers.filter((user) => user.id !== id)
-            );
+          .then((res) => {
+            if (res.ok) {
+              Swal.fire("Deleted!", "User has been deleted.", "success");
+              const updatedUserList = userList.filter((user) => user.id !== id);
+              setUserList(updatedUserList);
+            }
+          })
+          .catch((error) => {
+            console.error("Error deleting user:", error);
           });
-        Swal.fire("Deleted!", "User has been deleted.", "success");
       }
     });
   };
 
   return (
     <div className="p-2 shadow-lg rounded-xl border">
-      <h1 className="text-center text-4xl font-semibold mb-0">User List</h1>
+      <h1 className="text-center text-4xl font-semibold mb-0">Manage User</h1>
       <div className="divider mt-0"></div>
       <div className="overflow-x-auto">
         <table className="table">
@@ -110,7 +113,7 @@ export default function UserList() {
                 <th>{user.id}</th>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
-                <td>{user.status}</td>
+                <td>{user.status ? "Active" : "Inactive"}</td>
                 <td width="30">
                   <div className="flex gap-5">
                     <button className="btn btn-sm bg-blue-200">Edit</button>

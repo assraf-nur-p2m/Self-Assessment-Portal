@@ -62,7 +62,7 @@ export default function Dashboard() {
                 }`}
                 to="/dashboard/user-list"
               >
-                User List
+                Manage User
               </Link>
             </li>
             <hr />
