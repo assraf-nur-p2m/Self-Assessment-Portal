@@ -56,7 +56,7 @@ export default function DashPanel() {
     <div className="p-5">
       <div className="flex justify-between gap-6">
         <div className="flex justify-between items-center gap-8 p-8 rounded-xl shadow-xl bg-gradient-to-r from-[#330867] to-[#30cfd0] text-white flex-1 hover:scale-110 transform transition-transform duration-300 cursor-pointer">
-          <div className="text-3xl">
+          <div className="text-2xl">
             <FaUsers className="text-6xl mx-auto" />{" "}
             <p className="mt-2">All User</p>
           </div>
@@ -65,7 +65,7 @@ export default function DashPanel() {
           </div>
         </div>
         <div className="flex justify-between items-center gap-8 p-8 rounded-xl shadow-xl bg-gradient-to-r from-[#084c67] to-[#3070d0] text-white flex-1 hover:scale-110 transform transition-transform duration-300 cursor-pointer">
-          <div className="text-3xl">
+          <div className="text-2xl">
             <LuUserCheck className="text-6xl mx-auto" />{" "}
             <p className="mt-2">Active User</p>
           </div>
@@ -74,7 +74,7 @@ export default function DashPanel() {
           </div>
         </div>
         <div className="flex justify-between items-center gap-8 p-8 rounded-xl shadow-xl bg-gradient-to-r from-[#1e97dd] to-[#8949f0] text-white flex-1 hover:scale-110 transform transition-transform duration-300 cursor-pointer">
-          <div className="text-3xl">
+          <div className="text-2xl">
             <LuUserX className="text-6xl mx-auto" />{" "}
             <p className="mt-2">Inactive User</p>
           </div>

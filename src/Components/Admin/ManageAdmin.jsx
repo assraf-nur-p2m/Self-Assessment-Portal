@@ -138,10 +138,7 @@ export default function ManageAdmin() {
                 <th>{user.id}</th>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
-                <td>
-                  {/* <div className="border"></div> */}
-                  {renderPermissionList(user.permission)}
-                </td>
+                <td>{renderPermissionList(user.permission)}</td>
                 <td>{user.status ? "Active" : "Inactive"}</td>
                 <td width="30">
                   <div className="flex gap-5">
