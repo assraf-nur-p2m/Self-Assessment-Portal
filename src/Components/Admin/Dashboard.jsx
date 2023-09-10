@@ -69,6 +69,19 @@ export default function Dashboard() {
             <li className="py-2">
               <Link
                 className={`text-xl font-semibold py-3 ${
+                  location.pathname === "/dashboard/manage-admin"
+                    ? "bg-[#b4b8bd4b]"
+                    : ""
+                }`}
+                to="/dashboard/manage-admin"
+              >
+                Manage Admin
+              </Link>
+            </li>
+            <hr />
+            <li className="py-2">
+              <Link
+                className={`text-xl font-semibold py-3 ${
                   location.pathname === "/dashboard/question-view"
                     ? "bg-[#b4b8bd4b]"
                     : ""

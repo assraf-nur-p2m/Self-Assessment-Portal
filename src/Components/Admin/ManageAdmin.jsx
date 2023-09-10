@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-export default function ManageUser() {
+export default function ManageAdmin() {
   const [userList, setUserList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/admin/user")
+    fetch("http://192.168.1.29:8081/admin/admin")
       .then((res) => res.json())
       .then((data) => {
         setUserList(data);
@@ -70,7 +70,7 @@ export default function ManageUser() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `http://192.168.1.29:8081/admin/user/${id}`;
+        const url = `http://192.168.1.29:8081/admin/admin/${id}`;
 
         fetch(url, {
           method: "DELETE",
@@ -91,7 +91,7 @@ export default function ManageUser() {
 
   return (
     <div className="p-2 shadow-lg rounded-xl border">
-      <h1 className="text-center text-4xl font-semibold mb-0">Manage User</h1>
+      <h1 className="text-center text-4xl font-semibold mb-0">Manage Admin</h1>
       <div className="divider mt-0"></div>
       <div className="overflow-x-auto">
         <table className="table">
