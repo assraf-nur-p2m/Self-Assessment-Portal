@@ -131,12 +131,21 @@ export default function DashPanel() {
                         </span>
                       </p>
                     </div>
-                    <p className="mb-2">
-                      Visibility of Module:{" "}
-                      <span className="font-bold">
-                        {mod.visibility ? "Public" : "Private"}
-                      </span>
-                    </p>
+                    <div className="flex justify-between">
+                      <div>
+                        <p className="mb-2">
+                          Visibility of Module:{" "}
+                          <span className="font-bold">
+                            {mod.visibility ? "Public" : "Private"}
+                          </span>
+                        </p>
+                      </div>
+                      <div>
+                        <button className="btn btn-xs btn-outline btn-primary">
+                          {mod.visibility ? "Make Private" : "Make Public"}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </li>
