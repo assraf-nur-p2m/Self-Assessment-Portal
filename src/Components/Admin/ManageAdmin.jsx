@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 export default function ManageAdmin() {
   const [userList, setUserList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 3;
 
   useEffect(() => {
     fetch("http://192.168.1.29:8081/admin/admin")
@@ -89,6 +89,30 @@ export default function ManageAdmin() {
     });
   };
 
+  const renderPermissionList = (permission) => {
+    const permissionList = [];
+
+    for (const key in permission) {
+      if (permission.hasOwnProperty(key) && key !== "id") {
+        const label = key.replace(/([A-Z])/g, " $1").trim(); // Convert camelCase to spaced label
+        permissionList.push(
+          <li key={key}>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={permission[key]}
+                className="checkbox"
+              />
+              <span className="ml-2">{label}</span>
+            </label>
+          </li>
+        );
+      }
+    }
+
+    return <ul>{permissionList}</ul>;
+  };
+
   return (
     <div className="p-2 shadow-lg rounded-xl border">
       <h1 className="text-center text-4xl font-semibold mb-0">Manage Admin</h1>
@@ -100,6 +124,7 @@ export default function ManageAdmin() {
               <th className="font-bold">ID</th>
               <th className="font-bold">Name</th>
               <th className="font-bold">Email</th>
+              <th className="font-bold">Permission</th>
               <th className="font-bold">Status</th>
               <th className="font-bold text-center">Action</th>
             </tr>
@@ -113,6 +138,10 @@ export default function ManageAdmin() {
                 <th>{user.id}</th>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
+                <td>
+                  {/* <div className="border"></div> */}
+                  {renderPermissionList(user.permission)}
+                </td>
                 <td>{user.status ? "Active" : "Inactive"}</td>
                 <td width="30">
                   <div className="flex gap-5">
