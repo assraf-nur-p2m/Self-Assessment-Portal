@@ -20,6 +20,7 @@ import DashPanel from "../Components/Admin/DashPanel";
 import SetModuleMaterials from "../Components/Admin/SetModuleMaterials";
 import ControlCategory from "../Components/Admin/ControlCategory";
 import ManageAdmin from "../Components/Admin/ManageAdmin";
+import CreateAdmin from "../Components/Admin/CreateAdmin";
 
 export const router = createBrowserRouter([
   {
@@ -107,6 +108,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/manage-admin",
         element: <ManageAdmin />,
+      },
+      {
+        path: "/dashboard/add-admin",
+        element: <CreateAdmin />,
       },
     ],
   },

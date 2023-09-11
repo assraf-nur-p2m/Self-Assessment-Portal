@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { GrUserAdmin } from "react-icons/gr";
 
 export default function ManageAdmin() {
   const [userList, setUserList] = useState([]);
@@ -115,7 +117,17 @@ export default function ManageAdmin() {
 
   return (
     <div className="p-2 shadow-lg rounded-xl border">
-      <h1 className="text-center text-4xl font-semibold mb-0">Manage Admin</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-center text-4xl font-semibold mb-0 ps-1">
+          Manage Admin
+        </h1>
+        <Link
+          className="bg-success flex items-center justify-between gap-3 text-lg px-3 py-1 rounded-lg font-bold"
+          to="/dashboard/add-admin"
+        >
+          <GrUserAdmin /> Create Admin
+        </Link>
+      </div>
       <div className="divider mt-0"></div>
       <div className="overflow-x-auto">
         <table className="table">
