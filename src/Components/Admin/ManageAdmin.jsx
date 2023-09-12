@@ -12,7 +12,10 @@ export default function ManageAdmin() {
     fetch("http://192.168.1.29:8081/admin/admin")
       .then((res) => res.json())
       .then((data) => {
-        setUserList(data);
+        const filteredUserList = data.filter(
+          (user) => user.role !== "superadmin"
+        );
+        setUserList(filteredUserList);
       });
   }, []);
 
