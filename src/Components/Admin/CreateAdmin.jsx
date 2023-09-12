@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function CreateAdmin() {
-  const currentDate = new Date().toISOString().slice(0, 16);
-
   const handleCreateAdmin = (e) => {
     e.preventDefault();
     const {
@@ -13,7 +11,6 @@ export default function CreateAdmin() {
       adminEmail,
       adminPassword,
       status,
-      // dateTime,
       uploadVideo,
       uploadDocument,
       uploadQuestion,
@@ -31,12 +28,27 @@ export default function CreateAdmin() {
       return;
     }
 
+    if (
+      !uploadVideo.checked &&
+      !uploadDocument.checked &&
+      !uploadQuestion.checked &&
+      !createUser.checked &&
+      !holdUser.checked &&
+      !modifyUser.checked &&
+      !deleteUser.checked
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Select at least one admin permission",
+      });
+      return;
+    }
+
     const adminInfo = {
       name: adminName.value,
       email: adminEmail.value,
       password: adminPassword.value,
       status: status.value,
-      // registrationDatetime: dateTime.value,
       role: "admin",
       permission: {
         canUploadVideo: uploadVideo.checked,
@@ -148,28 +160,6 @@ export default function CreateAdmin() {
               </div>
             </div>
           </div>
-
-          {/* <div className="flex items-center gap-4 px-3 mt-6">
-            <label className="font-medium text-gray-700">Status:</label>
-            <label className="inline-flex items-center border px-2 cursor-pointer py-1 bg-green-300 rounded-lg">
-              <input
-                type="radio"
-                className="radio text-indigo-500"
-                name="status"
-                value="true"
-              />
-              <span className="ml-2">Active</span>
-            </label>
-            <label className="inline-flex items-center border px-2 cursor-pointer bg-red-300 py-1 rounded-lg">
-              <input
-                type="radio"
-                className="radio text-indigo-500"
-                name="status"
-                value="false"
-              />
-              <span className="ml-2">Inactive</span>
-            </label>
-          </div> */}
 
           <div className="mt-6 px-3 flex justify-between items-end">
             <div>
