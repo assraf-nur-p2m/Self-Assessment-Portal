@@ -1,62 +1,28 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import { GrUserAdmin } from "react-icons/gr";
 
-export default function QuestionView() {
-  const [category, setCategory] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedLevel, setSelectedLevel] = useState("1");
-  const [questionData, setQuestionData] = useState([]);
+export default function ManageAdmin() {
+  const [userList, setUserList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editFormData, setEditFormData] = useState({
-    context: "",
-    level: "",
-    answer: {
-      a: "",
-      b: "",
-      c: "",
-      d: "",
-      correctAnswer: "",
-      description: "",
-    },
-    id: null,
-  });
+  const itemsPerPage = 3;
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/admin/category")
+    fetch("http://192.168.1.29:8081/admin/admin")
       .then((res) => res.json())
       .then((data) => {
-        setCategory(data);
-        if (data.length > 0) {
-          setSelectedCategory(data[0].category);
-        }
+        const filteredUserList = data.filter(
+          (user) => user.role !== "superadmin"
+        );
+        setUserList(filteredUserList);
       });
   }, []);
 
-  useEffect(() => {
-    if (selectedCategory && selectedLevel) {
-      fetch(
-        `http://192.168.1.29:8081/question/${selectedCategory}/${selectedLevel}`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          setQuestionData(data);
-        });
-    }
-  }, [selectedCategory, selectedLevel]);
-
-  const handleLevelChange = (e) => {
-    setSelectedLevel(e.target.value);
-  };
-
-  const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value);
-  };
-
+  const totalPages = Math.ceil(userList.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = questionData.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(questionData.length / itemsPerPage);
+  const currentItems = userList.slice(indexOfFirstItem, indexOfLastItem);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -64,270 +30,181 @@ export default function QuestionView() {
     }
   };
 
-  const openEditModal = (question) => {
-    setIsEditModalOpen(true);
-    setEditFormData({
-      context: question.context,
-      level: question.level,
-      answer: {
-        a: question.a,
-        b: question.b,
-        c: question.c,
-        d: question.d,
-        correctAnswer: question.correctAnswer,
-        description: question.description,
-      },
-      id: question.id,
+  const handleGoButtonClick = () => {
+    const inputPage = parseInt(document.getElementById("jumpPageInput").value);
+    if (!isNaN(inputPage)) {
+      handlePageChange(inputPage);
+    }
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+
+    const maxButtons = 4;
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    if (endPage - startPage + 1 < maxButtons) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          className={`btn btn-sm bg-blue-200 mr-2 ${
+            i === currentPage ? "bg-blue-500" : ""
+          }`}
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const url = `http://192.168.1.29:8081/admin/admin/${id}`;
+
+        fetch(url, {
+          method: "DELETE",
+        })
+          .then((res) => {
+            if (res.ok) {
+              Swal.fire("Deleted!", "User has been deleted.", "success");
+              const updatedUserList = userList.filter((user) => user.id !== id);
+              setUserList(updatedUserList);
+            }
+          })
+          .catch((error) => {
+            console.error("Error deleting user:", error);
+          });
+      }
     });
   };
 
-  const handleEditFormChange = (e) => {
-    const { name, value } = e.target;
-    setEditFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
+  const renderPermissionList = (permission) => {
+    const permissionList = [];
 
-  const handleEditFormSubmit = () => {
-    fetch(`http://192.168.1.29:8081/question/${editFormData.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(editFormData),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setIsEditModalOpen(false);
-        // Handle success or display an error message
-      })
-      .catch((error) => {
-        console.error("Error editing question:", error);
-        // Handle error and display an error message
-      });
+    for (const key in permission) {
+      if (permission.hasOwnProperty(key) && key !== "id") {
+        const label = key.replace(/([A-Z])/g, " $1").trim(); // Convert camelCase to spaced label
+        permissionList.push(
+          <li key={key}>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={permission[key]}
+                className="checkbox"
+              />
+              <span className="ml-2">{label}</span>
+            </label>
+          </li>
+        );
+      }
+    }
+
+    return <ul>{permissionList}</ul>;
   };
 
   return (
-    <div>
-      <div className="p-2 shadow-lg rounded-xl h-[96vh]">
-        <h2 className="ps-4 text-xl mb-[-10px]">Select Question Level</h2>
-        <div className="flex justify-between">
-          <div className="flex items-center p-4">
-            <div className="mr-12 flex bg-green-300 px-2 py-2 rounded-lg font-semibold shadow-lg">
-              <input
-                type="radio"
-                id="level1"
-                name="questionLevel"
-                value="1"
-                className="mr-2 radio shadow-md"
-                onChange={handleLevelChange}
-                checked={selectedLevel === "1"} // Check if selectedLevel is "1"
-              />
-              <label
-                htmlFor="level1"
-                className="label-text text-lg cursor-pointer"
+    <div className="p-2 shadow-lg rounded-xl border">
+      <div className="flex items-center justify-between">
+        <h1 className="text-center text-4xl font-semibold mb-0 ps-1">
+          Manage Admin
+        </h1>
+        <Link
+          className="bg-success flex items-center justify-between gap-3 text-lg px-3 py-1 rounded-lg font-bold"
+          to="/dashboard/add-admin"
+        >
+          <GrUserAdmin /> Create Admin
+        </Link>
+      </div>
+      <div className="divider mt-0"></div>
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
+            <tr className="text-lg bg-[#004bad2d] rounded-lg">
+              <th className="font-bold">ID</th>
+              <th className="font-bold">Name</th>
+              <th className="font-bold">Email</th>
+              <th className="font-bold">Permission</th>
+              <th className="font-bold">Status</th>
+              <th className="font-bold text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentItems.map((user, index) => (
+              <tr
+                key={index}
+                className="hover bg-slate-100 border-b border-gray-300 text-lg"
               >
-                Level 1
-              </label>
-            </div>
-            <div className="mr-12 flex bg-yellow-300 px-2 py-2 rounded-lg font-semibold shadow-lg">
-              <input
-                type="radio"
-                id="level2"
-                name="questionLevel"
-                value="2"
-                className="mr-2 radio  shadow-md"
-                onChange={handleLevelChange}
-                checked={selectedLevel === "2"} // Check if selectedLevel is "2"
-              />
-              <label
-                htmlFor="level2"
-                className="label-text text-lg cursor-pointer"
-              >
-                Level 2
-              </label>
-            </div>
-            <div className="flex bg-red-400 px-2 py-2 rounded-lg font-semibold shadow-lg">
-              <input
-                type="radio"
-                id="level3"
-                name="questionLevel"
-                value="3"
-                className="mr-2 radio  shadow-md"
-                onChange={handleLevelChange}
-                checked={selectedLevel === "3"} // Check if selectedLevel is "3"
-              />
-              <label
-                htmlFor="level3"
-                className="label-text text-lg cursor-pointer"
-              >
-                Level 3
-              </label>
-            </div>
-          </div>
-          <div className="p-3 flex items-center gap-4">
-            <p className="text-xl">Select Category</p>
-            {/* Dropdown for selecting category */}
-            <select
-              className="form-select border px-12 py-2 text-xl rounded-lg shadow-md"
-              name="category"
-              id=""
-              onChange={handleCategoryChange}
-              value={selectedCategory} // Set the value to selectedCategory
-            >
-              <option value="">Select a category</option>
-              {category?.map((cat, index) => (
-                <option key={cat.id} value={cat.category}>
-                  {cat.category}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        {currentItems.length > 0 ? (
-          <div className="px-4">
-            <h2 className="mb-2 text-xl">Question Table</h2>
-            <table className="table">
-              <thead>
-                <tr className="text-lg bg-[#004bad2d] rounded-lg">
-                  <th className="font-bold">ID</th>
-                  <th className="font-bold">Questions</th>
-                  <th className="font-bold text-center">Options</th>
-                  <th className="font-bold text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="hover bg-slate-100 border-b border-gray-300 text-lg"
-                  >
-                    <th>{item.id}</th>
-                    <td>{item.context}</td>
-                    <td>
-                      <div>
-                        <p
-                          className={
-                            item.correctAnswer === "a"
-                              ? "correct-answer ps-2 rounded-lg"
-                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
-                          }
-                        >
-                          A. {item.a}
-                        </p>
-                        <p
-                          className={
-                            item.correctAnswer === "b"
-                              ? "correct-answer ps-2 rounded-lg"
-                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
-                          }
-                        >
-                          B. {item.b}
-                        </p>
-                        <p
-                          className={
-                            item.correctAnswer === "c"
-                              ? "correct-answer ps-2 rounded-lg"
-                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
-                          }
-                        >
-                          C. {item.c}
-                        </p>
-                        <p
-                          className={
-                            item.correctAnswer === "d"
-                              ? "correct-answer ps-2 rounded-lg"
-                              : "ps-2 bg-[#DCDDDF] py-1 border rounded-lg"
-                          }
-                        >
-                          D. {item.d}
-                        </p>
-                      </div>
-                    </td>
-                    <td width="30">
-                      <div className="flex gap-5">
-                        <button
-                          className="btn btn-sm bg-blue-200"
-                          onClick={() => openEditModal(item)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item.id)}
-                          className="btn btn-sm bg-red-200"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p className="text-4xl text-center mt-12">No data available</p>
-        )}
-
-        {/* Pagination buttons */}
-        <div className="flex justify-center mt-4">
+                <th>{user.id}</th>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{renderPermissionList(user.permission)}</td>
+                <td>{user.status ? "Active" : "Inactive"}</td>
+                <td width="30">
+                  <div className="flex gap-5">
+                    <button className="btn btn-sm bg-blue-200">Edit</button>
+                    <button
+                      onClick={() => handleDelete(user.id)}
+                      className="btn btn-sm bg-red-200"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="flex justify-between mt-3">
+        <div className="flex items-center">
           <button
-            className="btn btn-sm bg-blue-200"
-            onClick={() => handlePageChange(currentPage - 1)}
+            className="btn btn-sm bg-blue-200 mr-2"
             disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
           >
             Previous
           </button>
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              className={`btn btn-sm ${
-                i + 1 === currentPage ? "bg-blue-500" : "bg-blue-200"
-              } mx-2`}
-              onClick={() => handlePageChange(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
+          {renderPageNumbers()}
           <button
             className="btn btn-sm bg-blue-200"
-            onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
           >
             Next
           </button>
         </div>
-      </div>
-
-      {/* Edit Modal */}
-      {isEditModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Edit Question</h2>
-            <form onSubmit={handleEditFormSubmit}>
-              <div className="form-group">
-                <label htmlFor="context">Question:</label>
-                <textarea
-                  name="context"
-                  id="context"
-                  value={editFormData.context}
-                  onChange={handleEditFormChange}
-                  rows="4"
-                  required
-                />
-              </div>
-              {/* Add input fields for editing other question properties */}
-              <div className="form-group">
-                <button type="submit">Save Changes</button>
-                <button onClick={() => setIsEditModalOpen(false)}>
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
+        <div className="flex items-center">
+          <input
+            id="jumpPageInput"
+            type="number"
+            min={1}
+            max={totalPages}
+            className="px-2 py-1 border rounded-lg mr-2"
+          />
+          <button
+            className="btn btn-sm bg-blue-200"
+            onClick={handleGoButtonClick}
+          >
+            Go
+          </button>
         </div>
-      )}
+      </div>
     </div>
   );
 }

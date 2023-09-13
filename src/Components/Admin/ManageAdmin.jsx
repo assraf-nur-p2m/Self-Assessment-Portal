@@ -7,6 +7,7 @@ export default function ManageAdmin() {
   const [userList, setUserList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
+  const [editedNames, setEditedNames] = useState({});
 
   useEffect(() => {
     fetch("http://192.168.1.29:8081/admin/admin")
@@ -16,26 +17,18 @@ export default function ManageAdmin() {
           (user) => user.role !== "superadmin"
         );
         setUserList(filteredUserList);
+
+        // Initialize editedNames with an empty object for each admin
+        const initialEditedNames = {};
+        filteredUserList.forEach((user) => {
+          initialEditedNames[user.id] = {
+            isEditing: false,
+            editedName: user.name,
+          };
+        });
+        setEditedNames(initialEditedNames);
       });
   }, []);
-
-  const totalPages = Math.ceil(userList.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = userList.slice(indexOfFirstItem, indexOfLastItem);
-
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber >= 1 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber);
-    }
-  };
-
-  const handleGoButtonClick = () => {
-    const inputPage = parseInt(document.getElementById("jumpPageInput").value);
-    if (!isNaN(inputPage)) {
-      handlePageChange(inputPage);
-    }
-  };
 
   const renderPageNumbers = () => {
     const pageNumbers = [];
@@ -64,34 +57,67 @@ export default function ManageAdmin() {
     return pageNumbers;
   };
 
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const url = `http://192.168.1.29:8081/admin/admin/${id}`;
+  const handleGoButtonClick = () => {
+    const inputPage = parseInt(document.getElementById("jumpPageInput").value);
+    if (!isNaN(inputPage)) {
+      handlePageChange(inputPage);
+    }
+  };
 
-        fetch(url, {
-          method: "DELETE",
-        })
-          .then((res) => {
-            if (res.ok) {
-              Swal.fire("Deleted!", "User has been deleted.", "success");
-              const updatedUserList = userList.filter((user) => user.id !== id);
-              setUserList(updatedUserList);
-            }
-          })
-          .catch((error) => {
-            console.error("Error deleting user:", error);
-          });
-      }
-    });
+  const totalPages = Math.ceil(userList.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = userList.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const startEditing = (id) => {
+    setEditedNames((prevEditedNames) => ({
+      ...prevEditedNames,
+      [id]: {
+        ...prevEditedNames[id],
+        isEditing: true,
+      },
+    }));
+  };
+
+  const handleEditName = (id) => {
+    const updatedName = editedNames[id].editedName;
+
+    // Make a PUT request to update the admin's name
+    const url = `http://192.168.1.29:8081/admin/admin/${id}`;
+
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: updatedName }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          Swal.fire("Updated!", "Admin name has been updated.", "success");
+          setEditedNames((prevEditedNames) => ({
+            ...prevEditedNames,
+            [id]: {
+              ...prevEditedNames[id],
+              isEditing: false,
+            },
+          }));
+          // You may want to update the user list with the new name from the response
+        } else {
+          // Handle error cases here
+          Swal.fire("Error!", "Failed to update admin name.", "error");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating user name:", error);
+        Swal.fire("Error!", "Failed to update admin name.", "error");
+      });
   };
 
   const renderPermissionList = (permission) => {
@@ -116,6 +142,17 @@ export default function ManageAdmin() {
     }
 
     return <ul>{permissionList}</ul>;
+  };
+
+  const cancelEditing = (id) => {
+    setEditedNames((prevEditedNames) => ({
+      ...prevEditedNames,
+      [id]: {
+        ...prevEditedNames[id],
+        isEditing: false,
+        editedName: userList.find((user) => user.id === id).name, // Reset to the original name
+      },
+    }));
   };
 
   return (
@@ -151,13 +188,59 @@ export default function ManageAdmin() {
                 className="hover bg-slate-100 border-b border-gray-300 text-lg"
               >
                 <th>{user.id}</th>
-                <td>{user.name}</td>
+                <td>
+                  {editedNames[user.id].isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        value={editedNames[user.id].editedName}
+                        onChange={(e) =>
+                          setEditedNames((prevEditedNames) => ({
+                            ...prevEditedNames,
+                            [user.id]: {
+                              ...prevEditedNames[user.id],
+                              editedName: e.target.value,
+                            },
+                          }))
+                        }
+                      />
+                      <button
+                        className="btn btn-sm bg-green-200"
+                        onClick={() => handleEditName(user.id)}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="btn btn-sm bg-red-200"
+                        onClick={() => cancelEditing(user.id)}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    user.name
+                  )}
+                </td>
                 <td>{user.email}</td>
                 <td>{renderPermissionList(user.permission)}</td>
                 <td>{user.status ? "Active" : "Inactive"}</td>
                 <td width="30">
                   <div className="flex gap-5">
-                    <button className="btn btn-sm bg-blue-200">Edit</button>
+                    {editedNames[user.id].isEditing ? (
+                      <button
+                        className="btn btn-sm bg-red-200"
+                        onClick={() => cancelEditing(user.id)}
+                      >
+                        Cancel
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-sm bg-blue-200"
+                        onClick={() => startEditing(user.id)}
+                      >
+                        Edit
+                      </button>
+                    )}
                     <button
                       onClick={() => handleDelete(user.id)}
                       className="btn btn-sm bg-red-200"
