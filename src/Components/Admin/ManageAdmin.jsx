@@ -10,6 +10,7 @@ export default function ManageAdmin() {
   const [editedNames, setEditedNames] = useState({});
   const [editedEmails, setEditedEmails] = useState({});
   const [editedPermissions, setEditedPermissions] = useState({});
+  const [editedStatus, setEditedStatus] = useState({});
 
   useEffect(() => {
     fetch("https://cc87-118-179-97-19.ngrok-free.app/admin/admin", {
@@ -51,6 +52,15 @@ export default function ManageAdmin() {
           };
         });
         setEditedPermissions(initialEditedPermissions);
+
+        const initialEditedStatus = {};
+        filteredUserList.forEach((user) => {
+          initialEditedStatus[user.id] = {
+            isEditing: false,
+            editedStatus: user.status,
+          };
+        });
+        setEditedStatus(initialEditedStatus);
       });
   }, []);
 
@@ -335,6 +345,72 @@ export default function ManageAdmin() {
     return <ul>{permissionList}</ul>;
   };
 
+  const startEditingStatus = (id) => {
+    setEditedStatus((prevEditedStatus) => ({
+      ...prevEditedStatus,
+      [id]: {
+        ...prevEditedStatus[id],
+        isEditing: !prevEditedStatus[id].isEditing,
+      },
+    }));
+  };
+
+  const handleEditStatus = (id) => {
+    const updatedStatus = !userList.find((user) => user.id === id).status;
+
+    // Get the user with the specified ID
+    const userToUpdate = userList.find((user) => user.id === id);
+
+    // Create the updated user object with the new status
+    const updatedUser = {
+      ...userToUpdate,
+      status: updatedStatus,
+    };
+
+    // Make a PUT request to update the admin's status
+    const url = `https://cc87-118-179-97-19.ngrok-free.app/admin/admin/${id}`;
+
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedUser), // Send the updated user object
+    })
+      .then((res) => {
+        if (res.ok) {
+          // Update the userList with the updated user data
+          setUserList((prevUserList) =>
+            prevUserList.map((user) => (user.id === id ? updatedUser : user))
+          );
+
+          Swal.fire("Updated!", "Admin status has been updated.", "success");
+          setEditedStatus((prevEditedStatus) => ({
+            ...prevEditedStatus,
+            [id]: {
+              ...prevEditedStatus[id],
+              isEditing: false,
+            },
+          }));
+        } else {
+          // Handle error cases here
+          console.error("Error:", res.status, res.statusText);
+          Swal.fire("Error!", "Failed to update admin status.", "error");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating user status:", error);
+        Swal.fire("Error!", "Failed to update admin status.", "error");
+      });
+  };
+
+  const cancelEditingStatus = (id) => {
+    setEditedStatus((prevEditedStatus) => ({
+      ...prevEditedStatus,
+      [id]: userList.find((user) => user.id === id).status, // Reset to the original status
+    }));
+  };
+
   const renderPermissionList = (permission) => {
     const permissionList = [];
 
@@ -368,6 +444,45 @@ export default function ManageAdmin() {
         editedName: userList.find((user) => user.id === id).name, // Reset to the original name
       },
     }));
+  };
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Delete Admin",
+      text: "Are you sure you want to delete this admin?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Send a DELETE request to the API
+        const url = `https://cc87-118-179-97-19.ngrok-free.app/admin/admin/${id}`;
+
+        fetch(url, {
+          method: "DELETE",
+        })
+          .then((res) => {
+            if (res.ok) {
+              // Remove the deleted admin from the userList
+              setUserList((prevUserList) =>
+                prevUserList.filter((user) => user.id !== id)
+              );
+
+              Swal.fire("Deleted!", "Admin has been deleted.", "success");
+            } else {
+              // Handle error cases here
+              console.error("Error:", res.status, res.statusText);
+              Swal.fire("Error!", "Failed to delete admin.", "error");
+            }
+          })
+          .catch((error) => {
+            console.error("Error deleting admin:", error);
+            Swal.fire("Error!", "Failed to delete admin.", "error");
+          });
+      }
+    });
   };
 
   return (
@@ -516,7 +631,50 @@ export default function ManageAdmin() {
                   )}
                 </td>
 
-                <td>{user.status ? "Active" : "Inactive"}</td>
+                <td>
+                  {editedStatus[user.id].isEditing ? (
+                    <div className="flex items-center">
+                      <select
+                        value={editedStatus[user.id].editedStatus.toString()}
+                        onChange={(e) =>
+                          setEditedStatus((prevEditedStatus) => ({
+                            ...prevEditedStatus,
+                            [user.id]: {
+                              ...prevEditedStatus[user.id],
+                              editedStatus: e.target.value === "true",
+                            },
+                          }))
+                        }
+                      >
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                      </select>
+                      <button
+                        className="btn btn-sm bg-green-200"
+                        onClick={() => handleEditStatus(user.id)}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="btn btn-sm bg-red-200"
+                        onClick={() => cancelEditingStatus(user.id)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      {user.status ? "Active" : "Inactive"}
+                      <button
+                        className="btn btn-sm bg-blue-200 ml-2"
+                        onClick={() => startEditingStatus(user.id)}
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  )}
+                </td>
+
                 <td width="30">
                   <div className="flex gap-5">
                     <button
