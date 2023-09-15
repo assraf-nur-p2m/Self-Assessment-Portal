@@ -21,6 +21,7 @@ import SetModuleMaterials from "../Components/Admin/SetModuleMaterials";
 import ControlCategory from "../Components/Admin/ControlCategory";
 import ManageAdmin from "../Components/Admin/ManageAdmin";
 import CreateAdmin from "../Components/Admin/CreateAdmin";
+import Test2 from "../Components/Test2";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: "result",
         element: <Result />,
+      },
+      {
+        path: "test2",
+        element: <Test2 />,
       },
     ],
   },

@@ -8,9 +8,14 @@ export default function ManageAdmin() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
   const [editedNames, setEditedNames] = useState({});
+  const [editedEmails, setEditedEmails] = useState({});
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/admin/admin")
+    fetch("https://cc87-118-179-97-19.ngrok-free.app/admin/admin", {
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         const filteredUserList = data.filter(
@@ -27,6 +32,15 @@ export default function ManageAdmin() {
           };
         });
         setEditedNames(initialEditedNames);
+
+        const initialEditedEmails = {};
+        filteredUserList.forEach((user) => {
+          initialEditedEmails[user.id] = {
+            isEditing: false,
+            editedEmail: user.email,
+          };
+        });
+        setEditedEmails(initialEditedEmails);
       });
   }, []);
 
@@ -88,18 +102,32 @@ export default function ManageAdmin() {
   const handleEditName = (id) => {
     const updatedName = editedNames[id].editedName;
 
+    // Get the user with the specified ID
+    const userToUpdate = userList.find((user) => user.id === id);
+
+    // Create the updated user object with the new name
+    const updatedUser = {
+      ...userToUpdate,
+      name: updatedName,
+    };
+
     // Make a PUT request to update the admin's name
-    const url = `http://192.168.1.29:8081/admin/admin/${id}`;
+    const url = `https://cc87-118-179-97-19.ngrok-free.app/admin/admin/${id}`;
 
     fetch(url, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name: updatedName }),
+      body: JSON.stringify(updatedUser), // Send the updated user object
     })
       .then((res) => {
         if (res.ok) {
+          // Update the userList with the updated user data
+          setUserList((prevUserList) =>
+            prevUserList.map((user) => (user.id === id ? updatedUser : user))
+          );
+
           Swal.fire("Updated!", "Admin name has been updated.", "success");
           setEditedNames((prevEditedNames) => ({
             ...prevEditedNames,
@@ -108,7 +136,6 @@ export default function ManageAdmin() {
               isEditing: false,
             },
           }));
-          // You may want to update the user list with the new name from the response
         } else {
           // Handle error cases here
           Swal.fire("Error!", "Failed to update admin name.", "error");
@@ -118,6 +145,75 @@ export default function ManageAdmin() {
         console.error("Error updating user name:", error);
         Swal.fire("Error!", "Failed to update admin name.", "error");
       });
+  };
+
+  const startEditingEmail = (id) => {
+    setEditedEmails((prevEditedEmails) => ({
+      ...prevEditedEmails,
+      [id]: {
+        ...prevEditedEmails[id],
+        isEditing: true,
+      },
+    }));
+  };
+
+  const handleEditEmail = (id) => {
+    const updatedEmail = editedEmails[id]?.editedEmail;
+
+    // Get the user with the specified ID
+    const userToUpdate = userList.find((user) => user.id === id);
+
+    // Create the updated user object with the new email
+    const updatedUser = {
+      ...userToUpdate,
+      email: updatedEmail,
+    };
+
+    // Make a PUT request to update the admin's email
+    const url = `https://cc87-118-179-97-19.ngrok-free.app/admin/admin/${id}`;
+
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedUser), // Send the updated user object
+    })
+      .then((res) => {
+        if (res.ok) {
+          // Update the userList with the updated user data
+          setUserList((prevUserList) =>
+            prevUserList.map((user) => (user.id === id ? updatedUser : user))
+          );
+
+          Swal.fire("Updated!", "Admin email has been updated.", "success");
+          setEditedEmails((prevEditedEmails) => ({
+            ...prevEditedEmails,
+            [id]: {
+              ...prevEditedEmails[id],
+              isEditing: false,
+            },
+          }));
+        } else {
+          // Handle error cases here
+          Swal.fire("Error!", "Failed to update admin email.", "error");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating user email:", error);
+        Swal.fire("Error!", "Failed to update admin email.", "error");
+      });
+  };
+
+  const cancelEditingEmail = (id) => {
+    setEditedEmails((prevEditedEmails) => ({
+      ...prevEditedEmails,
+      [id]: {
+        ...prevEditedEmails[id],
+        isEditing: false,
+        editedEmail: userList.find((user) => user.id === id).email, // Reset to the original email
+      },
+    }));
   };
 
   const renderPermissionList = (permission) => {
@@ -218,29 +314,63 @@ export default function ManageAdmin() {
                       </button>
                     </>
                   ) : (
-                    user.name
-                  )}
-                </td>
-                <td>{user.email}</td>
-                <td>{renderPermissionList(user.permission)}</td>
-                <td>{user.status ? "Active" : "Inactive"}</td>
-                <td width="30">
-                  <div className="flex gap-5">
-                    {editedNames[user.id].isEditing ? (
+                    <div className="flex items-center">
+                      {user.name}
                       <button
-                        className="btn btn-sm bg-red-200"
-                        onClick={() => cancelEditing(user.id)}
-                      >
-                        Cancel
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-sm bg-blue-200"
+                        className="btn btn-sm bg-blue-200 ml-2"
                         onClick={() => startEditing(user.id)}
                       >
                         Edit
                       </button>
-                    )}
+                    </div>
+                  )}
+                </td>
+                <td>
+                  {editedEmails[user.id]?.isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        value={editedEmails[user.id]?.editedEmail}
+                        onChange={(e) =>
+                          setEditedEmails((prevEditedEmails) => ({
+                            ...prevEditedEmails,
+                            [user.id]: {
+                              ...prevEditedEmails[user.id],
+                              editedEmail: e.target.value,
+                            },
+                          }))
+                        }
+                      />
+                      <button
+                        className="btn btn-sm bg-green-200"
+                        onClick={() => handleEditEmail(user.id)}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="btn btn-sm bg-red-200"
+                        onClick={() => cancelEditingEmail(user.id)}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <div>
+                      {user.email}
+                      <button
+                        className="btn btn-sm bg-blue-200 ml-2"
+                        onClick={() => startEditingEmail(user.id)}
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  )}
+                </td>
+
+                <td>{renderPermissionList(user.permission)}</td>
+                <td>{user.status ? "Active" : "Inactive"}</td>
+                <td width="30">
+                  <div className="flex gap-5">
                     <button
                       onClick={() => handleDelete(user.id)}
                       className="btn btn-sm bg-red-200"
