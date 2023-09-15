@@ -9,6 +9,7 @@ export default function ManageAdmin() {
   const itemsPerPage = 3;
   const [editedNames, setEditedNames] = useState({});
   const [editedEmails, setEditedEmails] = useState({});
+  const [editedPermissions, setEditedPermissions] = useState({});
 
   useEffect(() => {
     fetch("https://cc87-118-179-97-19.ngrok-free.app/admin/admin", {
@@ -41,6 +42,15 @@ export default function ManageAdmin() {
           };
         });
         setEditedEmails(initialEditedEmails);
+
+        const initialEditedPermissions = {};
+        filteredUserList.forEach((user) => {
+          initialEditedPermissions[user.id] = {
+            isEditing: false,
+            permissions: { ...user.permission },
+          };
+        });
+        setEditedPermissions(initialEditedPermissions);
       });
   }, []);
 
@@ -69,6 +79,16 @@ export default function ManageAdmin() {
       );
     }
     return pageNumbers;
+  };
+
+  const startEditingPermissions = (id) => {
+    setEditedPermissions((prevEditedPermissions) => ({
+      ...prevEditedPermissions,
+      [id]: {
+        ...prevEditedPermissions[id],
+        isEditing: true,
+      },
+    }));
   };
 
   const handleGoButtonClick = () => {
@@ -205,6 +225,58 @@ export default function ManageAdmin() {
       });
   };
 
+  const handleEditPermissions = (id) => {
+    const updatedPermissions = editedPermissions[id].permissions;
+
+    // Get the user with the specified ID
+    const userToUpdate = userList.find((user) => user.id === id);
+
+    // Create the updated user object with the new permissions
+    const updatedUser = {
+      ...userToUpdate,
+      permission: { ...updatedPermissions },
+    };
+
+    // Make a PUT request to update the admin's permissions
+    const url = `https://cc87-118-179-97-19.ngrok-free.app/admin/admin/${id}`;
+
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedUser), // Send the updated user object
+    })
+      .then((res) => {
+        if (res.ok) {
+          // Update the userList with the updated user data
+          setUserList((prevUserList) =>
+            prevUserList.map((user) => (user.id === id ? updatedUser : user))
+          );
+
+          Swal.fire(
+            "Updated!",
+            "Admin permissions have been updated.",
+            "success"
+          );
+          setEditedPermissions((prevEditedPermissions) => ({
+            ...prevEditedPermissions,
+            [id]: {
+              ...prevEditedPermissions[id],
+              isEditing: false,
+            },
+          }));
+        } else {
+          // Handle error cases here
+          Swal.fire("Error!", "Failed to update admin permissions.", "error");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating user permissions:", error);
+        Swal.fire("Error!", "Failed to update admin permissions.", "error");
+      });
+  };
+
   const cancelEditingEmail = (id) => {
     setEditedEmails((prevEditedEmails) => ({
       ...prevEditedEmails,
@@ -214,6 +286,53 @@ export default function ManageAdmin() {
         editedEmail: userList.find((user) => user.id === id).email, // Reset to the original email
       },
     }));
+  };
+
+  const cancelEditingPermissions = (id) => {
+    setEditedPermissions((prevEditedPermissions) => ({
+      ...prevEditedPermissions,
+      [id]: {
+        ...prevEditedPermissions[id],
+        isEditing: false,
+        permissions: { ...userList.find((user) => user.id === id).permission }, // Reset to the original permissions
+      },
+    }));
+  };
+
+  const renderEditPermissions = (id) => {
+    const permissions = editedPermissions[id].permissions;
+    const permissionList = [];
+
+    for (const key in permissions) {
+      if (permissions.hasOwnProperty(key) && key !== "id") {
+        permissionList.push(
+          <li key={key}>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={permissions[key]}
+                onChange={(e) =>
+                  setEditedPermissions((prevEditedPermissions) => ({
+                    ...prevEditedPermissions,
+                    [id]: {
+                      ...prevEditedPermissions[id],
+                      permissions: {
+                        ...prevEditedPermissions[id].permissions,
+                        [key]: e.target.checked,
+                      },
+                    },
+                  }))
+                }
+                className="checkbox"
+              />
+              <span className="ml-2">{key}</span>
+            </label>
+          </li>
+        );
+      }
+    }
+
+    return <ul>{permissionList}</ul>;
   };
 
   const renderPermissionList = (permission) => {
@@ -367,7 +486,36 @@ export default function ManageAdmin() {
                   )}
                 </td>
 
-                <td>{renderPermissionList(user.permission)}</td>
+                <td>
+                  {editedPermissions[user.id].isEditing ? (
+                    <>
+                      {renderEditPermissions(user.id)}
+                      <button
+                        className="btn btn-sm bg-green-200"
+                        onClick={() => handleEditPermissions(user.id)}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="btn btn-sm bg-red-200"
+                        onClick={() => cancelEditingPermissions(user.id)}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <div className="flex items-center">
+                      <span className="mr-2">View or Edit Permissions</span>
+                      <button
+                        className="btn btn-sm bg-blue-200"
+                        onClick={() => startEditingPermissions(user.id)}
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  )}
+                </td>
+
                 <td>{user.status ? "Active" : "Inactive"}</td>
                 <td width="30">
                   <div className="flex gap-5">
