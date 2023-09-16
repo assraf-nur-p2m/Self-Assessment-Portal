@@ -6,7 +6,7 @@ import { GrUserAdmin } from "react-icons/gr";
 export default function ManageAdmin() {
   const [userList, setUserList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 10;
   const [editedNames, setEditedNames] = useState({});
   const [editedEmails, setEditedEmails] = useState({});
   const [editedPermissions, setEditedPermissions] = useState({});
