@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import Loading from "../Loading/Loading";
 
 export default function ManageUser() {
   const [userList, setUserList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("http://192.168.1.29:8081/admin/user")
       .then((res) => res.json())
       .then((data) => {
         setUserList(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+        setLoading(false);
       });
   }, []);
 
@@ -93,43 +100,47 @@ export default function ManageUser() {
     <div className="p-2 shadow-lg rounded-xl border">
       <h1 className="text-center text-4xl font-semibold mb-0">Manage User</h1>
       <div className="divider mt-0"></div>
-      <div className="overflow-x-auto">
-        <table className="table">
-          <thead>
-            <tr className="text-lg bg-[#004bad2d] rounded-lg">
-              <th className="font-bold">ID</th>
-              <th className="font-bold">Name</th>
-              <th className="font-bold">Email</th>
-              <th className="font-bold">Status</th>
-              <th className="font-bold text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems.map((user, index) => (
-              <tr
-                key={index}
-                className="hover bg-slate-100 border-b border-gray-300 text-lg"
-              >
-                <th>{user.id}</th>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.status ? "Active" : "Inactive"}</td>
-                <td width="30">
-                  <div className="flex gap-5">
-                    <button className="btn btn-sm bg-blue-200">Edit</button>
-                    <button
-                      onClick={() => handleDelete(user.id)}
-                      className="btn btn-sm bg-red-200"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="table">
+            <thead>
+              <tr className="text-lg bg-[#004bad2d] rounded-lg">
+                <th className="font-bold">ID</th>
+                <th className="font-bold">Name</th>
+                <th className="font-bold">Email</th>
+                <th className="font-bold">Status</th>
+                <th className="font-bold text-center">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {currentItems.map((user, index) => (
+                <tr
+                  key={index}
+                  className="hover bg-slate-100 border-b border-gray-300 text-lg"
+                >
+                  <th>{user.id}</th>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.status ? "Active" : "Inactive"}</td>
+                  <td width="30">
+                    <div className="flex gap-5">
+                      <button className="btn btn-sm bg-blue-200">Edit</button>
+                      <button
+                        onClick={() => handleDelete(user.id)}
+                        className="btn btn-sm bg-red-200"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       <div className="flex justify-between mt-3">
         <div className="flex items-center">
           <button

@@ -60,7 +60,7 @@ export default function CreateAdmin() {
         canDeleteUser: deleteUser.checked,
       },
     };
-    fetch("https://cc87-118-179-97-19.ngrok-free.app/admin/user", {
+    fetch("http://192.168.1.29:8081/admin/user", {
       method: "POST",
       headers: {
         "content-type": "application/json",
