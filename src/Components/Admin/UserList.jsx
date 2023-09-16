@@ -7,6 +7,7 @@ export default function ManageUser() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [loading, setLoading] = useState(true);
+  const [editedStatus, setEditedStatus] = useState({});
 
   useEffect(() => {
     fetch("http://192.168.1.29:8081/admin/user")
@@ -96,6 +97,59 @@ export default function ManageUser() {
     });
   };
 
+  const startEditingStatus = (id) => {
+    // Start editing status for the user with the given ID
+    setEditedStatus((prevEditedStatus) => ({
+      ...prevEditedStatus,
+      [id]: {
+        isEditing: true,
+        editedStatus: userList.find((user) => user.id === id).status,
+      },
+    }));
+  };
+
+  const handleEditStatus = (id) => {
+    // Save the edited status for the user with the given ID
+    const editedUser = {
+      ...userList.find((user) => user.id === id),
+      status: editedStatus[id].editedStatus,
+    };
+
+    const url = `http://192.168.1.29:8081/admin/user/${id}`;
+
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editedUser),
+    })
+      .then((res) => {
+        if (res.ok) {
+          Swal.fire("Updated!", "User status has been updated.", "success");
+          const updatedUserList = userList.map((user) =>
+            user.id === id ? editedUser : user
+          );
+          setUserList(updatedUserList);
+          cancelEditingStatus(id);
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating user status:", error);
+      });
+  };
+
+  const cancelEditingStatus = (id) => {
+    // Cancel editing status for the user with the given ID
+    setEditedStatus((prevEditedStatus) => ({
+      ...prevEditedStatus,
+      [id]: {
+        isEditing: false,
+        editedStatus: prevEditedStatus[id].editedStatus,
+      },
+    }));
+  };
+
   return (
     <div className="p-2 shadow-lg rounded-xl border">
       <h1 className="text-center text-4xl font-semibold mb-0">Manage User</h1>
@@ -123,10 +177,51 @@ export default function ManageUser() {
                   <th>{user.id}</th>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
-                  <td>{user.status ? "Active" : "Inactive"}</td>
+                  <td>
+                    {editedStatus[user.id]?.isEditing ? (
+                      <div className="flex items-center">
+                        <select
+                          value={editedStatus[user.id].editedStatus.toString()}
+                          onChange={(e) =>
+                            setEditedStatus((prevEditedStatus) => ({
+                              ...prevEditedStatus,
+                              [user.id]: {
+                                ...prevEditedStatus[user.id],
+                                editedStatus: e.target.value === "true",
+                              },
+                            }))
+                          }
+                        >
+                          <option value="true">Active</option>
+                          <option value="false">Inactive</option>
+                        </select>
+                        <button
+                          className="btn btn-sm bg-green-200"
+                          onClick={() => handleEditStatus(user.id)}
+                        >
+                          Save
+                        </button>
+                        <button
+                          className="btn btn-sm bg-red-200"
+                          onClick={() => cancelEditingStatus(user.id)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        {user.status ? "Active" : "Inactive"}
+                        <button
+                          className="btn btn-sm bg-blue-200 ml-2"
+                          onClick={() => startEditingStatus(user.id)}
+                        >
+                          Edit
+                        </button>
+                      </div>
+                    )}
+                  </td>
                   <td width="30">
                     <div className="flex gap-5">
-                      <button className="btn btn-sm bg-blue-200">Edit</button>
                       <button
                         onClick={() => handleDelete(user.id)}
                         className="btn btn-sm bg-red-200"
@@ -141,6 +236,7 @@ export default function ManageUser() {
           </table>
         </div>
       )}
+
       <div className="flex justify-between mt-3">
         <div className="flex items-center">
           <button

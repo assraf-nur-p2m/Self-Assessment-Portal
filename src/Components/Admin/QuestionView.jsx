@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 export default function QuestionView() {
   const [category, setCategory] = useState([]);
@@ -54,6 +55,45 @@ export default function QuestionView() {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
     }
+  };
+
+  const handleDelete = (id) => {
+    // Show a confirmation dialog using SweetAlert
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // User clicked "Yes," make the delete API request
+        const url = `http://192.168.1.29:8081/question/${id}`;
+
+        fetch(url, {
+          method: "DELETE",
+        })
+          .then((res) => {
+            if (res.ok) {
+              Swal.fire("Deleted!", "Question has been deleted.", "success");
+
+              // Update the questionData state by filtering out the deleted question
+              const updatedQuestionData = questionData.filter(
+                (question) => question.id !== id
+              );
+              setQuestionData(updatedQuestionData);
+            } else {
+              Swal.fire("Error", "Failed to delete the question.", "error");
+            }
+          })
+          .catch((error) => {
+            console.error("Error deleting question:", error);
+            Swal.fire("Error", "Failed to delete the question.", "error");
+          });
+      }
+    });
   };
 
   return (
@@ -195,7 +235,7 @@ export default function QuestionView() {
                     </td>
                     <td width="30">
                       <div className="flex gap-5">
-                        <button className="btn btn-sm bg-blue-200">Edit</button>
+                        {/* <button className="btn btn-sm bg-blue-200">Edit</button> */}
                         <button
                           onClick={() => handleDelete(item.id)}
                           className="btn btn-sm bg-red-200"
