@@ -21,7 +21,7 @@ export default function CreateModule() {
     setSelectedCategory(selectedValue);
     if (selectedValue) {
       fetch(
-        `http://192.168.1.29:8081/admin/dashboard/question/${selectedValue}`
+        `http://192.168.1.29:8081/dashboard/question/${selectedValue}`
       )
         .then((res) => res.json())
         .then((data) => {
