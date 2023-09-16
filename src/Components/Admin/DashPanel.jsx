@@ -170,6 +170,22 @@ export default function DashPanel() {
                         </span>
                       </p>
                     </div>
+                    <div>
+                      <p className="mb-2">
+                        Quiz Time:{" "}
+                        <span className="font-bold">
+                          {mod.quizTime >= 3600
+                            ? `${Math.floor(
+                                mod.quizTime / 3600
+                              )} hours ${Math.floor(
+                                (mod.quizTime % 3600) / 60
+                              )} minutes ${mod.quizTime % 60} seconds`
+                            : `${Math.floor(mod.quizTime / 60)} minutes ${
+                                mod.quizTime % 60
+                              } seconds`}
+                        </span>
+                      </p>
+                    </div>
                     <div className="flex justify-between">
                       <div>
                         <p className="mb-2">

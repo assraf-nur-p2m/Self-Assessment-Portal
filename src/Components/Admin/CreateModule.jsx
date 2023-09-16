@@ -50,6 +50,15 @@ export default function CreateModule() {
       visibility,
     } = e.target;
 
+    const quizHours = e.target.quizHours.value;
+    const quizMinutes = e.target.quizMinutes.value;
+    const quizSeconds = e.target.quizSeconds.value;
+
+    const quizTime =
+      parseInt(quizHours, 10) * 3600 +
+      parseInt(quizMinutes, 10) * 60 +
+      parseInt(quizSeconds, 10);
+
     const startNoticeDateTime = new Date(noticeStartTime.value);
     const endNoticeDateTime = new Date(noticeEndTime.value);
     const startExamDateTime = new Date(examStartTime.value);
@@ -118,7 +127,10 @@ export default function CreateModule() {
       !examStartTime.value ||
       !examEndTime.value ||
       !showNotice.value ||
-      !visibility.value
+      !visibility.value ||
+      !quizHours ||
+      !quizMinutes ||
+      !quizSeconds
     ) {
       Swal.fire({
         icon: "error",
@@ -141,6 +153,7 @@ export default function CreateModule() {
       examEndTime: examEndTime.value,
       showNotice: showNotice.value,
       visibility: visibility.value,
+      quizTime: quizTime,
     };
 
     fetch("http://192.168.1.29:8081/admin/module", {
@@ -348,6 +361,57 @@ export default function CreateModule() {
                         </span>
                         (not more than 100%)
                       </h2>
+                    </div>
+
+                    <div className="mt-5">
+                      <h2>Quiz Time:</h2>
+                      <div className="flex justify-between">
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            id="quizHours"
+                            name="quizHours"
+                            placeholder="Hours"
+                            className="input input-bordered w-full max-w-xs text-center"
+                          />
+                          <label
+                            htmlFor="quizHours"
+                            className="font-medium text-gray-700"
+                          >
+                            Hours
+                          </label>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                          <input
+                            type="number"
+                            id="quizMinutes"
+                            name="quizMinutes"
+                            placeholder="Minutes"
+                            className="input input-bordered w-full max-w-xs text-center"
+                          />
+                          <label
+                            htmlFor="quizMinutes"
+                            className="font-medium text-gray-700"
+                          >
+                            Minutes
+                          </label>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                          <input
+                            type="number"
+                            id="quizSeconds"
+                            name="quizSeconds"
+                            placeholder="Seconds"
+                            className="input input-bordered w-full max-w-xs text-center"
+                          />
+                          <label
+                            htmlFor="quizSeconds"
+                            className="font-medium text-gray-700"
+                          >
+                            Seconds
+                          </label>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="mt-12">
