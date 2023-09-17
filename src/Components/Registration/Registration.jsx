@@ -11,11 +11,27 @@ export default function Registration() {
     const { name, mail, password } = e.target;
     const userSignUp = {
       name: name.value,
-      mail: mail.value,
+      email: mail.value,
       password: password.value,
     };
-    console.log(userSignUp);
-    navigate("/quiz");
+
+    fetch("http://192.168.1.29:8081/admin/user", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(userSignUp),
+    })
+      .then((response) => {
+        if (response.ok) {
+          navigate("/otp");
+        } else {
+          console.error("Registration failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (

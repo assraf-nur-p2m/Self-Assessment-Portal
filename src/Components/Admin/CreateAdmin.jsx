@@ -49,7 +49,6 @@ export default function CreateAdmin() {
       email: adminEmail.value,
       password: adminPassword.value,
       status: status.value,
-      role: "admin",
       permission: {
         canUploadVideo: uploadVideo.checked,
         canUploadDoc: uploadDocument.checked,
@@ -60,7 +59,7 @@ export default function CreateAdmin() {
         canDeleteUser: deleteUser.checked,
       },
     };
-    fetch("http://192.168.1.29:8081/admin/user", {
+    fetch("http://192.168.1.29:8081/admin/admin", {
       method: "POST",
       headers: {
         "content-type": "application/json",
