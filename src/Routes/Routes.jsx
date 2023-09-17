@@ -23,6 +23,7 @@ import ManageAdmin from "../Components/Admin/ManageAdmin";
 import CreateAdmin from "../Components/Admin/CreateAdmin";
 import Test2 from "../Components/Test2";
 import UserProfile from "../Components/UserProfile/UserProfile";
+import CoreModule from "../Components/CoreModule/CoreModule";
 
 export const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
       {
         path: "user-profile",
         element: <UserProfile />,
+      },
+      {
+        path: "core-module",
+        element: <CoreModule />,
       },
     ],
   },
