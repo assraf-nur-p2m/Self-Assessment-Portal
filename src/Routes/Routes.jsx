@@ -22,6 +22,7 @@ import ControlCategory from "../Components/Admin/ControlCategory";
 import ManageAdmin from "../Components/Admin/ManageAdmin";
 import CreateAdmin from "../Components/Admin/CreateAdmin";
 import Test2 from "../Components/Test2";
+import UserProfile from "../Components/UserProfile/UserProfile";
 
 export const router = createBrowserRouter([
   {
@@ -57,8 +58,8 @@ export const router = createBrowserRouter([
         element: <Result />,
       },
       {
-        path: "test2",
-        element: <Test2 />,
+        path: "user-profile",
+        element: <UserProfile />,
       },
     ],
   },
