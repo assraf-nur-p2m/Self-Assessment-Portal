@@ -4,7 +4,7 @@ export default function UserProfile() {
   return (
     <div className="login-page min-h-screen p-4 md:p-16 flex justify-center items-center">
       <div className="p-4 rounded-xl bg-white bg-opacity-40 accent-color shadow-md">
-        <div className="bg-white rounded-lg p-6 flex flex-col md:flex-row gap-8">
+        <div className="bg-white rounded-lg p-6 md:flex md:flex-row md:gap-8">
           <div className="md:w-1/2 text-center md:text-left">
             <div className="flex justify-center items-center">
               <img
@@ -18,7 +18,7 @@ export default function UserProfile() {
               <p className="font-semibold">assraf.nur@gmail.com</p>
             </div>
           </div>
-          <div className="divider divider-horizontal my-4 md:my-0"></div>
+          <div className="divider lg:divider-horizontal"></div>
           <div className="md:w-1/2 flex justify-center items-center px-4 accent-color rounded-lg">
             <div className="px-6 bg-slate-50 py-6 rounded-lg shadow-xl">
               <p className="text-2xl font-bold">Quiz Average: 78%</p>
@@ -29,8 +29,8 @@ export default function UserProfile() {
         </div>
 
         <div className="p-5 mt-5">
-          <div className="flex gap-5">
-            <div className="card w-96 bg-base-100 shadow-xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
+            <div className="card bg-base-100 shadow-xl">
               <div className="card-body">
                 <h2 className="card-title">Card title!</h2>
                 <p>If a dog chews shoes whose shoes does he choose?</p>
@@ -39,7 +39,7 @@ export default function UserProfile() {
                 </div>
               </div>
             </div>
-            <div className="card w-96 bg-base-100 shadow-xl">
+            <div className="card bg-base-100 shadow-xl">
               <div className="card-body">
                 <h2 className="card-title">Card title!</h2>
                 <p>If a dog chews shoes whose shoes does he choose?</p>
@@ -48,7 +48,7 @@ export default function UserProfile() {
                 </div>
               </div>
             </div>
-            <div className="card w-96 bg-base-100 shadow-xl">
+            <div className="card bg-base-100 shadow-xl">
               <div className="card-body">
                 <h2 className="card-title">Card title!</h2>
                 <p>If a dog chews shoes whose shoes does he choose?</p>
