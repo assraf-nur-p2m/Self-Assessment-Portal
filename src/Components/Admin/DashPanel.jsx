@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FaUsers } from "react-icons/fa";
+import { AiOutlineDelete } from "react-icons/ai";
 import { LuUserCheck, LuUserX } from "react-icons/lu";
+import Swal from "sweetalert2";
 
 export default function DashPanel() {
   const [dashData, setDashData] = useState([]);
@@ -50,6 +52,49 @@ export default function DashPanel() {
       .catch((error) => {
         console.error("Error:", error);
       });
+  };
+
+  const handleModuleDelete = (modId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this module!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, keep it",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://192.168.1.29:8081/admin/module/${modId}`, {
+          method: "DELETE",
+        })
+          .then((res) => {
+            if (res.ok) {
+              setDashData((prevData) => ({
+                ...prevData,
+                modules: prevData.modules.filter((mod) => mod.id !== modId),
+              }));
+              Swal.fire({
+                title: "Deleted!",
+                text: `Module with ID ${modId} has been deleted.`,
+                icon: "success",
+              });
+
+              console.log(`Module with ID ${modId} has been deleted.`);
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: `Failed to delete module with ID ${modId}`,
+                icon: "error",
+              });
+
+              console.error(`Failed to delete module with ID ${modId}`);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    });
   };
 
   return (
@@ -203,6 +248,15 @@ export default function DashPanel() {
                           {mod.visibility ? "Make Private" : "Make Public"}
                         </button>
                       </div>
+                    </div>
+                    <div className="text-end mt-2">
+                      <button
+                        onClick={() => handleModuleDelete(mod.id)}
+                        className="bg-white p-2 text-red-600 rounded-full tooltip tooltip-left"
+                        data-tip="Delete the Module"
+                      >
+                        <AiOutlineDelete className="text-xl" />
+                      </button>
                     </div>
                   </div>
                 </div>
