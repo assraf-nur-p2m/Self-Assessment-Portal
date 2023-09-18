@@ -18,6 +18,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
     "react-router-dom": "^6.15.0",
+    "shaka-player-react": "^1.1.5",
     "sort-by": "^1.2.0",
     "sweetalert2": "^11.7.25"
   },

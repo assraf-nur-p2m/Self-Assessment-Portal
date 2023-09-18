@@ -68,7 +68,7 @@ export const router = createBrowserRouter([
         element: <UserProfile />,
       },
       {
-        path: "core-module",
+        path: "core-module/:moduleId",
         element: <CoreModule />,
       },
     ],

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function UserProfile() {
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState({ enrollModules: [] });
 
   useEffect(() => {
     fetch("http://192.168.1.29:8081/info/userinfo/122")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setUserInfo(data);
       });
   }, []);
@@ -47,19 +47,30 @@ export default function UserProfile() {
 
         <div className="p-5 mt-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-            {userInfo.enrollModules.map((module) => (
-              <div key={module.moduleId} className="card bg-base-100 shadow-xl">
-                <div className="card-body">
-                  <h2 className="card-title">{module.moduleName}</h2>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.{" "}
-                  </p>
-                  <div className="card-actions justify-end">
-                    <button className="btn btn-primary">View Details</button>
+            {userInfo.enrollModules && userInfo.enrollModules.length > 0 ? (
+              userInfo.enrollModules.map((module) => (
+                <div
+                  key={module.moduleId}
+                  className="card bg-base-100 shadow-xl"
+                >
+                  <div className="card-body">
+                    <h2 className="card-title">{module.moduleName}</h2>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </p>
+                    <div className="card-actions justify-end">
+                      <Link to={`/core-module/${module.moduleId}`}>
+                        <button className="btn btn-primary">
+                          View Details
+                        </button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p>No modules enrolled.</p>
+            )}
           </div>
         </div>
       </div>
