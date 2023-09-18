@@ -6,13 +6,14 @@ export default function CoreModule() {
   const { moduleId } = useParams();
   const [moduleInfo, setModuleInfo] = useState({});
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [selectedDocument, setSelectedDocument] = useState(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   useEffect(() => {
     fetch(`http://192.168.1.29:8081/admin/module/info/${moduleId}`)
       .then((res) => res.json())
       .then((data) => {
+        data.videos = data.videos.sort((a, b) => a.sequence - b.sequence);
+        data.documents = data.documents.sort((a, b) => a.sequence - b.sequence);
         setModuleInfo(data);
       });
   }, [moduleId]);
@@ -25,23 +26,14 @@ export default function CoreModule() {
         .load(selectedVideo.fileUrl)
         .then(() => {
           console.log("Video loaded successfully");
-          setIsVideoPlaying(true); // Set to true when video is playing
+          setIsVideoPlaying(true);
         })
         .catch((error) => {
           console.error("Error loading video:", error);
-          setIsVideoPlaying(false); // Set to false when there's an error
+          setIsVideoPlaying(false);
         });
     }
   }, [selectedVideo]);
-
-  const handleDocumentDownload = (document) => {
-    const downloadLink = document.createElement("a");
-    downloadLink.href = document.fileUrl;
-    downloadLink.download = document.documentName;
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-  };
 
   return (
     <div className="login-page p-6">
@@ -80,15 +72,16 @@ export default function CoreModule() {
           </div>
           <div className="w-full lg:w-1/3 bg-[#150f2de1] p-4 rounded-xl mx-1 shadow-lg">
             <h2 className="text-xl font-semibold text-white">Document List</h2>
-            <ul className="mt-3">
+            <ul className="mt-4">
               {moduleInfo.documents?.map((document, index) => (
-                <li key={index}>
-                  <button
+                <li className="" key={index}>
+                  <a
+                    href={document.fileUrl}
+                    target="_blank"
                     className="mb-3 p-2 rounded-lg w-full font-semibold bg-white"
-                    onClick={() => handleDocumentDownload(document)}
                   >
                     {document.documentName}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
