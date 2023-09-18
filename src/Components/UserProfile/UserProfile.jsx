@@ -5,7 +5,7 @@ export default function UserProfile() {
   const [userInfo, setUserInfo] = useState({ enrollModules: [] });
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/info/userinfo/122")
+    fetch("http://192.168.1.29:8081/info/userinfo/407")
       .then((res) => res.json())
       .then((data) => {
         setUserInfo(data);
