@@ -10,7 +10,6 @@ export default function CoreModule() {
   const [displayDocument, setDisplayDocument] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
 
-
   useEffect(() => {
     fetch(`http://192.168.1.29:8081/admin/module/info/${moduleId}`)
       .then((res) => res.json())
@@ -52,7 +51,7 @@ export default function CoreModule() {
                     ? selectedDocument.fileUrl
                     : ""
                 }
-                className="rounded-lg"
+                className="rounded-xl"
                 style={{ width: "100%", height: "580px" }}
                 title="Document Viewer"
               ></iframe>
@@ -67,7 +66,10 @@ export default function CoreModule() {
               />
             )}
           </div>
-          <div className="w-full lg:w-1/3 bg-[#150f2de1] p-4 rounded-xl ms-4 shadow-lg">
+          <div
+            className="w-full lg:w-1/3 bg-[#150f2de1] p-4 rounded-xl ms-4 shadow-lg"
+            style={{ overflowY: "auto" }}
+          >
             <div>
               <h2 className="text-xl font-semibold text-white">Video List</h2>
               <ul className="mt-3">
