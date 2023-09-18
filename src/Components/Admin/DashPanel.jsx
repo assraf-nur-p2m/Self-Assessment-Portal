@@ -192,9 +192,11 @@ export default function DashPanel() {
                   </div>
 
                   <div className="px-2">
-                    <p className="mb-2">
-                      Notice: <span className="font-bold">{mod.notice}</span>
-                    </p>
+                    <div className="">
+                      <p className="mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap max-w-xs sm:max-w-md">
+                        Notice: <span className="font-bold">{mod.notice}</span>
+                      </p>
+                    </div>
                     <p className="mb-2">
                       Notice Visibility Status:{" "}
                       <span className="font-bold">
