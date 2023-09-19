@@ -13,7 +13,6 @@ export default function UserProfile() {
       fetch(`http://192.168.1.29:8081/info/userinfo/${userId}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setUserInfo(data);
           setIsLoading(false);
         });

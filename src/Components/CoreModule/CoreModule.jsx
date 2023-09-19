@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import shaka from "shaka-player";
 
 export default function CoreModule() {
@@ -9,6 +9,7 @@ export default function CoreModule() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [displayDocument, setDisplayDocument] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`http://192.168.1.29:8081/admin/module/info/${moduleId}`)
@@ -36,6 +37,10 @@ export default function CoreModule() {
         });
     }
   }, [selectedVideo, displayDocument]);
+
+  const giveQuiz = () => {
+    navigate(`/quiz?moduleId=${moduleId}`);
+  };
 
   return (
     <div className="login-page p-6">
@@ -114,6 +119,15 @@ export default function CoreModule() {
               </ul>
             </div>
           </div>
+        </div>
+
+        <div className="flex justify-end pe-1 mt-4">
+          <button
+            onClick={giveQuiz}
+            className="p-3 bg-green-500 rounded-lg font-bold px-12"
+          >
+            Give Quiz
+          </button>
         </div>
       </div>
     </div>

@@ -3,22 +3,23 @@ import { ImArrowRight, ImArrowLeft } from "react-icons/im";
 import { CiSaveUp2 } from "react-icons/ci";
 import { motion } from "framer-motion";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Quiz = () => {
   const [quizData, setQuizData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(600);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const submitButtonRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const moduleId = queryParams.get("moduleId");
 
   // fetching data from api
   useEffect(() => {
-    fetch(
-      "https://self-assesment-portal-production.up.railway.app/api/questions"
-    )
+    fetch(`http://192.168.1.29:8081/api/questions/${moduleId}`)
       .then((res) => res.json())
       .then((data) => setQuizData(data));
   }, []);
@@ -41,7 +42,6 @@ const Quiz = () => {
     }
   }, [timeLeft, quizSubmitted]);
 
-  // auto submit function after timer stops
   useEffect(() => {
     if (!quizSubmitted && timeLeft === 0) {
       Swal.fire({
@@ -60,16 +60,13 @@ const Quiz = () => {
             selectedOption: selectedOptions[index] || null,
           }));
 
-          fetch(
-            "https://self-assesment-portal-production.up.railway.app/api/answers",
-            {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: JSON.stringify(optionsToSend),
-            }
-          )
+          fetch("http://192.168.1.29:8081/api/answers", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(optionsToSend),
+          })
             .then((res) => {
               console.log("Response status:", res.status);
               return res.json();
