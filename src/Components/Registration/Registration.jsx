@@ -24,7 +24,7 @@ export default function Registration() {
     })
       .then((response) => {
         if (response.ok) {
-          navigate("/otp");
+          navigate(`/otp?email=${mail.value}`);
         } else {
           console.error("Registration failed");
         }

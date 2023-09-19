@@ -1,14 +1,45 @@
 import React from "react";
 import otpImage from "../../assets/Images/otpImage.png";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function OtpVerify() {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const emailFromQuery = queryParams.get("email");
+  const navigate = useNavigate();
+
   const handleOtp = (e) => {
     e.preventDefault();
     const { otp } = e.target;
     const otpValue = {
       otp: otp.value,
+      email: emailFromQuery,
     };
-    console.log(otpValue);
+
+    fetch("http://192.168.1.29:8081/admin/validateuser", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(otpValue),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          console.error("OTP validation failed");
+        }
+      })
+      .then((data) => {
+        if (data && data.id) {
+          navigate(`/user-profile/${data.id}`);
+        } else {
+          console.error("Invalid response data");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -27,7 +58,7 @@ export default function OtpVerify() {
                 </h2>
                 <input
                   name="otp"
-                  type="text"
+                  type="number"
                   className="mt-5 w-full p-4 shadow-xl border rounded-lg text-center text-xl"
                 />
 

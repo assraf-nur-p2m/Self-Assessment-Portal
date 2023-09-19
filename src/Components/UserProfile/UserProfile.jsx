@@ -1,17 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Loading from "../Loading/Loading";
 
 export default function UserProfile() {
   const [userInfo, setUserInfo] = useState({ enrollModules: [] });
   const [isLoading, setIsLoading] = useState(true);
   const isInitialRender = useRef(true);
+  const { userId } = useParams();
 
   useEffect(() => {
     if (isInitialRender.current) {
-      fetch("http://192.168.1.29:8081/info/userinfo/407")
+      fetch(`http://192.168.1.29:8081/info/userinfo/${userId}`)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           setUserInfo(data);
           setIsLoading(false);
         });
