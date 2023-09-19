@@ -8,11 +8,38 @@ export default function Login() {
     e.preventDefault();
     const { mail, password } = e.target;
     const loginData = {
-      mail: mail.value,
+      email: mail.value,
       password: password.value,
     };
-    console.log(loginData);
-    navigate("/quiz");
+
+    fetch("http://192.168.1.29:8081/admin/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          if (response.ok) {
+            return response.json();
+          } else {
+            console.error("Login failed");
+          }
+        } else {
+          console.error("Login failed");
+        }
+      })
+      .then((data) => {
+        if (data && data.userId) {
+          navigate(`/user-profile/${data.userId}`);
+        } else {
+          console.error("Invalid response data");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
