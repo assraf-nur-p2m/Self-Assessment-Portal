@@ -17,7 +17,6 @@ const Quiz = () => {
   const queryParams = new URLSearchParams(location.search);
   const moduleId = queryParams.get("moduleId");
 
-  // fetching data from api
   useEffect(() => {
     fetch(`http://192.168.1.29:8081/api/questions/${moduleId}`)
       .then((res) => res.json())
@@ -85,7 +84,6 @@ const Quiz = () => {
                   const timerInterval = setInterval(() => {
                     b.textContent = Swal.getTimerLeft();
                   }, 100);
-                  // Navigate to "/result" after the alert closes
                   timerInterval &&
                     setTimeout(() => {
                       navigate("/result");
