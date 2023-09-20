@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Loading from "../Loading/Loading";
+import Swal from "sweetalert2";
 
 export default function UserProfile() {
   const [userInfo, setUserInfo] = useState({ enrollModules: [] });
   const [isLoading, setIsLoading] = useState(true);
   const isInitialRender = useRef(true);
   const { userId } = useParams();
+  const [moduleList, setModuleList] = useState([]);
+  const [selectedModule, setSelectedModule] = useState(null);
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -19,6 +22,49 @@ export default function UserProfile() {
       isInitialRender.current = false;
     }
   }, []);
+
+  useEffect(() => {
+    fetch("http://192.168.1.29:8081/admin/module")
+      .then((res) => res.json())
+      .then((data) => {
+        setModuleList(data);
+      });
+  }, []);
+
+  const sendModuleRequest = () => {
+    if (selectedModule) {
+      const requestBody = {
+        userID: userId,
+        coursed: selectedModule,
+      };
+
+      fetch("http://192.168.1.29:8081/admin/pendingModule", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      })
+        .then((response) => {
+          if (response.ok) {
+            document.getElementById("my_modal_3").close();
+
+            Swal.fire({
+              icon: "success",
+              title: "Request Successful",
+              text: "Your request for the course has been submitted successfully.",
+            });
+          } else {
+            console.error("Error sending module request");
+          }
+        })
+        .catch((error) => {
+          console.error("Error sending module request:", error);
+        });
+    } else {
+      console.error("No module selected");
+    }
+  };
 
   return (
     <div className="login-page min-h-screen p-4 md:p-16 flex justify-center items-center">
@@ -88,6 +134,58 @@ export default function UserProfile() {
             </div>
           </div>
         )}
+        <div className="flex justify-end">
+          <button
+            className="btn btn-outline btn-success text-white"
+            onClick={() => document.getElementById("my_modal_3").showModal()}
+          >
+            Request for new Course
+          </button>
+          <dialog id="my_modal_3" className="modal">
+            <div className="modal-box">
+              <form method="dialog">
+                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                  ✕
+                </button>
+              </form>
+              <h3 className="font-bold text-lg">
+                Select module and request to Admin
+              </h3>
+              <div className="mt-4">
+                <h3 className="font-bold text-lg">Select a Module</h3>
+                <select
+                  value={selectedModule}
+                  onChange={(e) => setSelectedModule(e.target.value)}
+                  className="border border-gray-300 rounded p-2 w-full"
+                >
+                  <option value="">Select a Module</option>
+                  {moduleList
+                    .filter((module) => module.visibility === true)
+                    .map((module) => (
+                      <option key={module.id} value={module.moduleName}>
+                        {module.moduleName}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              {selectedModule && (
+                <div className="mt-4">
+                  <h3 className="font-bold text-lg">Selected Module</h3>
+                  <p className="text-2xl font-bold">{selectedModule}</p>
+                </div>
+              )}
+              <div className="mt-4 justify-end flex">
+                <button
+                  className="btn btn-sm btn-success"
+                  onClick={sendModuleRequest}
+                  disabled={!selectedModule}
+                >
+                  Request
+                </button>
+              </div>
+            </div>
+          </dialog>
+        </div>
       </div>
     </div>
   );
