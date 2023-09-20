@@ -31,12 +31,29 @@ export default function UserProfile() {
       });
   }, []);
 
+  const availableModules = moduleList.filter(
+    (module) =>
+      module.visibility === true &&
+      !userInfo.enrollModules.some(
+        (enrolledModule) => enrolledModule.moduleId === module.id
+      )
+  );
+
   const sendModuleRequest = () => {
     if (selectedModule) {
+      const selectedModuleObject = moduleList.find(
+        (module) => module.moduleName === selectedModule
+      );
+
       const requestBody = {
         userID: userId,
-        coursed: selectedModule,
+        moduleID: selectedModuleObject.id,
+        userName: userInfo.userName,
+        userEmail: userInfo.userEmail,
+        moduleName: selectedModule,
       };
+
+      console.log(requestBody);
 
       fetch("http://192.168.1.29:8081/admin/pendingModule", {
         method: "POST",
@@ -159,7 +176,7 @@ export default function UserProfile() {
                   className="border border-gray-300 rounded p-2 w-full"
                 >
                   <option value="">Select a Module</option>
-                  {moduleList
+                  {availableModules
                     .filter((module) => module.visibility === true)
                     .map((module) => (
                       <option key={module.id} value={module.moduleName}>

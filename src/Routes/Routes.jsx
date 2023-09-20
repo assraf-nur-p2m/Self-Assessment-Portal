@@ -25,6 +25,7 @@ import Test2 from "../Components/Test2";
 import UserProfile from "../Components/UserProfile/UserProfile";
 import CoreModule from "../Components/CoreModule/CoreModule";
 import ErrorPage from "../Components/Error/ErrorPage";
+import ModuleRequest from "../Components/Admin/ModuleRequest";
 
 export const router = createBrowserRouter([
   {
@@ -128,6 +129,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/add-admin",
         element: <CreateAdmin />,
+      },
+      {
+        path: "/dashboard/module-request",
+        element: <ModuleRequest />,
       },
     ],
   },

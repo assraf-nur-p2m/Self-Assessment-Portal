@@ -130,6 +130,19 @@ export default function Dashboard() {
                 Control Category
               </Link>
             </li>
+            <hr />
+            <li className="py-2">
+              <Link
+                className={`text-xl font-semibold py-3 ${
+                  location.pathname === "/dashboard/module-request"
+                    ? "bg-[#b4b8bd4b]"
+                    : ""
+                }`}
+                to="/dashboard/module-request"
+              >
+                Module Request
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
