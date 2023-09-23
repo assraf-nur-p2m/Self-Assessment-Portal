@@ -9,6 +9,7 @@ export default function CoreModule() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [displayDocument, setDisplayDocument] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
+  const [selectedDocumentButton, setSelectedDocumentButton] = useState(null); // Track selected document button
   const navigate = useNavigate();
 
   // Track video playback position
@@ -71,6 +72,13 @@ export default function CoreModule() {
     }
   }, [selectedVideo, displayDocument]);
 
+  const handleDocumentClick = (document) => {
+    setSelectedVideo(null);
+    setSelectedDocument(document);
+    setDisplayDocument(true);
+    setSelectedDocumentButton(document); // Set the selected document button
+  };
+
   const giveQuiz = () => {
     navigate(`/quiz?moduleId=${moduleId}`);
   };
@@ -122,6 +130,7 @@ export default function CoreModule() {
                       onClick={() => {
                         setSelectedVideo(video);
                         setDisplayDocument(false);
+                        setSelectedDocumentButton(null); // Reset selected document button
                       }}
                     >
                       {video.videoName}
@@ -138,12 +147,12 @@ export default function CoreModule() {
                 {moduleInfo.documents?.map((document, index) => (
                   <li className="" key={index}>
                     <button
-                      className="mb-3 p-2 rounded-lg w-full font-semibold bg-white"
-                      onClick={() => {
-                        setSelectedVideo(null);
-                        setSelectedDocument(document); // Add this line
-                        setDisplayDocument(true);
-                      }}
+                      className={`mb-3 p-2 rounded-lg w-full font-semibold ${
+                        selectedDocumentButton === document
+                          ? "bg-green-500 text-white"
+                          : "bg-white"
+                      }`}
+                      onClick={() => handleDocumentClick(document)}
                     >
                       {document.documentName}
                     </button>
