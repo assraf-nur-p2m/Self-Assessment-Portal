@@ -27,33 +27,22 @@ export default function CoreModule() {
     if (selectedVideo && !displayDocument) {
       const videoElement = document.getElementById("shaka-video");
       const player = new shaka.Player(videoElement);
-
-      // Create a unique key for each video using the video's id
       const storageKey = `videoPosition_${selectedVideo.id}`;
-
-      // Get the saved playback position from the dictionary
       const savedPosition = videoPlaybackPositions[storageKey];
 
-      // Load the selected video
       player
         .load(selectedVideo.fileUrl)
         .then(() => {
           console.log("Video loaded successfully");
-
-          // Set the saved playback position if available
           if (savedPosition) {
             videoElement.currentTime = parseFloat(savedPosition);
           }
-
-          // Add an event listener to save the playback position
           videoElement.addEventListener("timeupdate", () => {
-            // Save the playback position in the dictionary
             const updatedPositions = { ...videoPlaybackPositions };
             updatedPositions[storageKey] = videoElement.currentTime.toString();
             setVideoPlaybackPositions(updatedPositions);
           });
 
-          // Start playing the video
           videoElement
             .play()
             .then(() => {
@@ -112,6 +101,7 @@ export default function CoreModule() {
             )}
           </div>
           <div
+            id="content-list"
             className="w-full lg:w-1/3 bg-[#150f2de1] p-4 rounded-xl ms-4 shadow-lg"
             style={{ overflowY: "auto" }}
           >
@@ -129,7 +119,7 @@ export default function CoreModule() {
                       onClick={() => {
                         setSelectedVideo(video);
                         setDisplayDocument(false);
-                        setSelectedDocumentButton(null); // Reset selected document button
+                        setSelectedDocumentButton(null);
                       }}
                     >
                       {video.videoName}

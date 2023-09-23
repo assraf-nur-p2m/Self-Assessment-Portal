@@ -26,6 +26,7 @@ import UserProfile from "../Components/UserProfile/UserProfile";
 import CoreModule from "../Components/CoreModule/CoreModule";
 import ErrorPage from "../Components/Error/ErrorPage";
 import ModuleRequest from "../Components/Admin/ModuleRequest";
+import UserPerformance from "../Components/Admin/UserPerformance";
 
 export const router = createBrowserRouter([
   {
@@ -133,6 +134,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/module-request",
         element: <ModuleRequest />,
+      },
+      {
+        path: "/dashboard/user-performance",
+        element: <UserPerformance />,
       },
     ],
   },

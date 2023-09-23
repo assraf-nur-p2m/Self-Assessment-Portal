@@ -143,6 +143,19 @@ export default function Dashboard() {
                 Module Request
               </Link>
             </li>
+            <hr />
+            <li className="py-2">
+              <Link
+                className={`text-xl font-semibold py-3 ${
+                  location.pathname === "/dashboard/user-performance"
+                    ? "bg-[#b4b8bd4b]"
+                    : ""
+                }`}
+                to="/dashboard/user-performance"
+              >
+                Student Performance
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
