@@ -15,6 +15,7 @@ export default function SetModuleMaterials() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [uploadInProgress, setUploadInProgress] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     if (category.length > 0) {
@@ -101,51 +102,57 @@ export default function SetModuleMaterials() {
         category: selectedCategory,
       };
 
-      if (selectedButton === "video") {
-        setUploadInProgress(true);
-      }
+      setUploadInProgress(true);
 
       const formData = new FormData();
       formData.append("file", uploadData.file);
       formData.append("json", JSON.stringify(json));
 
-      fetch(apiUrl, {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          document.getElementById("fileInput").value = "";
-          document.getElementById("nameInput").value = "";
-          document.getElementById("sequenceInput").value = "";
+      const xhr = new XMLHttpRequest();
 
-          setUploadData({
-            fileName: "",
-            fileSequence: "",
-            file: null,
-          });
+      // Track upload progress
+      xhr.upload.addEventListener("progress", (event) => {
+        if (event.lengthComputable) {
+          const progress = (event.loaded / event.total) * 100;
+          setUploadProgress(progress); // Update the progress state
+        }
+      });
 
-          if (selectedButton === "videos") {
+      xhr.open("POST", apiUrl, true);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            document.getElementById("fileInput").value = "";
+            document.getElementById("nameInput").value = "";
+            document.getElementById("sequenceInput").value = "";
+
+            setUploadData({
+              fileName: "",
+              fileSequence: "",
+              file: null,
+            });
+
+            setUploadInProgress(false);
+
+            const data = JSON.parse(xhr.responseText);
+            setApiData([...apiData, data]);
+
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your work has been saved",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          } else {
+            console.error("Upload error:", xhr.statusText);
+
             setUploadInProgress(false);
           }
+        }
+      };
 
-          setApiData([...apiData, data]);
-
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Your work has been saved",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        })
-        .catch((error) => {
-          console.error("Upload error:", error);
-
-          if (selectedButton === "videos") {
-            setUploadInProgress(false);
-          }
-        });
+      xhr.send(formData);
     }
   };
 
@@ -336,8 +343,15 @@ export default function SetModuleMaterials() {
                   />
                 </div>
                 {selectedButton === "videos" && uploadInProgress && (
-                  <div className="text-green-500 font-semibold">
-                    Uploading... Please wait.
+                  <div>
+                    <p className="text-xl font-bold text-green-700">
+                      Uploading....
+                    </p>
+                    <progress
+                      className="progress progress-info w-56"
+                      value={uploadProgress}
+                      max="100"
+                    ></progress>
                   </div>
                 )}
               </div>
