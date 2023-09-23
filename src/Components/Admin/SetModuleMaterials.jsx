@@ -119,9 +119,17 @@ export default function SetModuleMaterials() {
           document.getElementById("nameInput").value = "";
           document.getElementById("sequenceInput").value = "";
 
+          setUploadData({
+            fileName: "",
+            fileSequence: "",
+            file: null,
+          });
+
           if (selectedButton === "videos") {
             setUploadInProgress(false);
           }
+
+          setApiData([...apiData, data]);
 
           Swal.fire({
             position: "center",
