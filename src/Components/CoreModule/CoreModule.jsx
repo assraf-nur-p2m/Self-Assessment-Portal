@@ -9,11 +9,9 @@ export default function CoreModule() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [displayDocument, setDisplayDocument] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
-  const [selectedDocumentButton, setSelectedDocumentButton] = useState(null); // Track selected document button
+  const [selectedDocumentButton, setSelectedDocumentButton] = useState(null);
   const navigate = useNavigate();
-
-  // Track video playback position
-  const [videoPosition, setVideoPosition] = useState(0);
+  const [videoPlaybackPositions, setVideoPlaybackPositions] = useState({});
 
   useEffect(() => {
     fetch(`http://192.168.1.29:8081/admin/module/info/${moduleId}`)
@@ -30,10 +28,11 @@ export default function CoreModule() {
       const videoElement = document.getElementById("shaka-video");
       const player = new shaka.Player(videoElement);
 
-      // Check if there is a saved playback position in localStorage
-      const savedPosition = localStorage.getItem(
-        `videoPosition_${selectedVideo.id}`
-      );
+      // Create a unique key for each video using the video's id
+      const storageKey = `videoPosition_${selectedVideo.id}`;
+
+      // Get the saved playback position from the dictionary
+      const savedPosition = videoPlaybackPositions[storageKey];
 
       // Load the selected video
       player
@@ -48,10 +47,10 @@ export default function CoreModule() {
 
           // Add an event listener to save the playback position
           videoElement.addEventListener("timeupdate", () => {
-            localStorage.setItem(
-              `videoPosition_${selectedVideo.id}`,
-              videoElement.currentTime.toString()
-            );
+            // Save the playback position in the dictionary
+            const updatedPositions = { ...videoPlaybackPositions };
+            updatedPositions[storageKey] = videoElement.currentTime.toString();
+            setVideoPlaybackPositions(updatedPositions);
           });
 
           // Start playing the video
@@ -76,7 +75,7 @@ export default function CoreModule() {
     setSelectedVideo(null);
     setSelectedDocument(document);
     setDisplayDocument(true);
-    setSelectedDocumentButton(document); // Set the selected document button
+    setSelectedDocumentButton(document);
   };
 
   const giveQuiz = () => {

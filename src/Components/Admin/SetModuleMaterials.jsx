@@ -13,10 +13,14 @@ export default function SetModuleMaterials() {
     file: null,
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Adjust the number of items per page as needed
+  const [itemsPerPage] = useState(10);
   const [uploadInProgress, setUploadInProgress] = useState(false);
 
   useEffect(() => {
+    if (category.length > 0) {
+      setSelectedCategory(category[0].category);
+    }
+    setSelectedButton("documents");
     fetch("http://192.168.1.29:8081/admin/category")
       .then((res) => res.json())
       .then((data) => {
