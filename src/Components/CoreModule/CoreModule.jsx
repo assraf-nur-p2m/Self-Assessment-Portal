@@ -11,6 +11,9 @@ export default function CoreModule() {
   const [selectedDocument, setSelectedDocument] = useState(null);
   const navigate = useNavigate();
 
+  // Track video playback position
+  const [videoPosition, setVideoPosition] = useState(0);
+
   useEffect(() => {
     fetch(`http://192.168.1.29:8081/admin/module/info/${moduleId}`)
       .then((res) => res.json())
@@ -25,11 +28,41 @@ export default function CoreModule() {
     if (selectedVideo && !displayDocument) {
       const videoElement = document.getElementById("shaka-video");
       const player = new shaka.Player(videoElement);
+
+      // Check if there is a saved playback position in localStorage
+      const savedPosition = localStorage.getItem(
+        `videoPosition_${selectedVideo.id}`
+      );
+
+      // Load the selected video
       player
         .load(selectedVideo.fileUrl)
         .then(() => {
           console.log("Video loaded successfully");
-          setIsVideoPlaying(true);
+
+          // Set the saved playback position if available
+          if (savedPosition) {
+            videoElement.currentTime = parseFloat(savedPosition);
+          }
+
+          // Add an event listener to save the playback position
+          videoElement.addEventListener("timeupdate", () => {
+            localStorage.setItem(
+              `videoPosition_${selectedVideo.id}`,
+              videoElement.currentTime.toString()
+            );
+          });
+
+          // Start playing the video
+          videoElement
+            .play()
+            .then(() => {
+              setIsVideoPlaying(true);
+            })
+            .catch((error) => {
+              console.error("Error playing video:", error);
+              setIsVideoPlaying(false);
+            });
         })
         .catch((error) => {
           console.error("Error loading video:", error);
