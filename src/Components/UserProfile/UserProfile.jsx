@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Loading from "../Loading/Loading";
 import Swal from "sweetalert2";
+import profilePic from "../../assets/Images/IMG_1859 (1)-01.jpeg";
 
 export default function UserProfile() {
   const [userInfo, setUserInfo] = useState({ enrollModules: [] });
@@ -93,11 +94,7 @@ export default function UserProfile() {
             <div className="bg-white rounded-lg p-6 md:flex md:flex-row md:gap-8">
               <div className="md:w-1/2 text-center md:text-left">
                 <div className="flex justify-center items-center">
-                  <img
-                    className="rounded-full w-36"
-                    src="https://cdn-icons-png.flaticon.com/512/560/560199.png"
-                    alt=""
-                  />
+                  <img className="rounded-full w-36" src={profilePic} alt="" />
                 </div>
                 <div className="text-center mt-2">
                   <p className="text-3xl font-bold">{userInfo.userName}</p>

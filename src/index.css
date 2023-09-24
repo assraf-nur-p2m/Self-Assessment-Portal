@@ -8,9 +8,7 @@
 html {
   font-family: "Fira Sans", sans-serif;
 }
-.banner-image {
-  animation: zoomAnimation 3s infinite alternate;
-}
+
 
 @keyframes zoomAnimation {
   from {

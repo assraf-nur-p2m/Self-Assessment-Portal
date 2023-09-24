@@ -9,7 +9,7 @@ const Quiz = () => {
   const [quizData, setQuizData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [timeLeft, setTimeLeft] = useState(600);
+  const [timeLeft, setTimeLeft] = useState(1200);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const submitButtonRef = useRef(null);
   const navigate = useNavigate();
@@ -86,7 +86,7 @@ const Quiz = () => {
                   }, 100);
                   timerInterval &&
                     setTimeout(() => {
-                      navigate("/result");
+                      navigate("/");
                     }, 2000);
                 },
                 willClose: () => {
@@ -193,6 +193,7 @@ const Quiz = () => {
           });
 
         console.log(optionsToSend);
+        navigate('/core-module/602')
         Swal.fire({
           position: "center",
           icon: "success",
