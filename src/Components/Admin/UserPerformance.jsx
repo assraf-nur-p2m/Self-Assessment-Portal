@@ -16,12 +16,18 @@ export default function UserPerformance() {
       });
   }, []);
 
+  useEffect(() => {
+    if (selectedModule) {
+      handleModuleChange(selectedModule);
+    }
+  }, [selectedModule]);
+
   const handleModuleChange = (moduleId) => {
     setSelectedModule(moduleId);
     fetch(`http://192.168.1.29:8081/admin/module/userofmodule/${moduleId}`)
       .then((res) => res.json())
       .then((data) => {
-        setData(data); 
+        setData(data);
       });
   };
 
@@ -70,7 +76,9 @@ export default function UserPerformance() {
                   <td>{user.email}</td>
                   <td>
                     {user.marks.map((mark, index) => (
-                      <p className="text-center" key={index}>{mark}</p>
+                      <p className="text-center" key={index}>
+                        {mark}
+                      </p>
                     ))}
                   </td>
                 </tr>
