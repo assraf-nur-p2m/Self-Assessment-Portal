@@ -21,7 +21,6 @@ import SetModuleMaterials from "../Components/Admin/SetModuleMaterials";
 import ControlCategory from "../Components/Admin/ControlCategory";
 import ManageAdmin from "../Components/Admin/ManageAdmin";
 import CreateAdmin from "../Components/Admin/CreateAdmin";
-import Test2 from "../Components/Test2";
 import UserProfile from "../Components/UserProfile/UserProfile";
 import CoreModule from "../Components/CoreModule/CoreModule";
 import ErrorPage from "../Components/Error/ErrorPage";

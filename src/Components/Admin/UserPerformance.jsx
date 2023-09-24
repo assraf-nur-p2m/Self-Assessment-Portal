@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 export default function UserPerformance() {
   const [moduleList, setModuleList] = useState([]);
   const [selectedModule, setSelectedModule] = useState(null);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     fetch("http://192.168.1.29:8081/admin/module")
@@ -17,7 +18,11 @@ export default function UserPerformance() {
 
   const handleModuleChange = (moduleId) => {
     setSelectedModule(moduleId);
-    console.log("Selected Module ID:", moduleId);
+    fetch(`http://192.168.1.29:8081/admin/module/userofmodule/${moduleId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data); 
+      });
   };
 
   return (
@@ -40,21 +45,40 @@ export default function UserPerformance() {
           <option value="">Select a module</option>
           {moduleList.map((module) => (
             <option key={module.id} value={module.id}>
-              {module.moduleName}
+              {module.moduleName} {module.moduleId}
             </option>
           ))}
         </select>
       </div>
 
-      {/* Display selected module */}
-      {selectedModule && (
-        <div className="mt-4 ms-1">
-          <h2 className="text-xl font-semibold">
-            Students table of {selectedModule}
-          </h2>
-          {/* You can display additional module details here */}
+      <div className="mt-4 ms-1">
+        <div className="overflow-x-auto border rounded-lg mb-3 shadow-lg">
+          <table className="table">
+            <thead>
+              <tr>
+                <th className="w-[25%]">UserID</th>
+                <th className="w-[25%]">Name</th>
+                <th className="w-[25%]">Email</th>
+                <th className="w-[25%] text-center">Quiz Marks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((user) => (
+                <tr key={user.userId}>
+                  <td>{user.userId}</td>
+                  <td>{user.userName}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    {user.marks.map((mark, index) => (
+                      <p className="text-center" key={index}>{mark}</p>
+                    ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
     </div>
   );
 }
