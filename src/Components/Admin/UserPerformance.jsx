@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../Authentication/AuthProvider";
 
 export default function UserPerformance() {
   const [moduleList, setModuleList] = useState([]);
   const [selectedModule, setSelectedModule] = useState(null);
   const [data, setData] = useState([]);
+  const user = useContext(AuthContext);
 
   useEffect(() => {
     fetch("http://192.168.1.29:8081/admin/module")
@@ -34,7 +37,7 @@ export default function UserPerformance() {
   return (
     <div className="p-2 shadow-lg rounded-xl border">
       <h1 className="text-center text-4xl font-semibold mb-0">
-        Student Performance
+        Student Performance {user && <span>{user.displayName} {user.age}</span>}
       </h1>
       <div className="divider mt-0"></div>
 
