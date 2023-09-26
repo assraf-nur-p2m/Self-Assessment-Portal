@@ -12,23 +12,95 @@ export default function UserProfile() {
   const [moduleList, setModuleList] = useState([]);
   const [selectedModule, setSelectedModule] = useState(null);
 
+  // useEffect(() => {
+  //   if (isInitialRender.current) {
+  //     fetch(`http://192.168.1.29:8081/info/userinfo/${userId}`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setUserInfo(data);
+  //         setIsLoading(false);
+  //       });
+  //     isInitialRender.current = false;
+  //   }
+  // }, []);
   useEffect(() => {
     if (isInitialRender.current) {
-      fetch(`http://192.168.1.29:8081/info/userinfo/${userId}`)
+      // Function to retrieve the JWT token from localStorage
+      const getTokenFromLocalStorage = () => {
+        return localStorage.getItem("token");
+      };
+
+      // Define the API URL
+      const apiUrl = `http://192.168.1.29:8081/info/userinfo/${userId}`;
+
+      // Retrieve the JWT token from localStorage
+      const token = getTokenFromLocalStorage();
+
+      // Create headers with the token
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Set the token as Bearer token
+      };
+
+      // Send the authenticated API request
+      fetch(apiUrl, {
+        method: "GET",
+        headers: headers,
+      })
         .then((res) => res.json())
         .then((data) => {
           setUserInfo(data);
           setIsLoading(false);
+          console.log(data);
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error fetching user info:", error);
+          setIsLoading(false); // Set isLoading to false to handle errors gracefully
         });
+
       isInitialRender.current = false;
     }
-  }, []);
+  }, [userId]);
+
+  // useEffect(() => {
+  //   fetch("http://192.168.1.29:8081/admin/module")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setModuleList(data);
+  //     });
+  // }, []);
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/admin/module")
+    // Function to retrieve the JWT token from localStorage
+    const getTokenFromLocalStorage = () => {
+      return localStorage.getItem("token");
+    };
+
+    // Define the API URL
+    const apiUrl = "http://192.168.1.29:8081/admin/module";
+
+    // Retrieve the JWT token from localStorage
+    const token = getTokenFromLocalStorage();
+
+    // Create headers with the token
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // Set the token as Bearer token
+    };
+
+    // Send the authenticated API request
+    fetch(apiUrl, {
+      method: "GET",
+      headers: headers,
+    })
       .then((res) => res.json())
       .then((data) => {
         setModuleList(data);
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error("Error fetching modules:", error);
       });
   }, []);
 
@@ -54,13 +126,25 @@ export default function UserProfile() {
         moduleName: selectedModule,
       };
 
+      // Function to retrieve the JWT token from localStorage
+      const getTokenFromLocalStorage = () => {
+        return localStorage.getItem("token");
+      };
+
+      // Retrieve the JWT token from localStorage
+      const token = getTokenFromLocalStorage();
+
+      // Create headers with the token
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Set the token as Bearer token
+      };
+
       console.log(requestBody);
 
       fetch("http://192.168.1.29:8081/admin/pendingModule", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: headers,
         body: JSON.stringify(requestBody),
       })
         .then((response) => {

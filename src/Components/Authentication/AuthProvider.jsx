@@ -1,14 +1,44 @@
-import React, { createContext } from "react";
+import React, { createContext, useState } from "react";
 
 export const AuthContext = createContext(null);
 
-export default function AuthProvider({children}) {
-  const user = {
-    displayName: "Nur",
-    age: 23
-  }
+export default function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  return <AuthContext.Provider value={user}>
-    {children}
-  </AuthContext.Provider>;
+  const logIn = async (email, password) => {
+    try {
+      const response = await fetch("http://192.168.1.29:8081/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const { token, user } = await response.json();
+        setUser(user);
+        localStorage.setItem("token", token);
+        setLoading(false);
+
+        // return user
+        return { user };
+      } else {
+        console.error("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
+  const authInfo = {
+    user,
+    loading,
+    logIn,
+  };
+
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  );
 }

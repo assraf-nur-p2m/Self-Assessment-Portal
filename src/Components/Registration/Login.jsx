@@ -1,8 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import loginPic from "../../assets/Images/loginBanner.png";
+import { useContext, useState } from "react";
+import { AuthContext } from "../Authentication/AuthProvider";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { logIn } = useContext(AuthContext);
+  const [loginError, setLoginError] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -12,34 +16,10 @@ export default function Login() {
       password: password.value,
     };
 
-    fetch("http://192.168.1.29:8081/admin/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginData),
-    })
-      .then((response) => {
-        if (response.ok) {
-          if (response.ok) {
-            return response.json();
-          } else {
-            console.error("Login failed");
-          }
-        } else {
-          console.error("Login failed");
-        }
-      })
-      .then((data) => {
-        if (data && data.userId) {
-          navigate(`/user-profile/${data.userId}`);
-        } else {
-          console.error("Invalid response data");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    logIn(loginData.email, loginData.password).then((result) => {
+      const user = result.user;
+      navigate(`/user-profile/${user.id}`);
+    });
   };
 
   return (
