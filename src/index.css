@@ -9,7 +9,6 @@ html {
   font-family: "Fira Sans", sans-serif;
 }
 
-
 @keyframes zoomAnimation {
   from {
     transform: scale(1);
@@ -54,4 +53,25 @@ html {
   color: black;
   padding-top: 3px;
   padding-bottom: 3px;
+}
+/* CoreModule.css */
+
+.news-ticker {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.news-item {
+  display: inline-block;
+  margin-right: 20px; /* Adjust as needed for spacing between news items */
+  animation: scroll 60s linear infinite; /* Adjust animation duration as needed */
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(10%); /* Start off-screen to the right */
+  }
+  100% {
+    transform: translateX(-100%); /* Scroll to the left */
+  }
 }

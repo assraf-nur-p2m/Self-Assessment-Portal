@@ -12,6 +12,8 @@ export default function CoreModule() {
   const [selectedDocumentButton, setSelectedDocumentButton] = useState(null);
   const navigate = useNavigate();
   const [videoPlaybackPositions, setVideoPlaybackPositions] = useState({});
+  const [isNoticeVisible, setIsNoticeVisible] = useState(true);
+  const [isQuizVisible, setIsQuizVisible] = useState(true);
 
   useEffect(() => {
     fetch(`http://192.168.1.29:8081/admin/module/info/${moduleId}`)
@@ -20,6 +22,7 @@ export default function CoreModule() {
         data.videos = data.videos.sort((a, b) => a.sequence - b.sequence);
         data.documents = data.documents.sort((a, b) => a.sequence - b.sequence);
         setModuleInfo(data);
+        console.log(data);
       });
   }, [moduleId]);
 
@@ -59,6 +62,27 @@ export default function CoreModule() {
         });
     }
   }, [selectedVideo, displayDocument]);
+
+  useEffect(() => {
+    // Check if the current time is within the notice's start and end times
+    const currentTime = new Date();
+    const noticeStartTime = new Date(moduleInfo.noticeStartTime);
+    const noticeEndTime = new Date(moduleInfo.noticeEndTime);
+
+    if (currentTime < noticeStartTime || currentTime > noticeEndTime) {
+      // If the current time is outside the notice period, hide the notice
+      setIsNoticeVisible(false);
+    }
+
+    // Check if the current time is within the quiz's start and end times
+    const quizStartTime = new Date(moduleInfo.examStartTime);
+    const quizEndTime = new Date(moduleInfo.examEndTime);
+
+    if (currentTime < quizStartTime || currentTime > quizEndTime) {
+      // If the current time is outside the quiz period, hide the quiz button
+      setIsQuizVisible(false);
+    }
+  }, [moduleInfo]);
 
   const handleDocumentClick = (document) => {
     setSelectedVideo(null);
@@ -152,13 +176,24 @@ export default function CoreModule() {
           </div>
         </div>
 
-        <div className="flex justify-end pe-1 mt-4">
-          <button
-            onClick={giveQuiz}
-            className="p-3 bg-green-500 rounded-lg font-bold px-12"
-          >
-            Give Quiz
-          </button>
+        <div className="flex justify-between pe-1 mt-4">
+          <div className="news-ticker w-4/4">
+            {isNoticeVisible && (
+              <div className="news-item">
+                <p className="text-2xl mb-0 font-bold">{moduleInfo.notice}</p>
+              </div>
+            )}
+          </div>
+          <div className="w-2/4 flex justify-end">
+            {isQuizVisible && (
+              <button
+                onClick={giveQuiz}
+                className="p-3 bg-green-600 rounded-lg font-bold px-12 text-white"
+              >
+                Attempt Quiz
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
