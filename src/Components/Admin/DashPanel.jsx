@@ -25,7 +25,7 @@ export default function DashPanel() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          authorization: `Bearer ${token}`,
         },
       })
         .then((response) => response.json())
