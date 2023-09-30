@@ -13,7 +13,7 @@ export default function ManageAdmin() {
   const [editedStatus, setEditedStatus] = useState({});
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/admin/admin", {
+    fetch("http://192.168.1.7:8081/admin/admin", {
       headers: {
         "ngrok-skip-browser-warning": "true",
       },
@@ -142,7 +142,7 @@ export default function ManageAdmin() {
     };
 
     // Make a PUT request to update the admin's name
-    const url = `http://192.168.1.29:8081/admin/admin/${id}`;
+    const url = `http://192.168.1.7:8081/admin/admin/${id}`;
 
     fetch(url, {
       method: "PUT",
@@ -200,7 +200,7 @@ export default function ManageAdmin() {
     };
 
     // Make a PUT request to update the admin's email
-    const url = `http://192.168.1.29:8081/admin/admin/${id}`;
+    const url = `http://192.168.1.7:8081/admin/admin/${id}`;
 
     fetch(url, {
       method: "PUT",
@@ -248,7 +248,7 @@ export default function ManageAdmin() {
     };
 
     // Make a PUT request to update the admin's permissions
-    const url = `http://192.168.1.29:8081/admin/admin/${id}`;
+    const url = `http://192.168.1.7:8081/admin/admin/${id}`;
 
     fetch(url, {
       method: "PUT",
@@ -368,7 +368,7 @@ export default function ManageAdmin() {
     };
 
     // Make a PUT request to update the admin's status
-    const url = `http://192.168.1.29:8081/admin/admin/${id}`;
+    const url = `http://192.168.1.7:8081/admin/admin/${id}`;
 
     fetch(url, {
       method: "PUT",
@@ -458,7 +458,7 @@ export default function ManageAdmin() {
     }).then((result) => {
       if (result.isConfirmed) {
         // Send a DELETE request to the API
-        const url = `http://192.168.1.29:8081/admin/admin/${id}`;
+        const url = `http://192.168.1.7:8081/admin/admin/${id}`;
 
         fetch(url, {
           method: "DELETE",

@@ -9,7 +9,7 @@ export default function ModuleRequest() {
   }, []);
 
   const fetchModuleRequests = () => {
-    fetch("http://192.168.1.29:8081/admin/pendingModule")
+    fetch("http://192.168.1.7:8081/admin/pendingModule")
       .then((res) => res.json())
       .then((data) => {
         setModuleRequests(data);
@@ -20,7 +20,7 @@ export default function ModuleRequest() {
   };
 
   const handleApprove = (id) => {
-    fetch(`http://192.168.1.29:8081/admin/pendingModule/${id}`, {
+    fetch(`http://192.168.1.7:8081/admin/pendingModule/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export default function ModuleRequest() {
   };
 
   const handleReject = (id) => {
-    fetch(`http://192.168.1.29:8081/admin/pendingModule/${id}`, {
+    fetch(`http://192.168.1.7:8081/admin/pendingModule/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

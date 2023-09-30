@@ -10,7 +10,7 @@ export default function ManageUser() {
   const [editedStatus, setEditedStatus] = useState({});
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/admin/user")
+    fetch("http://192.168.1.7:8081/admin/user")
       .then((res) => res.json())
       .then((data) => {
         setUserList(data);
@@ -78,7 +78,7 @@ export default function ManageUser() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `http://192.168.1.29:8081/admin/user/${id}`;
+        const url = `http://192.168.1.7:8081/admin/user/${id}`;
 
         fetch(url, {
           method: "DELETE",
@@ -115,7 +115,7 @@ export default function ManageUser() {
       status: editedStatus[id].editedStatus,
     };
 
-    const url = `http://192.168.1.29:8081/admin/user/${id}`;
+    const url = `http://192.168.1.7:8081/admin/user/${id}`;
 
     fetch(url, {
       method: "PUT",

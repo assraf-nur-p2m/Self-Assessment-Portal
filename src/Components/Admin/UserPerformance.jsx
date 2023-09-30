@@ -9,7 +9,7 @@ export default function UserPerformance() {
   const user = useContext(AuthContext);
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/admin/module")
+    fetch("http://192.168.1.7:8081/admin/module")
       .then((res) => res.json())
       .then((data) => {
         setModuleList(data);
@@ -27,7 +27,7 @@ export default function UserPerformance() {
 
   const handleModuleChange = (moduleId) => {
     setSelectedModule(moduleId);
-    fetch(`http://192.168.1.29:8081/admin/module/userofmodule/${moduleId}`)
+    fetch(`http://192.168.1.7:8081/admin/module/userofmodule/${moduleId}`)
       .then((res) => res.json())
       .then((data) => {
         setData(data);

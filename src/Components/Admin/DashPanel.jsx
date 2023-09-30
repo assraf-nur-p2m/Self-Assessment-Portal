@@ -8,7 +8,7 @@ export default function DashPanel() {
   const [dashData, setDashData] = useState([]);
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/dashboard/admin")
+    fetch("http://192.168.1.7:8081/dashboard/admin")
       .then((res) => res.json())
       .then((data) => {
         setDashData(data);
@@ -33,7 +33,7 @@ export default function DashPanel() {
       isActive: !dashData.modules.find((mod) => mod.id === modId).visibility,
     };
 
-    fetch(`http://192.168.1.29:8081/admin/module/visibility/${modId}`, {
+    fetch(`http://192.168.1.7:8081/admin/module/visibility/${modId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export default function DashPanel() {
       cancelButtonText: "No, keep it",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://192.168.1.29:8081/admin/module/${modId}`, {
+        fetch(`http://192.168.1.7:8081/admin/module/${modId}`, {
           method: "DELETE",
         })
           .then((res) => {

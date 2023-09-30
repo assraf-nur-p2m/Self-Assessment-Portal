@@ -16,7 +16,7 @@ export default function OtpVerify() {
       email: emailFromQuery,
     };
 
-    fetch("http://192.168.1.29:8081/admin/validateuser", {
+    fetch("http://192.168.1.7:8081/auth/validateuser", {
       method: "POST",
       headers: {
         "content-type": "application/json",

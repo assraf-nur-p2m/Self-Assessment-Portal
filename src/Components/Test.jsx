@@ -25,7 +25,7 @@ export default function SetModuleMaterials() {
       setSelectedCategory(category[0].category);
     }
     setSelectedButton("documents");
-    fetch("http://192.168.1.29:8081/admin/category")
+    fetch("http://192.168.1.7:8081/admin/category")
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
@@ -49,7 +49,7 @@ export default function SetModuleMaterials() {
   };
 
   const fetchData = (buttonType) => {
-    const apiUrl = `http://192.168.1.29:8081/${buttonType}/${selectedCategory}`;
+    const apiUrl = `http://192.168.1.7:8081/${buttonType}/${selectedCategory}`;
     fetch(apiUrl)
       .then((res) => res.json())
       .then((data) => {
@@ -96,8 +96,8 @@ export default function SetModuleMaterials() {
     if (selectedButton === "documents" || selectedButton === "videos") {
       const apiUrl =
         selectedButton === "documents"
-          ? "http://192.168.1.29:8081/documents"
-          : "http://192.168.1.29:8081/videos";
+          ? "http://192.168.1.7:8081/documents"
+          : "http://192.168.1.7:8081/videos";
 
       const json = {
         name: uploadData.fileName,
@@ -194,8 +194,8 @@ export default function SetModuleMaterials() {
       if (result.isConfirmed) {
         const apiUrl =
           selectedButton === "documents"
-            ? `http://192.168.1.29:8081/documents/${itemId}`
-            : `http://192.168.1.29:8081/videos/${itemId}`;
+            ? `http://192.168.1.7:8081/documents/${itemId}`
+            : `http://192.168.1.7:8081/videos/${itemId}`;
 
         fetch(apiUrl, {
           method: "DELETE",

@@ -7,7 +7,7 @@ export default function ControlCategory() {
   const [editedCategory, setEditedCategory] = useState({});
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/admin/category")
+    fetch("http://192.168.1.7:8081/admin/category")
       .then((res) => res.json())
       .then((data) => {
         setCat(data);
@@ -22,7 +22,7 @@ export default function ControlCategory() {
       category,
     };
 
-    fetch("http://192.168.1.29:8081/admin/category", {
+    fetch("http://192.168.1.7:8081/admin/category", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export default function ControlCategory() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://192.168.1.29:8081/admin/category/${id}`, {
+        fetch(`http://192.168.1.7:8081/admin/category/${id}`, {
           method: "DELETE",
         })
           .then((res) => {
@@ -113,7 +113,7 @@ export default function ControlCategory() {
   const handleSaveEdit = (e) => {
     e.preventDefault();
     // Send a PUT request to update the category data
-    fetch(`http://192.168.1.29:8081/admin/category/${editedCategory.id}`, {
+    fetch(`http://192.168.1.7:8081/admin/category/${editedCategory.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

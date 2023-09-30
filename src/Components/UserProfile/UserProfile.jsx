@@ -14,7 +14,7 @@ export default function UserProfile() {
 
   // useEffect(() => {
   //   if (isInitialRender.current) {
-  //     fetch(`http://192.168.1.29:8081/info/userinfo/${userId}`)
+  //     fetch(`http://192.168.1.7:8081/info/userinfo/${userId}`)
   //       .then((res) => res.json())
   //       .then((data) => {
   //         setUserInfo(data);
@@ -31,7 +31,7 @@ export default function UserProfile() {
       };
 
       // Define the API URL
-      const apiUrl = `http://192.168.1.29:8081/info/userinfo/${userId}`;
+      const apiUrl = `http://192.168.1.7:8081/info/userinfo/${userId}`;
 
       // Retrieve the JWT token from localStorage
       const token = getTokenFromLocalStorage();
@@ -64,7 +64,7 @@ export default function UserProfile() {
   }, [userId]);
 
   // useEffect(() => {
-  //   fetch("http://192.168.1.29:8081/admin/module")
+  //   fetch("http://192.168.1.7:8081/admin/module")
   //     .then((res) => res.json())
   //     .then((data) => {
   //       setModuleList(data);
@@ -78,7 +78,7 @@ export default function UserProfile() {
     };
 
     // Define the API URL
-    const apiUrl = "http://192.168.1.29:8081/admin/module";
+    const apiUrl = "http://192.168.1.7:8081/admin/module";
 
     // Retrieve the JWT token from localStorage
     const token = getTokenFromLocalStorage();
@@ -142,7 +142,7 @@ export default function UserProfile() {
 
       console.log(requestBody);
 
-      fetch("http://192.168.1.29:8081/admin/pendingModule", {
+      fetch("http://192.168.1.7:8081/admin/pendingModule", {
         method: "POST",
         headers: headers,
         body: JSON.stringify(requestBody),

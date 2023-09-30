@@ -9,7 +9,7 @@ export default function CreateModule() {
   const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
-    fetch("http://192.168.1.29:8081/admin/category")
+    fetch("http://192.168.1.7:8081/admin/category")
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
@@ -21,7 +21,7 @@ export default function CreateModule() {
     setSelectedCategory(selectedValue);
     if (selectedValue) {
       fetch(
-        `http://192.168.1.29:8081/dashboard/question/${selectedValue}`
+        `http://192.168.1.7:8081/dashboard/question/${selectedValue}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -156,7 +156,7 @@ export default function CreateModule() {
       quizTime: quizTime,
     };
 
-    fetch("http://192.168.1.29:8081/admin/module", {
+    fetch("http://192.168.1.7:8081/admin/module", {
       method: "POST",
       headers: {
         "content-type": "application/json",

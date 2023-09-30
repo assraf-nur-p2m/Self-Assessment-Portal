@@ -11,7 +11,7 @@ export default function QuestionView() {
 
   useEffect(() => {
     // Fetch the list of categories
-    fetch("http://192.168.1.29:8081/admin/category")
+    fetch("http://192.168.1.7:8081/admin/category")
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
@@ -25,7 +25,7 @@ export default function QuestionView() {
     // Make an API request to fetch data based on selectedCategory and selectedLevel
     if (selectedCategory && selectedLevel) {
       fetch(
-        `http://192.168.1.29:8081/question/${selectedCategory}/${selectedLevel}`
+        `http://192.168.1.7:8081/question/${selectedCategory}/${selectedLevel}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -70,7 +70,7 @@ export default function QuestionView() {
     }).then((result) => {
       if (result.isConfirmed) {
         // User clicked "Yes," make the delete API request
-        const url = `http://192.168.1.29:8081/question/${id}`;
+        const url = `http://192.168.1.7:8081/question/${id}`;
 
         fetch(url, {
           method: "DELETE",
