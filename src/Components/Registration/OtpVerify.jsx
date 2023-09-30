@@ -32,7 +32,7 @@ export default function OtpVerify() {
       })
       .then((data) => {
         if (data && data.id) {
-          navigate(`/user-profile/${data.id}`);
+          navigate(`/login`);
         } else {
           console.error("Invalid response data");
         }

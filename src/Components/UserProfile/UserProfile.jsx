@@ -23,6 +23,7 @@ export default function UserProfile() {
   //     isInitialRender.current = false;
   //   }
   // }, []);
+
   useEffect(() => {
     if (isInitialRender.current) {
       // Function to retrieve the JWT token from localStorage
@@ -35,6 +36,7 @@ export default function UserProfile() {
 
       // Retrieve the JWT token from localStorage
       const token = getTokenFromLocalStorage();
+      
 
       // Create headers with the token
       const headers = {
@@ -86,7 +88,7 @@ export default function UserProfile() {
     // Create headers with the token
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // Set the token as Bearer token
+      Authorization: `Bearer ${token}`, 
     };
 
     // Send the authenticated API request
@@ -96,6 +98,7 @@ export default function UserProfile() {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log("this is data", data);
         setModuleList(data);
       })
       .catch((error) => {

@@ -16,7 +16,8 @@ export default function Login() {
       password: password.value,
     };
 
-    logIn(loginData.email, loginData.password).then((result) => {
+    logIn(loginData.email, loginData.password)
+    .then((result) => {
       const user = result.user;
       navigate(`/user-profile/${user.id}`);
     });
