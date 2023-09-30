@@ -7,12 +7,53 @@ import Swal from "sweetalert2";
 export default function DashPanel() {
   const [dashData, setDashData] = useState([]);
 
+  // useEffect(() => {
+  //   fetch("http://192.168.1.7:8081/dashboard/admin")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setDashData(data);
+  //     });
+  // }, []);
+
   useEffect(() => {
-    fetch("http://192.168.1.7:8081/dashboard/admin")
-      .then((res) => res.json())
-      .then((data) => {
-        setDashData(data);
-      });
+    // Function to retrieve the JWT token from localStorage
+    const getTokenFromLocalStorage = () => {
+      return localStorage.getItem("token");
+    };
+
+    // Retrieve the JWT token from localStorage
+    const token = getTokenFromLocalStorage();
+
+    // Check if token is available, then fetch data
+    if (token) {
+      // Define the API URL
+      const apiUrl = "http://192.168.1.7:8081/dashboard/admin";
+
+      // Create headers with the token
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Set the token as Bearer token
+      };
+
+      // Send the authenticated API request
+      fetch(apiUrl, {
+        method: "GET",
+        headers: headers,
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          throw new Error("Network response was not ok");
+        })
+        .then((data) => {
+          setDashData(data);
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error fetching dashboard data:", error);
+        });
+    }
   }, []);
 
   const handleVisibility = (modId) => {

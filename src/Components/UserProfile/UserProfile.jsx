@@ -85,6 +85,8 @@ export default function UserProfile() {
     // Retrieve the JWT token from localStorage
     const token = getTokenFromLocalStorage();
 
+    console.log(token);
+
     // Create headers with the token
     const headers = {
       "Content-Type": "application/json",
