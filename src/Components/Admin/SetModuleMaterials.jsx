@@ -89,6 +89,45 @@ export default function SetModuleMaterials() {
     }
   };
 
+  // const handleUpload = async () => {
+  //   if (selectedButton === "documents" || selectedButton === "videos") {
+  //     const apiUrl =
+  //       selectedButton === "documents"
+  //         ? "http://192.168.1.7:8081/documents"
+  //         : "http://192.168.1.7:8081/videos";
+
+  //     const json = {
+  //       name: uploadData.fileName,
+  //       sequence: uploadData.fileSequence,
+  //       category: selectedCategory,
+  //     };
+
+  //     setUploadInProgress(true);
+
+  //     const formData = new FormData();
+  //     formData.append("file", uploadData.file);
+  //     formData.append("json", JSON.stringify(json));
+
+  //     // Get token from local storage
+  //     const token = localStorage.getItem("token");
+
+  //     try {
+  //       const response = await fetch(apiUrl, {
+  //         method: "POST",
+  //         body: formData,
+  //         headers: {
+  //           Authorization: `Bearer ${token}`, // Add token to request headers
+  //         },
+  //       });
+
+  //       // Rest of your code...
+  //     } catch (error) {
+  //       console.error("Upload error:", error);
+  //       setUploadInProgress(false);
+  //     }
+  //   }
+  // };
+
   const handleUpload = () => {
     if (selectedButton === "documents" || selectedButton === "videos") {
       const apiUrl =
