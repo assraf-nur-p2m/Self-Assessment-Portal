@@ -7,9 +7,14 @@ export default function CreateModule() {
   const currentDate = new Date().toISOString().slice(0, 16);
   const [levelWiseQuestion, setLevelWiseQuestion] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://192.168.1.7:8081/admin/category")
+    fetch("http://192.168.1.7:8081/admin/category", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
@@ -20,9 +25,11 @@ export default function CreateModule() {
     const selectedValue = event.target.value;
     setSelectedCategory(selectedValue);
     if (selectedValue) {
-      fetch(
-        `http://192.168.1.7:8081/dashboard/question/${selectedValue}`
-      )
+      fetch(`http://192.168.1.7:8081/dashboard/question/${selectedValue}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then((res) => res.json())
         .then((data) => {
           setLevelWiseQuestion(data);
@@ -160,6 +167,7 @@ export default function CreateModule() {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(addModule),
     })

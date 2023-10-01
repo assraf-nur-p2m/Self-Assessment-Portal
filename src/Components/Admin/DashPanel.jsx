@@ -51,6 +51,7 @@ export default function DashPanel() {
   }
 
   const handleVisibility = (modId) => {
+    const token = localStorage.getItem("token");
     const updatedModules = dashData.modules.map((mod) => {
       if (mod.id === modId) {
         return {
@@ -72,6 +73,7 @@ export default function DashPanel() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(requestBody),
     })
@@ -99,8 +101,13 @@ export default function DashPanel() {
       cancelButtonText: "No, keep it",
     }).then((result) => {
       if (result.isConfirmed) {
+        const token = localStorage.getItem("token");
+
         fetch(`http://192.168.1.7:8081/admin/module/${modId}`, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
           .then((res) => {
             if (res.ok) {

@@ -10,7 +10,13 @@ export default function ManageUser() {
   const [editedStatus, setEditedStatus] = useState({});
 
   useEffect(() => {
-    fetch("http://192.168.1.7:8081/admin/user")
+    const token = localStorage.getItem("token");
+    fetch("http://192.168.1.7:8081/admin/user", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         setUserList(data);
@@ -78,10 +84,14 @@ export default function ManageUser() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        const token = localStorage.getItem("token");
         const url = `http://192.168.1.7:8081/admin/user/${id}`;
 
         fetch(url, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
           .then((res) => {
             if (res.ok) {
@@ -115,12 +125,14 @@ export default function ManageUser() {
       status: editedStatus[id].editedStatus,
     };
 
+    const token = localStorage.getItem("token");
     const url = `http://192.168.1.7:8081/admin/user/${id}`;
 
     fetch(url, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(editedUser),
     })

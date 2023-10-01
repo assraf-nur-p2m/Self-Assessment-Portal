@@ -5,12 +5,20 @@ export default function ControlCategory() {
   const [cat, setCat] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editedCategory, setEditedCategory] = useState({});
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://192.168.1.7:8081/admin/category")
+    fetch("http://192.168.1.7:8081/admin/category", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         setCat(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching category data:", error);
       });
   }, []);
 
@@ -26,6 +34,7 @@ export default function ControlCategory() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(newCategoryData),
     })
@@ -78,6 +87,9 @@ export default function ControlCategory() {
       if (result.isConfirmed) {
         fetch(`http://192.168.1.7:8081/admin/category/${id}`, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
           .then((res) => {
             if (res.ok) {
@@ -117,6 +129,7 @@ export default function ControlCategory() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(editedCategory),
     })

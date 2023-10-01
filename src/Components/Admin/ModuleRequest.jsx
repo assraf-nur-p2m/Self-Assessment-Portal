@@ -3,13 +3,18 @@ import Swal from "sweetalert2";
 
 export default function ModuleRequest() {
   const [moduleRequests, setModuleRequests] = useState([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     fetchModuleRequests();
   }, []);
 
   const fetchModuleRequests = () => {
-    fetch("http://192.168.1.7:8081/admin/pendingModule")
+    fetch("http://192.168.1.7:8081/admin/pendingModule", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         setModuleRequests(data);
@@ -24,6 +29,7 @@ export default function ModuleRequest() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
@@ -48,6 +54,7 @@ export default function ModuleRequest() {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
@@ -69,8 +76,10 @@ export default function ModuleRequest() {
 
   return (
     <div className="p-2 shadow-lg rounded-xl border">
-        <h1 className="text-center text-3xl font-bold py-3 ">Module Request Table</h1>
-        <hr />
+      <h1 className="text-center text-3xl font-bold py-3 ">
+        Module Request Table
+      </h1>
+      <hr />
       <div className="overflow-x-auto">
         <table className="table table-zebra">
           <thead>

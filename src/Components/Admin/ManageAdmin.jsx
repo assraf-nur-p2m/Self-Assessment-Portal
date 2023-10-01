@@ -11,11 +11,12 @@ export default function ManageAdmin() {
   const [editedEmails, setEditedEmails] = useState({});
   const [editedPermissions, setEditedPermissions] = useState({});
   const [editedStatus, setEditedStatus] = useState({});
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     fetch("http://192.168.1.7:8081/admin/admin", {
       headers: {
-        "ngrok-skip-browser-warning": "true",
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => res.json())
@@ -140,7 +141,6 @@ export default function ManageAdmin() {
       ...userToUpdate,
       name: updatedName,
     };
-
     // Make a PUT request to update the admin's name
     const url = `http://192.168.1.7:8081/admin/admin/${id}`;
 
@@ -148,6 +148,7 @@ export default function ManageAdmin() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updatedUser), // Send the updated user object
     })
@@ -206,6 +207,7 @@ export default function ManageAdmin() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updatedUser), // Send the updated user object
     })
@@ -254,6 +256,7 @@ export default function ManageAdmin() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updatedUser), // Send the updated user object
     })
@@ -374,6 +377,7 @@ export default function ManageAdmin() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updatedUser), // Send the updated user object
     })
@@ -457,11 +461,13 @@ export default function ManageAdmin() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        // Send a DELETE request to the API
         const url = `http://192.168.1.7:8081/admin/admin/${id}`;
 
         fetch(url, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
           .then((res) => {
             if (res.ok) {

@@ -3,15 +3,19 @@ import Swal from "sweetalert2";
 
 export default function QuestionView() {
   const [category, setCategory] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(""); // Initialize with an empty string
-  const [selectedLevel, setSelectedLevel] = useState("1"); // Initialize with "1" for Level 1
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState("1");
   const [questionData, setQuestionData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Number of items to display per page
+  const itemsPerPage = 5;
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    // Fetch the list of categories
-    fetch("http://192.168.1.7:8081/admin/category")
+    fetch("http://192.168.1.7:8081/admin/category", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
@@ -22,10 +26,14 @@ export default function QuestionView() {
   }, []);
 
   useEffect(() => {
-    // Make an API request to fetch data based on selectedCategory and selectedLevel
     if (selectedCategory && selectedLevel) {
       fetch(
-        `http://192.168.1.7:8081/question/${selectedCategory}/${selectedLevel}`
+        `http://192.168.1.7:8081/question/${selectedCategory}/${selectedLevel}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
         .then((res) => res.json())
         .then((data) => {
@@ -74,6 +82,9 @@ export default function QuestionView() {
 
         fetch(url, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
           .then((res) => {
             if (res.ok) {

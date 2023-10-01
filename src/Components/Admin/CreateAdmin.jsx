@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function CreateAdmin() {
+  const token = localStorage.getItem("token");
+
   const handleCreateAdmin = (e) => {
     e.preventDefault();
     const {
@@ -59,10 +61,12 @@ export default function CreateAdmin() {
         canDeleteUser: deleteUser.checked,
       },
     };
+
     fetch("http://192.168.1.7:8081/admin/admin", {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(adminInfo),
     })
