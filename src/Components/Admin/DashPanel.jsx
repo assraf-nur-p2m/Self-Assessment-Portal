@@ -3,9 +3,12 @@ import { FaUsers } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { LuUserCheck, LuUserX } from "react-icons/lu";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 export default function DashPanel() {
   const [dashData, setDashData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // useEffect(() => {
   //   fetch("http://192.168.1.7:8081/dashboard/admin")
@@ -21,18 +24,31 @@ export default function DashPanel() {
     };
     const token = getTokenFromLocalStorage();
     if (token) {
-      fetch("http://192.168.1.7:8081/dashboard/admin", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((error) => console.error("Error:", error));
+      axios
+        .get("http://192.168.1.7:8081/dashboard/admin", {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          setDashData(response.data);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          setError(error);
+          setIsLoading(false);
+        });
     }
   }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   const handleVisibility = (modId) => {
     const updatedModules = dashData.modules.map((mod) => {
