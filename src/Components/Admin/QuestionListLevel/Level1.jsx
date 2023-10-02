@@ -7,7 +7,7 @@ export default function Level1() {
   const itemsPerPage = 5;
 
   useEffect(() => {
-    fetch("http://192.168.1.13:8081/admin/question/1")
+    fetch("http://192.168.1.2:8081/admin/question/1")
       .then((res) => res.json())
       .then((data) => {
         setQuestion1(data);
@@ -72,7 +72,7 @@ export default function Level1() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `http://192.168.1.13:8081/admin/question/${id}`;
+        const url = `http://192.168.1.2:8081/admin/question/${id}`;
 
         fetch(url, {
           method: "DELETE",

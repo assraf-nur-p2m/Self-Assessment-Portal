@@ -10,7 +10,7 @@ export default function CreateModule() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://192.168.1.13:8081/admin/category", {
+    fetch("http://192.168.1.2:8081/admin/category", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -25,7 +25,7 @@ export default function CreateModule() {
     const selectedValue = event.target.value;
     setSelectedCategory(selectedValue);
     if (selectedValue) {
-      fetch(`http://192.168.1.13:8081/dashboard/question/${selectedValue}`, {
+      fetch(`http://192.168.1.2:8081/dashboard/question/${selectedValue}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -163,7 +163,7 @@ export default function CreateModule() {
       quizTime: quizTime,
     };
 
-    fetch("http://192.168.1.13:8081/admin/module", {
+    fetch("http://192.168.1.2:8081/admin/module", {
       method: "POST",
       headers: {
         "content-type": "application/json",

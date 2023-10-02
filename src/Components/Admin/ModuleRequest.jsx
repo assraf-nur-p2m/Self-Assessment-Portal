@@ -10,7 +10,7 @@ export default function ModuleRequest() {
   }, []);
 
   const fetchModuleRequests = () => {
-    fetch("http://192.168.1.13:8081/admin/pendingModule", {
+    fetch("http://192.168.1.2:8081/admin/pendingModule", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -25,7 +25,7 @@ export default function ModuleRequest() {
   };
 
   const handleApprove = (id) => {
-    fetch(`http://192.168.1.13:8081/admin/pendingModule/${id}`, {
+    fetch(`http://192.168.1.2:8081/admin/pendingModule/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export default function ModuleRequest() {
   };
 
   const handleReject = (id) => {
-    fetch(`http://192.168.1.13:8081/admin/pendingModule/${id}`, {
+    fetch(`http://192.168.1.2:8081/admin/pendingModule/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

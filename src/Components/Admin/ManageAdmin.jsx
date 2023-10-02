@@ -14,7 +14,7 @@ export default function ManageAdmin() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://192.168.1.13:8081/admin/admin", {
+    fetch("http://192.168.1.2:8081/admin/admin", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -142,7 +142,7 @@ export default function ManageAdmin() {
       name: updatedName,
     };
     // Make a PUT request to update the admin's name
-    const url = `http://192.168.1.13:8081/admin/admin/${id}`;
+    const url = `http://192.168.1.2:8081/admin/admin/${id}`;
 
     fetch(url, {
       method: "PUT",
@@ -201,7 +201,7 @@ export default function ManageAdmin() {
     };
 
     // Make a PUT request to update the admin's email
-    const url = `http://192.168.1.13:8081/admin/admin/${id}`;
+    const url = `http://192.168.1.2:8081/admin/admin/${id}`;
 
     fetch(url, {
       method: "PUT",
@@ -250,7 +250,7 @@ export default function ManageAdmin() {
     };
 
     // Make a PUT request to update the admin's permissions
-    const url = `http://192.168.1.13:8081/admin/admin/${id}`;
+    const url = `http://192.168.1.2:8081/admin/admin/${id}`;
 
     fetch(url, {
       method: "PUT",
@@ -371,7 +371,7 @@ export default function ManageAdmin() {
     };
 
     // Make a PUT request to update the admin's status
-    const url = `http://192.168.1.13:8081/admin/admin/${id}`;
+    const url = `http://192.168.1.2:8081/admin/admin/${id}`;
 
     fetch(url, {
       method: "PUT",
@@ -461,7 +461,7 @@ export default function ManageAdmin() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `http://192.168.1.13:8081/admin/admin/${id}`;
+        const url = `http://192.168.1.2:8081/admin/admin/${id}`;
 
         fetch(url, {
           method: "DELETE",

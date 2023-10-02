@@ -11,7 +11,7 @@ export default function ManageUser() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://192.168.1.13:8081/admin/user", {
+    fetch("http://192.168.1.2:8081/admin/user", {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -85,7 +85,7 @@ export default function ManageUser() {
     }).then((result) => {
       if (result.isConfirmed) {
         const token = localStorage.getItem("token");
-        const url = `http://192.168.1.13:8081/admin/user/${id}`;
+        const url = `http://192.168.1.2:8081/admin/user/${id}`;
 
         fetch(url, {
           method: "DELETE",
@@ -126,7 +126,7 @@ export default function ManageUser() {
     };
 
     const token = localStorage.getItem("token");
-    const url = `http://192.168.1.13:8081/admin/user/${id}`;
+    const url = `http://192.168.1.2:8081/admin/user/${id}`;
 
     fetch(url, {
       method: "PUT",

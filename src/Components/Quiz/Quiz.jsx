@@ -18,7 +18,7 @@ const Quiz = () => {
   const moduleId = queryParams.get("moduleId");
 
   useEffect(() => {
-    fetch(`http://192.168.1.13:8081/api/questions/${moduleId}`)
+    fetch(`http://192.168.1.2:8081/api/questions/${moduleId}`)
       .then((res) => res.json())
       .then((data) => setQuizData(data));
   }, []);
@@ -59,7 +59,7 @@ const Quiz = () => {
             selectedOption: selectedOptions[index] || null,
           }));
 
-          fetch("http://192.168.1.13:8081/api/answers", {
+          fetch("http://192.168.1.2:8081/api/answers", {
             method: "POST",
             headers: {
               "content-type": "application/json",
