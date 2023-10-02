@@ -6,6 +6,8 @@ import Navbar from "../Navbar/Navbar";
 export default function Dashboard() {
   const location = useLocation();
   const [isQuestionListOpen, setIsQuestionListOpen] = useState(false);
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const isAdmin = user && user.role === "SUPER_ADMIN";
 
   const handleQuestionListToggle = () => {
     setIsQuestionListOpen(!isQuestionListOpen);
@@ -66,18 +68,21 @@ export default function Dashboard() {
               </Link>
             </li>
             <hr />
-            <li className="py-2">
-              <Link
-                className={`text-xl font-semibold py-3 ${
-                  location.pathname === "/dashboard/manage-admin"
-                    ? "bg-[#b4b8bd4b]"
-                    : ""
-                }`}
-                to="/dashboard/manage-admin"
-              >
-                Manage Admin
-              </Link>
-            </li>
+            {isAdmin && (
+              <li className="py-2">
+                <Link
+                  className={`text-xl font-semibold py-3 ${
+                    location.pathname === "/dashboard/manage-admin"
+                      ? "bg-[#b4b8bd4b]"
+                      : ""
+                  }`}
+                  to="/dashboard/manage-admin"
+                >
+                  Manage Admin
+                </Link>
+              </li>
+            )}
+
             <hr />
             <li className="py-2">
               <Link

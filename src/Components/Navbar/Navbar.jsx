@@ -1,8 +1,17 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../Authentication/AuthProvider";
 
 export default function Navbar() {
   const location = useLocation();
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const { logOut } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logOut();
+    navigate("/");
+  };
 
   const isActiveLink = (path) => location.pathname === path;
   const navbarItems = (
@@ -13,22 +22,42 @@ export default function Navbar() {
             Home
           </Link>
         </li>
-        <li>
-          <Link
-            to="/dashboard"
-            className={isActiveLink("/dashboard") ? "bg-[#80808034]" : ""}
-          >
-            Dashboard
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/login"
-            className={isActiveLink("/login") ? "bg-[#80808034]" : ""}
-          >
-            Login
-          </Link>
-        </li>
+        {user && user.role !== "USER" && (
+          <li>
+            <Link
+              to="/dashboard"
+              className={isActiveLink("/dashboard") ? "bg-[#80808034]" : ""}
+            >
+              Dashboard
+            </Link>
+          </li>
+        )}
+        {user ? (
+          <li>
+            <Link
+              to="/user-profile"
+              className={isActiveLink("/user-profile") ? "bg-[#80808034]" : ""}
+            >
+              Profile
+            </Link>
+          </li>
+        ) : (
+          <></>
+        )}
+        {user ? (
+          <li>
+            <button onClick={handleLogout}>Logout ({user.name})</button>
+          </li>
+        ) : (
+          <li>
+            <Link
+              to="/login"
+              className={isActiveLink("/login") ? "bg-[#80808034]" : ""}
+            >
+              Login
+            </Link>
+          </li>
+        )}
       </ul>
     </>
   );

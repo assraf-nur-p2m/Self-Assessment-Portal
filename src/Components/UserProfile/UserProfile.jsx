@@ -3,8 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import Loading from "../Loading/Loading";
 import Swal from "sweetalert2";
 import profilePic from "../../assets/Images/IMG_1859 (1)-01.jpeg";
-import { useContext } from "react";
-import { AuthContext } from "../Authentication/AuthProvider";
 
 export default function UserProfile() {
   const [userInfo, setUserInfo] = useState({ enrollModules: [] });
@@ -12,8 +10,8 @@ export default function UserProfile() {
   const isInitialRender = useRef(true);
   const { userId } = useParams();
   const [moduleList, setModuleList] = useState([]);
-  const [selectedModule, setSelectedModule] = useState(null);
-  const { user } = useContext(AuthContext);
+  const [selectedModule, setSelectedModule] = useState("");
+  const user = JSON.parse(localStorage.getItem("userInfo"));
 
   // useEffect(() => {
   //   if (isInitialRender.current) {
@@ -27,13 +25,14 @@ export default function UserProfile() {
   //   }
   // }, []);
 
+
   useEffect(() => {
     if (isInitialRender.current) {
       const getTokenFromLocalStorage = () => {
         return localStorage.getItem("token");
       };
 
-      const apiUrl = `http://192.168.1.3:8081/info/userinfo/${userId}`;
+      const apiUrl = `http://192.168.1.3:8081/info/userinfo/${user.id}`;
 
       const token = getTokenFromLocalStorage();
 
@@ -106,7 +105,7 @@ export default function UserProfile() {
       );
 
       const requestBody = {
-        userID: userId,
+        userID: user.id,
         moduleID: selectedModuleObject.id,
         userName: userInfo.userName,
         userEmail: userInfo.userEmail,

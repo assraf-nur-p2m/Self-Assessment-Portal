@@ -20,6 +20,7 @@ export default function AuthProvider({ children }) {
         const { token, user } = await response.json();
         setUser(user);
         localStorage.setItem("token", token);
+        localStorage.setItem("userInfo", JSON.stringify(user));
         setLoading(false);
 
         // return user
@@ -32,10 +33,17 @@ export default function AuthProvider({ children }) {
     }
   };
 
+  const logOut = () => {
+    setUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("userInfo");
+  };
+
   const authInfo = {
     user,
     loading,
     logIn,
+    logOut,
   };
 
   return (

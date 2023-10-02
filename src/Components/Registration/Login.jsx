@@ -6,7 +6,6 @@ import { AuthContext } from "../Authentication/AuthProvider";
 export default function Login() {
   const navigate = useNavigate();
   const { logIn } = useContext(AuthContext);
-  const [loginError, setLoginError] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -18,8 +17,7 @@ export default function Login() {
 
     logIn(loginData.email, loginData.password)
     .then((result) => {
-      const user = result.user;
-      navigate(`/user-profile/${user.id}`);
+      navigate(`/user-profile`);
     });
   };
 
