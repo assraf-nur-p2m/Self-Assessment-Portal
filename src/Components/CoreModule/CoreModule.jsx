@@ -16,7 +16,7 @@ export default function CoreModule() {
   const [isQuizVisible, setIsQuizVisible] = useState(true);
 
   useEffect(() => {
-    fetch(`http://192.168.1.7:8081/admin/module/info/${moduleId}`)
+    fetch(`http://192.168.1.13:8081/admin/module/info/${moduleId}`)
       .then((res) => res.json())
       .then((data) => {
         data.videos = data.videos.sort((a, b) => a.sequence - b.sequence);

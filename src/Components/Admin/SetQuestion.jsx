@@ -6,7 +6,7 @@ export default function SetQuestion() {
   const [category, setCategory] = useState([]);
 
   useEffect(() => {
-    fetch("http://192.168.1.7:8081/admin/category")
+    fetch("http://192.168.1.13:8081/admin/category")
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
@@ -53,7 +53,7 @@ export default function SetQuestion() {
       correctAnswer: correctAnswer.value,
     };
 
-    fetch("http://192.168.1.7:8081/question", {
+    fetch("http://192.168.1.13:8081/question", {
       method: "POST",
       headers: {
         "content-type": "application/json",

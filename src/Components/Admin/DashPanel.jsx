@@ -11,7 +11,7 @@ export default function DashPanel() {
   const [error, setError] = useState(null);
 
   // useEffect(() => {
-  //   fetch("http://192.168.1.7:8081/dashboard/admin")
+  //   fetch("http://192.168.1.13:8081/dashboard/admin")
   //     .then((res) => res.json())
   //     .then((data) => {
   //       setDashData(data);
@@ -25,7 +25,7 @@ export default function DashPanel() {
     const token = getTokenFromLocalStorage();
     if (token) {
       axios
-        .get("http://192.168.1.7:8081/dashboard/admin", {
+        .get("http://192.168.1.13:8081/dashboard/admin", {
           headers: {
             "Content-Type": "application/json",
             authorization: `Bearer ${token}`,
@@ -69,7 +69,7 @@ export default function DashPanel() {
       isActive: !dashData.modules.find((mod) => mod.id === modId).visibility,
     };
 
-    fetch(`http://192.168.1.7:8081/admin/module/visibility/${modId}`, {
+    fetch(`http://192.168.1.13:8081/admin/module/visibility/${modId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export default function DashPanel() {
       if (result.isConfirmed) {
         const token = localStorage.getItem("token");
 
-        fetch(`http://192.168.1.7:8081/admin/module/${modId}`, {
+        fetch(`http://192.168.1.13:8081/admin/module/${modId}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,

@@ -23,7 +23,7 @@ export default function SetModuleMaterials() {
       setSelectedCategory(category[0].category);
     }
     setSelectedButton("documents");
-    fetch("http://192.168.1.7:8081/admin/category", {
+    fetch("http://192.168.1.13:8081/admin/category", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -52,7 +52,7 @@ export default function SetModuleMaterials() {
   };
 
   const fetchData = (buttonType) => {
-    const apiUrl = `http://192.168.1.7:8081/${buttonType}/${selectedCategory}`;
+    const apiUrl = `http://192.168.1.13:8081/${buttonType}/${selectedCategory}`;
     fetch(apiUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -103,8 +103,8 @@ export default function SetModuleMaterials() {
   //   if (selectedButton === "documents" || selectedButton === "videos") {
   //     const apiUrl =
   //       selectedButton === "documents"
-  //         ? "http://192.168.1.7:8081/documents"
-  //         : "http://192.168.1.7:8081/videos";
+  //         ? "http://192.168.1.13:8081/documents"
+  //         : "http://192.168.1.13:8081/videos";
 
   //     const json = {
   //       name: uploadData.fileName,
@@ -142,8 +142,8 @@ export default function SetModuleMaterials() {
   //   if (selectedButton === "documents" || selectedButton === "videos") {
   //     const apiUrl =
   //       selectedButton === "documents"
-  //         ? "http://192.168.1.7:8081/documents"
-  //         : "http://192.168.1.7:8081/videos";
+  //         ? "http://192.168.1.13:8081/documents"
+  //         : "http://192.168.1.13:8081/videos";
 
   //     const json = {
   //       name: uploadData.fileName,
@@ -206,8 +206,8 @@ export default function SetModuleMaterials() {
     if (selectedButton === "documents" || selectedButton === "videos") {
       const apiUrl =
         selectedButton === "documents"
-          ? "http://192.168.1.7:8081/documents"
-          : "http://192.168.1.7:8081/videos";
+          ? "http://192.168.1.13:8081/documents"
+          : "http://192.168.1.13:8081/videos";
 
       const json = {
         name: uploadData.fileName,
@@ -304,8 +304,8 @@ export default function SetModuleMaterials() {
       if (result.isConfirmed) {
         const apiUrl =
           selectedButton === "documents"
-            ? `http://192.168.1.7:8081/documents/${itemId}`
-            : `http://192.168.1.7:8081/videos/${itemId}`;
+            ? `http://192.168.1.13:8081/documents/${itemId}`
+            : `http://192.168.1.13:8081/videos/${itemId}`;
 
         fetch(apiUrl, {
           method: "DELETE",

@@ -11,7 +11,7 @@ export default function QuestionView() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://192.168.1.7:8081/admin/category", {
+    fetch("http://192.168.1.13:8081/admin/category", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,7 +28,7 @@ export default function QuestionView() {
   useEffect(() => {
     if (selectedCategory && selectedLevel) {
       fetch(
-        `http://192.168.1.7:8081/question/${selectedCategory}/${selectedLevel}`,
+        `http://192.168.1.13:8081/question/${selectedCategory}/${selectedLevel}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -78,7 +78,7 @@ export default function QuestionView() {
     }).then((result) => {
       if (result.isConfirmed) {
         // User clicked "Yes," make the delete API request
-        const url = `http://192.168.1.7:8081/question/${id}`;
+        const url = `http://192.168.1.13:8081/question/${id}`;
 
         fetch(url, {
           method: "DELETE",
