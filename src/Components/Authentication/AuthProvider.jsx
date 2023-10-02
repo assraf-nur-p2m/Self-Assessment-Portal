@@ -8,7 +8,7 @@ export default function AuthProvider({ children }) {
 
   const logIn = async (email, password) => {
     try {
-      const response = await fetch("http://192.168.1.2:8081/auth/login", {
+      const response = await fetch("http://192.168.1.3:8081/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

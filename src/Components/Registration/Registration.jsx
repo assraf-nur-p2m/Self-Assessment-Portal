@@ -15,7 +15,7 @@ export default function Registration() {
       password: password.value,
     };
 
-    fetch("http://192.168.1.2:8081/auth/signup", {
+    fetch("http://192.168.1.3:8081/auth/signup", {
       method: "POST",
       headers: {
         "content-type": "application/json",
