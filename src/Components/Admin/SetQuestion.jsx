@@ -4,9 +4,14 @@ import Swal from "sweetalert2";
 
 export default function SetQuestion() {
   const [category, setCategory] = useState([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://192.168.1.3:8081/admin/category")
+    fetch("http://192.168.1.3:8081/admin/category", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
@@ -57,6 +62,7 @@ export default function SetQuestion() {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(setQuestion),
     })

@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import Loading from "../Loading/Loading";
 import Swal from "sweetalert2";
 import profilePic from "../../assets/Images/IMG_1859 (1)-01.jpeg";
+import { useContext } from "react";
+import { AuthContext } from "../Authentication/AuthProvider";
 
 export default function UserProfile() {
   const [userInfo, setUserInfo] = useState({ enrollModules: [] });
@@ -11,6 +13,7 @@ export default function UserProfile() {
   const { userId } = useParams();
   const [moduleList, setModuleList] = useState([]);
   const [selectedModule, setSelectedModule] = useState(null);
+  const { user } = useContext(AuthContext);
 
   // useEffect(() => {
   //   if (isInitialRender.current) {
@@ -33,10 +36,10 @@ export default function UserProfile() {
       const apiUrl = `http://192.168.1.3:8081/info/userinfo/${userId}`;
 
       const token = getTokenFromLocalStorage();
-      
+
       const headers = {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       };
 
       fetch(apiUrl, {
@@ -50,7 +53,7 @@ export default function UserProfile() {
         })
         .catch((error) => {
           console.error("Error fetching user info:", error);
-          setIsLoading(false); 
+          setIsLoading(false);
         });
       isInitialRender.current = false;
     }
@@ -73,7 +76,7 @@ export default function UserProfile() {
     const token = getTokenFromLocalStorage();
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, 
+      Authorization: `Bearer ${token}`,
     };
     fetch(apiUrl, {
       method: "GET",
