@@ -16,13 +16,19 @@ export default function SetModuleMaterials() {
   const [itemsPerPage] = useState(10);
   const [uploadInProgress, setUploadInProgress] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (category.length > 0) {
       setSelectedCategory(category[0].category);
     }
     setSelectedButton("documents");
-    fetch("http://192.168.1.7:8081/admin/category")
+    fetch("http://192.168.1.7:8081/admin/category", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
@@ -47,7 +53,11 @@ export default function SetModuleMaterials() {
 
   const fetchData = (buttonType) => {
     const apiUrl = `http://192.168.1.7:8081/${buttonType}/${selectedCategory}`;
-    fetch(apiUrl)
+    fetch(apiUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         setApiData(data);
@@ -128,73 +138,7 @@ export default function SetModuleMaterials() {
   //   }
   // };
 
-  // const handleUpload = async () => {
-  //   if (selectedButton === "documents" || selectedButton === "videos") {
-  //     const apiUrl =
-  //       selectedButton === "documents"
-  //         ? "http://192.168.1.7:8081/documents"
-  //         : "http://192.168.1.7:8081/videos";
-
-  //     const json = {
-  //       name: uploadData.fileName,
-  //       sequence: uploadData.fileSequence,
-  //       category: selectedCategory,
-  //     };
-
-  //     setUploadInProgress(true);
-
-  //     const formData = new FormData();
-  //     formData.append("file", uploadData.file);
-  //     formData.append("json", JSON.stringify(json));
-
-  //     // Get token from local storage
-  //     const token = localStorage.getItem("token");
-
-  //     try {
-  //       const response = await fetch(apiUrl, {
-  //         method: "POST",
-  //         body: formData,
-  //         headers: {
-  //           Authorization: `Bearer ${token}`, // Add token to request headers
-  //         },
-  //       });
-
-  //       if (response.ok) {
-  //         const data = await response.json();
-
-  //         // Reset the form and update the state with the new data
-  //         document.getElementById("fileInput").value = "";
-  //         document.getElementById("nameInput").value = "";
-  //         document.getElementById("sequenceInput").value = "";
-
-  //         setUploadData({
-  //           fileName: "",
-  //           fileSequence: "",
-  //           file: null,
-  //         });
-
-  //         setUploadInProgress(false);
-  //         setApiData([...apiData, data]);
-
-  //         Swal.fire({
-  //           position: "center",
-  //           icon: "success",
-  //           title: "Your work has been saved",
-  //           showConfirmButton: false,
-  //           timer: 1500,
-  //         });
-  //       } else {
-  //         console.error("Upload error:", response.statusText);
-  //         setUploadInProgress(false);
-  //       }
-  //     } catch (error) {
-  //       console.error("Upload error:", error);
-  //       setUploadInProgress(false);
-  //     }
-  //   }
-  // };
-
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (selectedButton === "documents" || selectedButton === "videos") {
       const apiUrl =
         selectedButton === "documents"
@@ -213,53 +157,117 @@ export default function SetModuleMaterials() {
       formData.append("file", uploadData.file);
       formData.append("json", JSON.stringify(json));
 
-      const xhr = new XMLHttpRequest();
+      const token = localStorage.getItem("token");
 
-      // Track upload progress
-      xhr.upload.addEventListener("progress", (event) => {
-        if (event.lengthComputable) {
-          const progress = (event.loaded / event.total) * 100;
-          setUploadProgress(progress); // Update the progress state
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+
+          document.getElementById("fileInput").value = "";
+          document.getElementById("nameInput").value = "";
+          document.getElementById("sequenceInput").value = "";
+
+          setUploadData({
+            fileName: "",
+            fileSequence: "",
+            file: null,
+          });
+
+          setUploadInProgress(false);
+          setApiData([...apiData, data]);
+
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else {
+          console.error("Upload error:", response.statusText);
+          setUploadInProgress(false);
         }
-      });
-
-      xhr.open("POST", apiUrl, true);
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          if (xhr.status === 200) {
-            document.getElementById("fileInput").value = "";
-            document.getElementById("nameInput").value = "";
-            document.getElementById("sequenceInput").value = "";
-
-            setUploadData({
-              fileName: "",
-              fileSequence: "",
-              file: null,
-            });
-
-            setUploadInProgress(false);
-
-            const data = JSON.parse(xhr.responseText);
-            setApiData([...apiData, data]);
-
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Your work has been saved",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          } else {
-            console.error("Upload error:", xhr.statusText);
-
-            setUploadInProgress(false);
-          }
-        }
-      };
-
-      xhr.send(formData);
+      } catch (error) {
+        console.error("Upload error:", error);
+        setUploadInProgress(false);
+      }
     }
   };
+
+  // const handleUpload = () => {
+  //   if (selectedButton === "documents" || selectedButton === "videos") {
+  //     const apiUrl =
+  //       selectedButton === "documents"
+  //         ? "http://192.168.1.7:8081/documents"
+  //         : "http://192.168.1.7:8081/videos";
+
+  //     const json = {
+  //       name: uploadData.fileName,
+  //       sequence: uploadData.fileSequence,
+  //       category: selectedCategory,
+  //     };
+
+  //     setUploadInProgress(true);
+
+  //     const formData = new FormData();
+  //     formData.append("file", uploadData.file);
+  //     formData.append("json", JSON.stringify(json));
+
+  //     const xhr = new XMLHttpRequest();
+
+  //     // Track upload progress
+  //     xhr.upload.addEventListener("progress", (event) => {
+  //       if (event.lengthComputable) {
+  //         const progress = (event.loaded / event.total) * 100;
+  //         setUploadProgress(progress); // Update the progress state
+  //       }
+  //     });
+
+  //     xhr.open("POST", apiUrl, true);
+  //     xhr.onreadystatechange = () => {
+  //       if (xhr.readyState === 4) {
+  //         if (xhr.status === 200) {
+  //           document.getElementById("fileInput").value = "";
+  //           document.getElementById("nameInput").value = "";
+  //           document.getElementById("sequenceInput").value = "";
+
+  //           setUploadData({
+  //             fileName: "",
+  //             fileSequence: "",
+  //             file: null,
+  //           });
+
+  //           setUploadInProgress(false);
+
+  //           const data = JSON.parse(xhr.responseText);
+  //           setApiData([...apiData, data]);
+
+  //           Swal.fire({
+  //             position: "center",
+  //             icon: "success",
+  //             title: "Your work has been saved",
+  //             showConfirmButton: false,
+  //             timer: 1500,
+  //           });
+  //         } else {
+  //           console.error("Upload error:", xhr.statusText);
+
+  //           setUploadInProgress(false);
+  //         }
+  //       }
+  //     };
+
+  //     xhr.send(formData);
+  //   }
+  // };
 
   // Calculate the current items to display
   const indexOfLastItem = currentPage * itemsPerPage;
