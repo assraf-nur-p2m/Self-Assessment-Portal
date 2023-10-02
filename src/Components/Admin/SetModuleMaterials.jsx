@@ -138,71 +138,7 @@ export default function SetModuleMaterials() {
   //   }
   // };
 
-  const handleUpload = async () => {
-    if (selectedButton === "documents" || selectedButton === "videos") {
-      const apiUrl =
-        selectedButton === "documents"
-          ? "http://192.168.1.7:8081/documents"
-          : "http://192.168.1.7:8081/videos";
-
-      const json = {
-        name: uploadData.fileName,
-        sequence: uploadData.fileSequence,
-        category: selectedCategory,
-      };
-
-      setUploadInProgress(true);
-
-      const formData = new FormData();
-      formData.append("file", uploadData.file);
-      formData.append("json", JSON.stringify(json));
-
-      const token = localStorage.getItem("token");
-
-      try {
-        const response = await fetch(apiUrl, {
-          method: "POST",
-          body: formData,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-
-          document.getElementById("fileInput").value = "";
-          document.getElementById("nameInput").value = "";
-          document.getElementById("sequenceInput").value = "";
-
-          setUploadData({
-            fileName: "",
-            fileSequence: "",
-            file: null,
-          });
-
-          setUploadInProgress(false);
-          setApiData([...apiData, data]);
-
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Your work has been saved",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        } else {
-          console.error("Upload error:", response.statusText);
-          setUploadInProgress(false);
-        }
-      } catch (error) {
-        console.error("Upload error:", error);
-        setUploadInProgress(false);
-      }
-    }
-  };
-
-  // const handleUpload = () => {
+  // const handleUpload = async () => {
   //   if (selectedButton === "documents" || selectedButton === "videos") {
   //     const apiUrl =
   //       selectedButton === "documents"
@@ -221,53 +157,117 @@ export default function SetModuleMaterials() {
   //     formData.append("file", uploadData.file);
   //     formData.append("json", JSON.stringify(json));
 
-  //     const xhr = new XMLHttpRequest();
+  //     const token = localStorage.getItem("token");
 
-  //     // Track upload progress
-  //     xhr.upload.addEventListener("progress", (event) => {
-  //       if (event.lengthComputable) {
-  //         const progress = (event.loaded / event.total) * 100;
-  //         setUploadProgress(progress); // Update the progress state
+  //     try {
+  //       const response = await fetch(apiUrl, {
+  //         method: "POST",
+  //         body: formData,
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       if (response.ok) {
+  //         const data = await response.json();
+
+  //         document.getElementById("fileInput").value = "";
+  //         document.getElementById("nameInput").value = "";
+  //         document.getElementById("sequenceInput").value = "";
+
+  //         setUploadData({
+  //           fileName: "",
+  //           fileSequence: "",
+  //           file: null,
+  //         });
+
+  //         setUploadInProgress(false);
+  //         setApiData([...apiData, data]);
+
+  //         Swal.fire({
+  //           position: "center",
+  //           icon: "success",
+  //           title: "Your work has been saved",
+  //           showConfirmButton: false,
+  //           timer: 1500,
+  //         });
+  //       } else {
+  //         console.error("Upload error:", response.statusText);
+  //         setUploadInProgress(false);
   //       }
-  //     });
-
-  //     xhr.open("POST", apiUrl, true);
-  //     xhr.onreadystatechange = () => {
-  //       if (xhr.readyState === 4) {
-  //         if (xhr.status === 200) {
-  //           document.getElementById("fileInput").value = "";
-  //           document.getElementById("nameInput").value = "";
-  //           document.getElementById("sequenceInput").value = "";
-
-  //           setUploadData({
-  //             fileName: "",
-  //             fileSequence: "",
-  //             file: null,
-  //           });
-
-  //           setUploadInProgress(false);
-
-  //           const data = JSON.parse(xhr.responseText);
-  //           setApiData([...apiData, data]);
-
-  //           Swal.fire({
-  //             position: "center",
-  //             icon: "success",
-  //             title: "Your work has been saved",
-  //             showConfirmButton: false,
-  //             timer: 1500,
-  //           });
-  //         } else {
-  //           console.error("Upload error:", xhr.statusText);
-
-  //           setUploadInProgress(false);
-  //         }
-  //       }
-  //     };
-
-  //     xhr.send(formData);
+  //     } catch (error) {
+  //       console.error("Upload error:", error);
+  //       setUploadInProgress(false);
+  //     }
   //   }
   // };
+
+  const handleUpload = () => {
+    if (selectedButton === "documents" || selectedButton === "videos") {
+      const apiUrl =
+        selectedButton === "documents"
+          ? "http://192.168.1.7:8081/documents"
+          : "http://192.168.1.7:8081/videos";
+
+      const json = {
+        name: uploadData.fileName,
+        sequence: uploadData.fileSequence,
+        category: selectedCategory,
+      };
+
+      setUploadInProgress(true);
+
+      const formData = new FormData();
+      formData.append("file", uploadData.file);
+      formData.append("json", JSON.stringify(json));
+
+      const xhr = new XMLHttpRequest();
+
+      // Track upload progress
+      xhr.upload.addEventListener("progress", (event) => {
+        if (event.lengthComputable) {
+          const progress = (event.loaded / event.total) * 100;
+          setUploadProgress(progress); // Update the progress state
+        }
+      });
+
+      xhr.open("POST", apiUrl, true);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            document.getElementById("fileInput").value = "";
+            document.getElementById("nameInput").value = "";
+            document.getElementById("sequenceInput").value = "";
+
+            setUploadData({
+              fileName: "",
+              fileSequence: "",
+              file: null,
+            });
+
+            setUploadInProgress(false);
+
+            const data = JSON.parse(xhr.responseText);
+            setApiData([...apiData, data]);
+
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your work has been saved",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          } else {
+            console.error("Upload error:", xhr.statusText);
+
+            setUploadInProgress(false);
+          }
+        }
+      };
+
+      xhr.send(formData);
+    }
+  };
 
   // Calculate the current items to display
   const indexOfLastItem = currentPage * itemsPerPage;
