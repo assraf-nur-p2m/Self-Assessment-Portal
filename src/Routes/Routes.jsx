@@ -26,6 +26,7 @@ import CoreModule from "../Components/CoreModule/CoreModule";
 import ErrorPage from "../Components/Error/ErrorPage";
 import ModuleRequest from "../Components/Admin/ModuleRequest";
 import UserPerformance from "../Components/Admin/UserPerformance";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -76,7 +77,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
     children: [
       {
         path: "/dashboard/set-question",
