@@ -11,7 +11,7 @@ export default function QuestionView() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://192.168.1.3:8081/admin/category", {
+    fetch("http://192.168.1.3:8081/admin/moduleSelect", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -109,7 +109,7 @@ export default function QuestionView() {
 
   return (
     <div>
-      <div className="p-2 shadow-lg rounded-xl h-[96vh]">
+      <div className="p-2 shadow-lg rounded-xl">
         <h2 className="ps-4 text-xl mb-[-10px]">Select Question Level</h2>
         <div className="flex justify-between">
           <div className="flex items-center p-4">
@@ -166,7 +166,7 @@ export default function QuestionView() {
             </div>
           </div>
           <div className="p-3 flex items-center gap-4">
-            <p className="text-xl">Select Category</p>
+            <p className="text-xl">Select Module</p>
             {/* Dropdown for selecting category */}
             <select
               className="form-select border px-12 py-2 text-xl rounded-lg shadow-md"
@@ -175,10 +175,10 @@ export default function QuestionView() {
               onChange={handleCategoryChange}
               value={selectedCategory} // Set the value to selectedCategory
             >
-              <option value="">Select a category</option>
+              <option value="">Select a module</option>
               {category?.map((cat, index) => (
                 <option key={cat.id} value={cat.category}>
-                  {cat.category}
+                  {cat.module}
                 </option>
               ))}
             </select>

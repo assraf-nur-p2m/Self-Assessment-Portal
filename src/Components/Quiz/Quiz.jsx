@@ -4,23 +4,33 @@ import { CiSaveUp2 } from "react-icons/ci";
 import { motion } from "framer-motion";
 import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../Authentication/AuthProvider";
 
 const Quiz = () => {
   const [quizData, setQuizData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [timeLeft, setTimeLeft] = useState(1200);
+  const [timeLeft, setTimeLeft] = useState(10);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const submitButtonRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const moduleId = queryParams.get("moduleId");
+  const token = localStorage.getItem("token");
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch(`http://192.168.1.3:8081/api/questions/${moduleId}`)
+    fetch(`http://192.168.1.3:8081/api/questions/${moduleId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
-      .then((data) => setQuizData(data));
+      .then((data) => {
+        setQuizData(data);
+      });
   }, []);
 
   useEffect(() => {
@@ -55,6 +65,7 @@ const Quiz = () => {
           setQuizSubmitted(true);
 
           const optionsToSend = quizData.map((question, index) => ({
+            userId: user.id,
             questionId: question.id,
             selectedOption: selectedOptions[index] || null,
           }));
@@ -63,6 +74,7 @@ const Quiz = () => {
             method: "POST",
             headers: {
               "content-type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(optionsToSend),
           })
@@ -86,7 +98,7 @@ const Quiz = () => {
                   }, 100);
                   timerInterval &&
                     setTimeout(() => {
-                      navigate("/");
+                      navigate("/result");
                     }, 2000);
                 },
                 willClose: () => {
@@ -145,20 +157,19 @@ const Quiz = () => {
         setQuizSubmitted(true);
 
         const optionsToSend = quizData.map((question, index) => ({
+          userId: user.id,
           questionId: question.id,
           selectedOption: selectedOptions[index] || null,
         }));
 
-        fetch(
-          "https://self-assesment-portal-production.up.railway.app/api/answers",
-          {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify(optionsToSend),
-          }
-        )
+        fetch("http://192.168.1.3:8081/api/answers", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(optionsToSend),
+        })
           .then((res) => {
             console.log("Response status:", res.status);
             return res.json();
@@ -177,7 +188,7 @@ const Quiz = () => {
                 const timerInterval = setInterval(() => {
                   b.textContent = Swal.getTimerLeft();
                 }, 100);
-                // Navigate to "/result" after the alert closes
+
                 timerInterval &&
                   setTimeout(() => {
                     navigate("/result");
@@ -193,7 +204,7 @@ const Quiz = () => {
           });
 
         console.log(optionsToSend);
-        navigate('/core-module/602')
+        navigate("/result");
         Swal.fire({
           position: "center",
           icon: "success",

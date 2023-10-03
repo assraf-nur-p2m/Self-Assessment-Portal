@@ -6,10 +6,8 @@ export default function SetQuestion() {
   const [category, setCategory] = useState([]);
   const token = localStorage.getItem("token");
 
-  console.log(token);
-
   useEffect(() => {
-    fetch("http://192.168.1.3:8081/admin/category", {
+    fetch("http://192.168.1.3:8081/admin/moduleSelect", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -17,7 +15,6 @@ export default function SetQuestion() {
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
-        console.log(data);
       });
   }, []);
 
@@ -151,16 +148,16 @@ export default function SetQuestion() {
               </div>
             </div>
             <div className="p-3 flex items-center gap-4">
-              <p className="text-xl">Select Category</p>
+              <p className="text-xl">Select Module</p>
               <select
                 className="form-select border px-12 py-2 text-xl rounded-lg shadow-md"
                 name="category"
                 id=""
               >
-                <option value="">Select a category</option>
+                <option value="">Select a module</option>
                 {category?.map((cat, index) => (
                   <option key={cat.id} value={cat.category}>
-                    {cat.category}
+                    {cat.module}
                   </option>
                 ))}
               </select>
