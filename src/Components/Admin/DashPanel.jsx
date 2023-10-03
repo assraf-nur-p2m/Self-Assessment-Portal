@@ -4,6 +4,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { LuUserCheck, LuUserX } from "react-icons/lu";
 import Swal from "sweetalert2";
 import axios from "axios";
+import moment from "moment";
 
 export default function DashPanel() {
   const [dashData, setDashData] = useState([]);
@@ -49,6 +50,23 @@ export default function DashPanel() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
+  const formatDate = (dateArray) => {
+    if (Array.isArray(dateArray) && dateArray.length === 5) {
+      // Convert the date array to a JavaScript Date object
+      const [year, month, day, hours, minutes] = dateArray;
+      const formattedDate = new Date(year, month - 1, day, hours, minutes);
+
+      // Check if the formattedDate is valid
+      if (!isNaN(formattedDate.getTime())) {
+        // Format the valid date using moment.js
+        return moment(formattedDate).format("llll");
+      }
+    }
+
+    // Return a default message when the date is not available or invalid
+    return "Date Not Available";
+  };
 
   const handleVisibility = (modId) => {
     const token = localStorage.getItem("token");
@@ -218,17 +236,17 @@ export default function DashPanel() {
                       Percentage of Pass: {mod.percentOfPass}%
                     </p>
                   </div>
-                  <div className="flex justify-between px-2 text-md mb-2">
-                    <p>
+                  <div className="px-2 text-md mb-2">
+                    <p className="mb-2">
                       Start At:{" "}
                       <span className="font-bold">
-                        {new Date(mod.examStartTime).toLocaleString()}
+                        {formatDate(mod.noticeStartTime)}
                       </span>
                     </p>
-                    <p>
+                    <p className="mb-2">
                       End At:{" "}
                       <span className="font-bold">
-                        {new Date(mod.examEndTime).toLocaleString()}
+                        {formatDate(mod.noticeEndTime)}
                       </span>
                     </p>
                   </div>
@@ -245,22 +263,22 @@ export default function DashPanel() {
                         {mod.showNotice ? "Public" : "Private"}
                       </span>
                     </p>
-                    <div className="flex justify-between">
+                    <div className="">
                       <p className="mb-2">
                         Start At:{" "}
                         <span className="font-bold">
-                          {new Date(mod.noticeStartTime).toLocaleString()}
+                          {formatDate(mod.examStartTime)}
                         </span>
                       </p>
-                      <p className="mb-2">
+                      <p>
                         End At:{" "}
                         <span className="font-bold">
-                          {new Date(mod.noticeEndTime).toLocaleString()}
+                          {formatDate(mod.examEndTime)}
                         </span>
                       </p>
                     </div>
                     <div>
-                      <p className="mb-2">
+                      <p className="mb-2 mt-2">
                         Quiz Time:{" "}
                         <span className="font-bold">
                           {mod.quizTime >= 3600
