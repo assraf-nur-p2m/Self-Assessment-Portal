@@ -14,15 +14,19 @@ export default function CoreModule() {
   const [videoPlaybackPositions, setVideoPlaybackPositions] = useState({});
   const [isNoticeVisible, setIsNoticeVisible] = useState(true);
   const [isQuizVisible, setIsQuizVisible] = useState(true);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch(`http://192.168.1.3:8081/admin/module/info/${moduleId}`)
+    fetch(`http://192.168.1.3:8081/admin/module/info/${moduleId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         data.videos = data.videos.sort((a, b) => a.sequence - b.sequence);
         data.documents = data.documents.sort((a, b) => a.sequence - b.sequence);
         setModuleInfo(data);
-        console.log(data);
       });
   }, [moduleId]);
 

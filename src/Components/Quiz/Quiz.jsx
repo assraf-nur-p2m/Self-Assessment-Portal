@@ -30,6 +30,7 @@ const Quiz = () => {
       .then((res) => res.json())
       .then((data) => {
         setQuizData(data);
+        console.log(data);
       });
   }, []);
 
@@ -109,8 +110,6 @@ const Quiz = () => {
             .catch((error) => {
               console.error("Error submitting data:", error);
             });
-
-          console.log(optionsToSend);
           Swal.fire({
             position: "center",
             icon: "success",
@@ -225,7 +224,7 @@ const Quiz = () => {
     <div className="login-page min-h-screen p-4 md:p-16 flex justify-center items-center">
       <div className="p-4 rounded-xl bg-white bg-opacity-40 accent-color shadow-md">
         <div className="login-box md:flex md:justify-center shadow-md md:items-center bg-white rounded-xl p-8 bg-opacity-90 w-full md:w-full">
-          <div className="w-full md:w-[650px] lg:w-[850px] xl:w-[1100px] h-[60vh] relative">
+          <div className="w-full md:w-[650px] lg:w-[850px] xl:w-[1100px] relative">
             {quizData.length > 0 && (
               <div className="">
                 <div className="">
@@ -293,7 +292,7 @@ const Quiz = () => {
                   </form>
                 </motion.div>
 
-                <div className="flex justify-between items-center mt-4 absolute bottom-0 w-full">
+                <div className="flex justify-between items-center mt-12 w-full">
                   <motion.button
                     onClick={handlePreviousQuestion}
                     className="bg-[#004AAD] flex hover:bg-blue-600 text-xl text-white py-2 px-4 rounded"

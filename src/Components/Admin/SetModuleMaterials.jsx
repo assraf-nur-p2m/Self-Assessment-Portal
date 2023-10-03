@@ -23,7 +23,7 @@ export default function SetModuleMaterials() {
       setSelectedCategory(category[0].category);
     }
     setSelectedButton("documents");
-    fetch("http://192.168.1.3:8081/admin/category", {
+    fetch("http://192.168.1.3:8081/admin/moduleSelect", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -247,17 +247,17 @@ export default function SetModuleMaterials() {
       <div className="p-2 shadow-lg rounded-xl h-auto">
         <div className="flex justify-between content-center items-center">
           <div className="p-3 flex items-center gap-4">
-            <p className="text-xl">Select Category</p>
+            <p className="text-xl">Select Module</p>
             <select
               className="form-select border px-12 py-2 text-xl rounded-lg shadow-md"
               name="quizCategory"
               onChange={handleCategoryChange}
               value={selectedCategory}
             >
-              <option value="">Select a category</option>
+              <option value="">Select a module</option>
               {category.map((cat) => (
                 <option key={cat.id} value={cat.category}>
-                  {cat.category}
+                  {cat.module}
                 </option>
               ))}
             </select>
@@ -382,7 +382,7 @@ export default function SetModuleMaterials() {
               <tr>
                 <th className="w-[10%]">Sequence</th>
                 <th className="w-[25%]">File Name</th>
-                <th className="w-[25%]">Category</th>
+                <th className="w-[25%]">Module Name</th>
                 <th className="w-[25%] text-center">Actions</th>
               </tr>
             </thead>
