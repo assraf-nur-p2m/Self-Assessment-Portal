@@ -6,6 +6,8 @@ export default function SetQuestion() {
   const [category, setCategory] = useState([]);
   const token = localStorage.getItem("token");
 
+  console.log(token);
+
   useEffect(() => {
     fetch("http://192.168.1.3:8081/admin/category", {
       headers: {
@@ -15,6 +17,7 @@ export default function SetQuestion() {
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
+        console.log(data);
       });
   }, []);
 
