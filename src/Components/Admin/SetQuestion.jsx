@@ -45,7 +45,6 @@ export default function SetQuestion() {
       });
       return;
     }
-
     const setQuestion = {
       level: questionLevel.value,
       context: question.value,
