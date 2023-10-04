@@ -308,40 +308,65 @@ export default function SetModuleMaterials() {
             </h2>
             <div className="flex justify-between">
               <div className="w-full">
-                <div className="mb-3">
-                  <label className="block text-lg">File Name</label>
-                  <input
-                    id="nameInput"
-                    type="text"
-                    name="fileName"
-                    className="input input-bordered w-full max-w-xs"
-                    value={uploadData.fileName}
-                    onChange={handleFileInputChange}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="block text-lg">File Sequence</label>
-                  <input
-                    id="sequenceInput"
-                    type="number"
-                    name="fileSequence"
-                    className="input input-bordered w-full max-w-xs"
-                    value={uploadData.fileSequence}
-                    onChange={handleFileInputChange}
-                  />
+                <div>
+                  <div className="mb-3">
+                    <label className="block text-lg">File Name</label>
+                    <input
+                      id="nameInput"
+                      type="text"
+                      name="fileName"
+                      className="input input-bordered w-full max-w-xs"
+                      value={uploadData.fileName}
+                      onChange={handleFileInputChange}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="block text-lg">File Sequence</label>
+                    <input
+                      id="sequenceInput"
+                      type="number"
+                      name="fileSequence"
+                      className="input input-bordered w-full max-w-xs"
+                      value={uploadData.fileSequence}
+                      onChange={handleFileInputChange}
+                    />
+                  </div>
+
+                  <button
+                    className="btn btn-success"
+                    onClick={handleUpload}
+                    disabled={
+                      !uploadData.fileName ||
+                      !uploadData.fileSequence ||
+                      !uploadData.file
+                    }
+                  >
+                    Upload
+                  </button>
                 </div>
 
-                <button
-                  className="btn btn-success"
-                  onClick={handleUpload}
-                  disabled={
-                    !uploadData.fileName ||
-                    !uploadData.fileSequence ||
-                    !uploadData.file
-                  }
-                >
-                  Upload
-                </button>
+                <form action="">
+                  <div className="mt-8">
+                    <div>
+                      <p className="mb-1 font-bold ms-1">Bulk upload</p>
+                    </div>
+                    <div className="flex gap-3">
+                      <input
+                        type="file"
+                        id=""
+                        className="file-input file-input-bordered"
+                        name="bulkFile"
+                      />
+                      <input
+                        type="submit"
+                        value="BULK UPLOAD"
+                        className="btn btn-info"
+                      />
+                    </div>
+                  </div>
+                </form>
+
+
               </div>
               <div className="w-full">
                 <div className="mb-3">

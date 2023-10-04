@@ -11,7 +11,7 @@ const Quiz = () => {
   const [quizData, setQuizData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState();
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const submitButtonRef = useRef(null);
   const navigate = useNavigate();
@@ -29,8 +29,8 @@ const Quiz = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setQuizData(data);
-        console.log(data);
+        setQuizData(data.questionsForms);
+        setTimeLeft(data.time);
       });
   }, []);
 
@@ -67,7 +67,7 @@ const Quiz = () => {
 
           const optionsToSend = quizData.map((question, index) => ({
             userId: user.id,
-            questionId: question.id,
+            questionsId: question.id,
             selectedOption: selectedOptions[index] || null,
           }));
 
@@ -99,7 +99,7 @@ const Quiz = () => {
                   }, 100);
                   timerInterval &&
                     setTimeout(() => {
-                      navigate("/result");
+                      navigate(`/result?moduleId=${moduleId}`);
                     }, 2000);
                 },
                 willClose: () => {
@@ -157,7 +157,7 @@ const Quiz = () => {
 
         const optionsToSend = quizData.map((question, index) => ({
           userId: user.id,
-          questionId: question.id,
+          questionsId: question.id,
           selectedOption: selectedOptions[index] || null,
         }));
 
@@ -190,7 +190,7 @@ const Quiz = () => {
 
                 timerInterval &&
                   setTimeout(() => {
-                    navigate("/result");
+                    navigate(`/result?moduleId=${moduleId}`);
                   }, 2000);
               },
               willClose: () => {
@@ -203,7 +203,7 @@ const Quiz = () => {
           });
 
         console.log(optionsToSend);
-        navigate("/result");
+        navigate(`/result?moduleId=${moduleId}`);
         Swal.fire({
           position: "center",
           icon: "success",

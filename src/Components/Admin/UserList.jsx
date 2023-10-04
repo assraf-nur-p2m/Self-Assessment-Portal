@@ -21,6 +21,7 @@ export default function ManageUser() {
       .then((data) => {
         setUserList(data);
         setLoading(false);
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);

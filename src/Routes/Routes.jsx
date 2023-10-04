@@ -24,6 +24,8 @@ import ErrorPage from "../Components/Error/ErrorPage";
 import ModuleRequest from "../Components/Admin/ModuleRequest";
 import UserPerformance from "../Components/Admin/UserPerformance";
 import PrivateRoute from "./PrivateRoute";
+import QuizSetting from "../Components/Admin/QuizSetting";
+import ReviewQuiz from "../Components/Quiz/ReviewQuiz";
 
 export const router = createBrowserRouter([
   {
@@ -69,6 +71,10 @@ export const router = createBrowserRouter([
       {
         path: "core-module/:moduleId",
         element: <CoreModule />,
+      },
+      {
+        path: "/review-quiz",
+        element: <ReviewQuiz />,
       },
     ],
   },
@@ -127,6 +133,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/user-performance",
         element: <UserPerformance />,
+      },
+      {
+        path: "/dashboard/quiz-setting",
+        element: <QuizSetting />,
       },
     ],
   },

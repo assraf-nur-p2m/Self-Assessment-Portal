@@ -25,7 +25,6 @@ export default function UserProfile() {
   //   }
   // }, []);
 
-
   useEffect(() => {
     if (isInitialRender.current) {
       const getTokenFromLocalStorage = () => {
