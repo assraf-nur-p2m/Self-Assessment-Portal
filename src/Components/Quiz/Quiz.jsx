@@ -170,11 +170,9 @@ const Quiz = () => {
           body: JSON.stringify(optionsToSend),
         })
           .then((res) => {
-            console.log("Response status:", res.status);
             return res.json();
           })
           .then((data) => {
-            console.log("Response data:", data);
             let timerInterval;
             Swal.fire({
               title: "Calculating Result",
@@ -202,7 +200,6 @@ const Quiz = () => {
             console.error("Error submitting data:", error);
           });
 
-        console.log(optionsToSend);
         navigate(`/result?moduleId=${moduleId}`);
         Swal.fire({
           position: "center",
