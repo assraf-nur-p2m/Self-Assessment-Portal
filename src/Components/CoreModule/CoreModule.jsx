@@ -68,22 +68,18 @@ export default function CoreModule() {
   }, [selectedVideo, displayDocument]);
 
   useEffect(() => {
-    // Check if the current time is within the notice's start and end times
     const currentTime = new Date();
     const noticeStartTime = new Date(moduleInfo.noticeStartTime);
     const noticeEndTime = new Date(moduleInfo.noticeEndTime);
 
     if (currentTime < noticeStartTime || currentTime > noticeEndTime) {
-      // If the current time is outside the notice period, hide the notice
       setIsNoticeVisible(false);
     }
 
-    // Check if the current time is within the quiz's start and end times
     const quizStartTime = new Date(moduleInfo.examStartTime);
     const quizEndTime = new Date(moduleInfo.examEndTime);
 
     if (currentTime < quizStartTime || currentTime > quizEndTime) {
-      // If the current time is outside the quiz period, hide the quiz button
       setIsQuizVisible(false);
     }
   }, [moduleInfo]);
@@ -188,7 +184,7 @@ export default function CoreModule() {
               </div>
             )}
           </div>
-          <div className="w-2/4 flex justify-end">
+          {/* <div className="w-2/4 flex justify-end">
             {isQuizVisible && (
               <button
                 onClick={giveQuiz}
@@ -197,7 +193,42 @@ export default function CoreModule() {
                 Attempt Quiz
               </button>
             )}
-          </div>
+          </div> */}
+
+          <button
+            className="btn btn-success font-bold"
+            onClick={() => document.getElementById("my_modal_2").showModal()}
+          >
+            Give Quiz
+          </button>
+          <dialog id="my_modal_2" className="modal">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg">Chose your Quiz Type</h3>
+              <div className="w-full mt-5">
+                {isQuizVisible && (
+                  <button
+                    onClick={giveQuiz}
+                    className="p-3 bg-green-600 w-full rounded-lg font-bold text-white"
+                  >
+                    MOC Quiz
+                  </button>
+                )}
+              </div>
+              <div className="w-full mt-5">
+                {isQuizVisible && (
+                  <button
+                    onClick={giveQuiz}
+                    className="p-3 bg-green-600 w-full rounded-lg font-bold text-white"
+                  >
+                    Final Quiz
+                  </button>
+                )}
+              </div>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
         </div>
       </div>
     </div>
